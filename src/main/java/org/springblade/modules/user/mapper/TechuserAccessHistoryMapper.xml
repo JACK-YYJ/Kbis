@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.springblade.modules.user.mapper.TechuserAccessHistoryMapper">
+  <resultMap id="BaseResultMap" type="org.springblade.modules.user.entity.TechuserAccessHistory">
+    <!--@mbg.generated-->
+    <!--@Table techuser_access_history-->
+    <result column="techuser_code" jdbcType="INTEGER" property="techuserCode" />
+    <result column="op_type" jdbcType="VARCHAR" property="opType" />
+    <result column="op_time" jdbcType="TIMESTAMP" property="opTime" />
+    <result column="device_code" jdbcType="VARCHAR" property="deviceCode" />
+    <result column="min" jdbcType="BIGINT" property="min" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    techuser_code, op_type, op_time, device_code, `min`
+  </sql>
+</mapper>

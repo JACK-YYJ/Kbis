@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.springblade.modules.user.mapper.JobOtherPMapper">
+    <resultMap id="BaseResultMap" type="org.springblade.modules.user.entity.JobOtherP">
+        <!--@mbg.generated-->
+        <!--@Table job_other_p-->
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="j_id" jdbcType="INTEGER" property="jId"/>
+        <result column="op_id" jdbcType="INTEGER" property="opId"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        id, j_id, op_id
+    </sql>
+    <select id="selectJobOtherP" resultType="org.springblade.modules.user.vo.JobOtherPVo">
+        SELECT jop.*, dop.other_performance_name
+        FROM job_other_p jop
+                 LEFT JOIN dict_other_performance dop ON jop.op_id = dop.op_id
+    </select>
+</mapper>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.springblade.modules.user.mapper.OtherPerformanceMapper">
+    <resultMap id="BaseResultMap" type="org.springblade.modules.user.entity.OtherPerformance">
+        <!--@mbg.generated-->
+        <!--@Table dict_other_performance-->
+        <id column="op_id" jdbcType="INTEGER" property="opId"/>
+        <result column="other_performance_name" jdbcType="VARCHAR" property="otherPerformanceName"/>
+        <result column="op_type" jdbcType="INTEGER" property="opType"/>
+        <result column="op_sum" jdbcType="INTEGER" property="opSum"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        op_id, other_performance_name, op_type, op_sum
+    </sql>
+    <select id="selectOtherPerformancePage" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from dict_other_performance
+        <where>
+            <if test="otherPerformanceName != null and otherPerformanceName != ''">
+                other_performance_name = #{otherPerformanceName}
+            </if>
+        </where>
+    </select>
+</mapper>

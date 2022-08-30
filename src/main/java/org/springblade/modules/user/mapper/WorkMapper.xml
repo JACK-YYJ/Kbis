@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.springblade.modules.user.mapper.WorkMapper">
+  <resultMap id="BaseResultMap" type="org.springblade.modules.user.entity.Work">
+    <!--@mbg.generated-->
+    <!--@Table dict_work-->
+    <id column="w_id" jdbcType="INTEGER" property="wId" />
+    <result column="work_name" jdbcType="VARCHAR" property="workName" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    w_id, work_name
+  </sql>
+    <select id="selectWorkPage" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from dict_work
+        <where>
+            <if test="idOrName != null and idOrName != ''">
+                w_id regexp #{idOrName}
+                    or work_name regexp #{idOrName}
+            </if>
+        </where>
+    </select>
+</mapper>
