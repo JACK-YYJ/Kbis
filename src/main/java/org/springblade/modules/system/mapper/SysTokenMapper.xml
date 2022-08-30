@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.springblade.modules.system.mapper.SysTokenMapper">
+  <resultMap id="BaseResultMap" type="org.springblade.modules.system.entity.SysToken">
+    <!--@mbg.generated-->
+    <!--@Table sys_token-->
+    <id column="user_code" jdbcType="INTEGER" property="userCode" />
+    <result column="token" jdbcType="LONGVARCHAR" property="token" />
+    <result column="expire_time" jdbcType="TIMESTAMP" property="expireTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    user_code, token, expire_time, update_time
+  </sql>
+</mapper>
