@@ -28,7 +28,7 @@ public class OtherPerformance implements Serializable {
     /**
      * 其他绩效
      */
-    @TableId(value = "op_id", type = IdType.AUTO)
+    @TableId(value = "op_id", type = IdType.INPUT)
     @ApiModelProperty(value = "其他绩效")
     private Integer opId;
 
@@ -52,6 +52,12 @@ public class OtherPerformance implements Serializable {
     @TableField(value = "op_sum")
     @ApiModelProperty(value = "单价（op_sum）")
     private Integer opSum;
+	/**
+	 * 绩效名称
+	 */
+	@TableField(value = "op_bt_name")
+	@ApiModelProperty(value = "绩效名称")
+	private String opBtName;
 
     private static final long serialVersionUID = 1L;
 

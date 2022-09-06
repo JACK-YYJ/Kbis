@@ -315,6 +315,13 @@ public class DateUtils {
 		String dateNowStr = sdf.format(d);
 		return dateNowStr;
 	}
+	//获取当天时间
+	public static String getTodayDateMonth() {
+		Date d = new Date();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
+		String dateNowStr = sdf.format(d);
+		return dateNowStr;
+	}
 	//获取昨天时间
 	public static String getYestoryDate() {
 		Calendar calendar = Calendar.getInstance();

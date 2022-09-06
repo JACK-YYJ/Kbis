@@ -11,5 +11,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface JobWorkService extends IService<JobWork> {
 
 
+    void add(Integer jId);
+
 }
 

@@ -11,6 +11,8 @@ import java.util.List;
  * @Date 2022/8/29 11:30
  */
 
-public interface JobOtherPService extends IService<JobOtherP>{
-         List<JobOtherPVo> selectJobOtherP(Integer jId);
-     }
+public interface JobOtherPService extends IService<JobOtherP> {
+	List<JobOtherPVo> selectJobOtherP(Integer jId);
+
+	void add(Integer jId);
+}

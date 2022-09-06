@@ -1,23 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.springblade.modules.performance.mapper.KpiAttendanceMapper">
-  <resultMap id="BaseResultMap" type="org.springblade.modules.performance.entity.KpiAttendance">
-    <!--@mbg.generated-->
-    <!--@Table kpi_attendance-->
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="user_code" jdbcType="INTEGER" property="userCode" />
-    <result column="user_name" jdbcType="VARCHAR" property="userName" />
-    <result column="attendance_month" jdbcType="DATE" property="attendanceMonth" />
-    <result column="attendance_state" jdbcType="INTEGER" property="attendanceState" />
-    <result column="attendance_day" jdbcType="INTEGER" property="attendanceDay" />
-    <result column="month_day" jdbcType="INTEGER" property="monthDay" />
-  </resultMap>
-  <sql id="Base_Column_List">
-    <!--@mbg.generated-->
-    id, user_code, user_name, attendance_month, attendance_state, attendance_day, month_day
-  </sql><select id="selectAttendancePage" resultType="org.springblade.modules.performance.vo.KpiAttendanceVo">
-            select
-        <include refid="Base_Column_List" />
+    <resultMap id="BaseResultMap" type="org.springblade.modules.performance.entity.KpiAttendance">
+        <!--@mbg.generated-->
+        <!--@Table kpi_attendance-->
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="user_code" jdbcType="INTEGER" property="userCode"/>
+        <result column="user_name" jdbcType="VARCHAR" property="userName"/>
+        <result column="attendance_month" jdbcType="DATE" property="attendanceMonth"/>
+        <result column="attendance_state" jdbcType="INTEGER" property="attendanceState"/>
+        <result column="attendance_day" jdbcType="INTEGER" property="attendanceDay"/>
+        <result column="month_day" jdbcType="INTEGER" property="monthDay"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        id, user_code, user_name, attendance_month, attendance_state, attendance_day, month_day
+    </sql>
+    <select id="selectAttendancePage" resultType="org.springblade.modules.performance.vo.KpiAttendanceVo">
+        select
+        <include refid="Base_Column_List"/>
         ,CONCAT(
             CAST(CONVERT(100 * CAST(attendance_day AS DECIMAL) /
                          CAST(month_day AS DECIMAL
@@ -33,11 +34,31 @@
                 date_format(attendance_month, '%Y-%m') = date_format(#{toMonth}, '%Y-%m')
             </if>
         </where>
-
-</select><select id="selectAttendance" resultMap="BaseResultMap">
- select
-        <include refid="Base_Column_List" />
+    </select>
+    <select id="selectAttendance" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
         from kpi_attendance
-        where  date_format(attendance_month, '%Y-%m') = date_format(#{param.toMonth,jdbcType=VARCHAR}, '%Y-%m')
-</select>
+        where date_format(attendance_month, '%Y-%m') = date_format(#{param.toMonth,jdbcType=VARCHAR}, '%Y-%m')
+    </select>
+    <select id="selectidOrName" resultType="org.springblade.modules.performance.vo.KpiAttendanceVo">
+        select
+        <include refid="Base_Column_List"/>
+        ,CONCAT(
+            CAST(CONVERT(100 * CAST(attendance_day AS DECIMAL) /
+                         CAST(month_day AS DECIMAL
+                             ),
+                DECIMAL
+                ) AS CHAR
+                ),
+            '%'
+            ) AS percentage
+            from kpi_attendance
+        <where>
+            <if test="idOrName != null and idOrName != ''">
+                user_code regexp #{idOrName}
+                    or user_name regexp #{idOrName}
+            </if>
+        </where>
+    </select>
 </mapper>

@@ -3,6 +3,7 @@ package org.springblade.modules.performance.controller;
 import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import io.swagger.annotations.Api;
@@ -10,6 +11,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.api.R;
+import org.springblade.modules.performance.dto.AttendanceDto;
 import org.springblade.modules.performance.dto.UpdateDto;
 import org.springblade.modules.performance.entity.KpiAttendance;
 import org.springblade.modules.performance.mapper.KpiAttendanceMapper;
@@ -43,11 +45,11 @@ public class AttendanceController {
 	@GetMapping("/selectAttendancePage")
 	@ApiOperationSupport(order = 1)
 	@ApiOperation(value = "条件分页查询", notes = "传入toMonth")
-	public R<IPage<KpiAttendanceVo>> selectAttendancePage(Query page, String toMonth) {
+	public R<IPage<KpiAttendanceVo>> selectAttendancePage(Query page, String toMonth,String idOrName) {
 		if (toMonth==null){
 	 	 return R.fail("请从新输入月份");
 		}
-		IPage<KpiAttendanceVo> pages = kpiAttendanceService.selectAttendancePage(Condition.getPage(page), toMonth);
+		IPage<KpiAttendanceVo> pages = kpiAttendanceService.selectAttendancePage(Condition.getPage(page), toMonth,idOrName);
 		return R.data(pages);
 	}
 
@@ -60,8 +62,9 @@ public class AttendanceController {
 	@PostMapping("/update")
 	@ApiOperation(value = "编辑")
 	@ApiOperationSupport(order = 3)
-	public R update(@RequestBody KpiAttendance param) {
-		kpiAttendanceService.updateById(param);
+	public R update(@RequestBody List<KpiAttendance> param) {
+
+			kpiAttendanceService.updateBatchById(param);
 		return R.success("操作成功");
 	}
 
@@ -85,6 +88,4 @@ public class AttendanceController {
 		kpiAttendanceService.updateBatchById(kpiAttendanceList);
 		return R.success("操作成功");
 	}
-
-
 }

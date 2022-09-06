@@ -11,7 +11,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
 
 public interface JobService extends IService<Job> {
 
-
     IPage<Job> selectJobPage(IPage<Object> page, String jobName);
 }
 

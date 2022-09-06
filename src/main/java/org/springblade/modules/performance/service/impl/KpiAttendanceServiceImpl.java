@@ -1,9 +1,6 @@
 package org.springblade.modules.performance.service.impl;
 
-import cn.hutool.core.date.DateUtil;
-import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springblade.modules.performance.dto.UpdateDto;
 import org.springblade.modules.performance.vo.KpiAttendanceVo;
@@ -12,7 +9,6 @@ import org.springblade.modules.user.service.UserService;
 import org.springblade.modules.util.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -31,9 +27,9 @@ public class KpiAttendanceServiceImpl extends ServiceImpl<KpiAttendanceMapper, K
     public UserService userService;
 
     @Override
-    public IPage<KpiAttendanceVo> selectAttendancePage(IPage<Object> page, String toMonth) {
+    public IPage<KpiAttendanceVo> selectAttendancePage(IPage<Object> page, String toMonth,String idOrName) {
         Page<KpiAttendanceVo> kpiAttendancePage = baseMapper.selectAttendancePage(page, toMonth);
-        if (kpiAttendancePage.getSize() == 0) {
+        if (kpiAttendancePage.getRecords().size()==0) {
             List<User> userList = userService.lambdaQuery().list();
             ArrayList<KpiAttendance> kpiAttendances = new ArrayList<>();
             for (User user : userList) {
@@ -48,6 +44,10 @@ public class KpiAttendanceServiceImpl extends ServiceImpl<KpiAttendanceMapper, K
             }
             this.saveBatch(kpiAttendances);
         }
+        if(idOrName!=null){
+			IPage<KpiAttendanceVo> kpiAttendanceVoStream = baseMapper.selectidOrName(page,idOrName,toMonth);
+			return kpiAttendanceVoStream;
+		}
         return kpiAttendancePage;
     }
 

@@ -74,7 +74,7 @@ public class SwaggerConfiguration {
 	@Bean(value = "performance")
 	public Docket performance() {
 		return new Docket(DocumentationType.SWAGGER_2)
-			.groupName("绩效模块")
+			.groupName("绩效核算管理模块")
 			.apiInfo(apiInfo())
 			.select()
 			.apis(RequestHandlerSelectors.basePackage("org.springblade.modules.performance"))
@@ -96,19 +96,44 @@ public class SwaggerConfiguration {
 			.paths(PathSelectors.any())
 			.build();
 	}
+	/**
+	 * 测试模块
+	 *
+	 * @return
+	 */
+	@Bean(value = "demo")
+	public Docket demo() {
+		return new Docket(DocumentationType.SWAGGER_2)
+			.groupName("测试模块")
+			.apiInfo(apiInfo())
+			.select()
+			.apis(RequestHandlerSelectors.basePackage("org.springblade.modules.demo"))
+			.paths(PathSelectors.any())
+			.build();
+	}
+
+//	private ApiInfo apiInfo() {
+//		return new ApiInfoBuilder()
+//			.title(swaggerProperties.getTitle())
+//			.description(swaggerProperties.getDescription())
+//			.license(swaggerProperties.getLicense())
+//			.licenseUrl(swaggerProperties.getLicenseUrl())
+//			.termsOfServiceUrl(swaggerProperties.getTermsOfServiceUrl())
+//			.contact(new Contact(swaggerProperties.getContact().getName(), swaggerProperties.getContact().getUrl(), swaggerProperties.getContact().getEmail()))
+//			.version(swaggerProperties.getVersion())
+//			.build();
+//	}
 
 	private ApiInfo apiInfo() {
 		return new ApiInfoBuilder()
-			.title(swaggerProperties.getTitle())
-			.description(swaggerProperties.getDescription())
-			.license(swaggerProperties.getLicense())
-			.licenseUrl(swaggerProperties.getLicenseUrl())
-			.termsOfServiceUrl(swaggerProperties.getTermsOfServiceUrl())
+			.title("绩效管理")
+			.description("")
+			.license("")
+			.licenseUrl("")
+			.termsOfServiceUrl("")
 			.contact(new Contact(swaggerProperties.getContact().getName(), swaggerProperties.getContact().getUrl(), swaggerProperties.getContact().getEmail()))
 			.version(swaggerProperties.getVersion())
 			.build();
 	}
-
-
 
 }

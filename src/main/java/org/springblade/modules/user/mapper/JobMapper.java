@@ -11,5 +11,5 @@ import org.apache.ibatis.annotations.Param;import org.springblade.modules.user.e
 
 @Mapper
 public interface JobMapper extends BaseMapper<Job> {
-    IPage<Job> selectJobPage(@Param("jobName") String jobName);
+	IPage<Job> selectJobPage(IPage<Object> page,@Param("jobName") String jobName);
 }

@@ -21,4 +21,7 @@ public interface KpiAttendanceMapper extends BaseMapper<KpiAttendance> {
 	Page<KpiAttendanceVo> selectAttendancePage(@Param("page") IPage<Object> page, @Param("toMonth") String toMonth);
 
 	List<KpiAttendance> selectAttendance(@Param("param") UpdateDto param);
+
+	Page<KpiAttendanceVo> selectidOrName(@Param("page") IPage<Object> page,@Param("idOrName") String idOrName, @Param("toMonth") String toMonth);
+
 }

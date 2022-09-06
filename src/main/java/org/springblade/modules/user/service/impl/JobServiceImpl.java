@@ -22,10 +22,8 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements JobSe
 
     @Override
     public IPage<Job> selectJobPage(IPage<Object> page, String jobName) {
-        IPage<Job> pages = baseMapper.selectJobPage(jobName);
+        IPage<Job> pages = baseMapper.selectJobPage(page,jobName);
+		System.out.println(pages);
         return pages;
     }
 }
-
-
-
