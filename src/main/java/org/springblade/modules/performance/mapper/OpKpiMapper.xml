@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.springblade.modules.performance.mapper.OpKpiMapper">
+  <resultMap id="BaseResultMap" type="org.springblade.modules.performance.entity.OpKpi">
+    <!--@mbg.generated-->
+    <!--@Table op_kpi-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="kop_id" jdbcType="VARCHAR" property="kopId" />
+    <result column="op_id" jdbcType="INTEGER" property="opId" />
+    <result column="op_price" jdbcType="DECIMAL" property="opPrice" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, kop_id, op_id, op_price
+  </sql>
+  <select id="lambdaQuerydata" resultMap="BaseResultMap">
+
+    select ok.*
+    from kpi_other_performance kop
+    left join op_kpi ok on kop.kop_id = ok.kop_id
+    where ok.kop_id &lt;&gt; 'demo'
+    <where>
+     <if test="toMonth != null and toMonth != ''">
+                and   attendance_month =#{toMonth}
+            </if>
+            <if test="idOrName != null and idOrName != ''">
+                and  (user_code  regexp #{idOrName} or user_name regexp #{idOrName})
+            </if>
+</where>
+</select>
+</mapper>

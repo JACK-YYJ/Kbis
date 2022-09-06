@@ -9,6 +9,8 @@ import io.swagger.annotations.ApiOperation;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.api.R;
+import org.springblade.modules.performance.entity.OpKpi;
+import org.springblade.modules.performance.service.OpKpiService;
 import org.springblade.modules.user.entity.Job;
 import org.springblade.modules.user.entity.JobOtherP;
 import org.springblade.modules.user.entity.OtherPerformance;
@@ -33,6 +35,8 @@ public class OPController {
 	private OtherPerformanceService otherPerformanceService;
 	@Autowired
 	private JobOtherPService jobOtherPService;
+	@Autowired
+	private OpKpiService opKpiService;
 
 	/**
 	 *
@@ -59,7 +63,21 @@ public class OPController {
 		if (em != null) {
 			return R.fail("请勿重复添加");
 		}
+		OtherPerformance count = otherPerformanceService
+			.query()
+			.orderByDesc(OtherPerformance.COL_OP_ID)
+			.list().get(0);
+		param.setOpId(count.getOpId()+1);
+		if(param.getOpType().equals(1)){
+			param.setOpBtName(param.getOtherPerformanceName()+"(元)");
+		}else {
+			param.setOpBtName(param.getOtherPerformanceName()+"(个)");
+		}
 		otherPerformanceService.save(param);
+		OpKpi opKpi = new OpKpi();
+		opKpi.setKopId("demo");
+		opKpi.setOpId(count.getOpId()+1);
+		opKpiService.save(opKpi);
 		return R.success("添加成功");
 	}
 
