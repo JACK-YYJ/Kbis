@@ -13,17 +13,12 @@ import org.springblade.auth.config.YmlConfig;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.api.R;
-import org.springblade.modules.system.dto.SysUserDto;
 import org.springblade.modules.system.dto.SysUserPwdDto;
 import org.springblade.modules.system.entity.SysUser;
-
 import org.springblade.modules.system.service.SysUserService;
 import org.springblade.modules.user.dto.UserDto;
-
-
 import org.springblade.modules.user.entity.User;
 import org.springblade.modules.user.service.UserService;
-
 import org.springblade.modules.user.tool.utils.ShiroUtils;
 import org.springblade.modules.user.vo.UserVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +32,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("api/set/user")
-@Api(tags = "用户管理")
+@Api(tags = "用户管理（字典表）")
 public class UserController {
 	@Autowired
 	public UserService userService;

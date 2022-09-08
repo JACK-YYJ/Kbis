@@ -28,7 +28,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("api/set/op")
-@Api(tags = "其他绩效管理")
+@Api(tags = "其他绩效管理（字典表）")
 public class OPController {
 
 	@Autowired

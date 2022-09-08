@@ -26,7 +26,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("api/set/degree")
-@Api(tags = "学历字典表")
+@Api(tags = "学历字典表（字典表）")
 public class DegreeController extends BladeController {
 	@Autowired
 	public DegreeService degreeService;

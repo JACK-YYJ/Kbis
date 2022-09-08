@@ -20,10 +20,12 @@ import org.springblade.modules.user.service.DegreeService;
 @Service
 public class DegreeServiceImpl extends ServiceImpl<DegreeMapper, Degree> implements DegreeService {
 
-	@Override
-	public IPage<Degree> selectDegreePage(IPage<Object> page, String idOrName) {
-		IPage<Degree> pages = baseMapper.selectDegreePage(page,idOrName);
-		return pages;
-	}
+    @Override
+    public IPage<Degree> selectDegreePage(IPage<Object> page, String idOrName) {
+        IPage<Degree> pages = baseMapper.selectDegreePage(page, idOrName);
+        return pages;
+    }
 }
+
+
 

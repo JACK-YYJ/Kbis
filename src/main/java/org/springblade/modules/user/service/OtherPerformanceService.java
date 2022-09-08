@@ -16,6 +16,9 @@ public interface OtherPerformanceService extends IService<OtherPerformance> {
 
     IPage<OtherPerformance> selectOtherPerformancePage(IPage<Object> page, String otherPerformanceName);
 
-    HashMap<String, String> selectBt();
+
 }
+
+
+
 

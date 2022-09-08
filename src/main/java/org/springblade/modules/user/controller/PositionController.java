@@ -21,7 +21,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("api/set/Position")
-@Api(tags = "职称管理")
+@Api(tags = "职称管理（字典表）")
 public class PositionController {
 	@Autowired
 	private PositionService positionService;

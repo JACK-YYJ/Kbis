@@ -7,13 +7,15 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
+import java.math.BigDecimal;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
  /**
  * @Author 元杰
- * @Date 2022/8/29 10:32
+ * @Date 2022/9/8 16:01
  */
 
 /**
@@ -51,13 +53,14 @@ public class OtherPerformance implements Serializable {
      */
     @TableField(value = "op_sum")
     @ApiModelProperty(value = "单价（op_sum）")
-    private Integer opSum;
-	/**
-	 * 绩效名称
-	 */
-	@TableField(value = "op_bt_name")
-	@ApiModelProperty(value = "绩效名称")
-	private String opBtName;
+    private BigDecimal opSum;
+
+    /**
+     * 表头
+     */
+    @TableField(value = "op_bt_name")
+    @ApiModelProperty(value = "表头")
+    private String opBtName;
 
     private static final long serialVersionUID = 1L;
 
@@ -68,4 +71,6 @@ public class OtherPerformance implements Serializable {
     public static final String COL_OP_TYPE = "op_type";
 
     public static final String COL_OP_SUM = "op_sum";
+
+    public static final String COL_OP_BT_NAME = "op_bt_name";
 }

@@ -7,13 +7,15 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
+import java.math.BigDecimal;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
  /**
  * @Author 元杰
- * @Date 2022/8/26 18:21
+ * @Date 2022/9/8 16:01
  */
 
 /**
@@ -44,7 +46,7 @@ public class Position implements Serializable {
      */
     @TableField(value = "position_score")
     @ApiModelProperty(value = "职称分值")
-    private Integer positionScore;
+    private BigDecimal positionScore;
 
     private static final long serialVersionUID = 1L;
 

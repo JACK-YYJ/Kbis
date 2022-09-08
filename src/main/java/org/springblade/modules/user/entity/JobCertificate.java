@@ -7,13 +7,14 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
  /**
  * @Author 元杰
- * @Date 2022/8/26 18:19
+ * @Date 2022/9/8 16:01
  */
 
 /**
@@ -44,7 +45,7 @@ public class JobCertificate implements Serializable {
      */
     @TableField(value = "job_certificate_score")
     @ApiModelProperty(value = "岗位证分值")
-    private Integer jobCertificateScore;
+    private BigDecimal jobCertificateScore;
 
     private static final long serialVersionUID = 1L;
 

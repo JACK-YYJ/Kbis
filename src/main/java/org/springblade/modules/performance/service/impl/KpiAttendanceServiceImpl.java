@@ -27,9 +27,9 @@ public class KpiAttendanceServiceImpl extends ServiceImpl<KpiAttendanceMapper, K
     public UserService userService;
 
     @Override
-    public IPage<KpiAttendanceVo> selectAttendancePage(IPage<Object> page, String toMonth,String idOrName) {
+    public IPage<KpiAttendanceVo> selectAttendancePage(IPage<Object> page, String toMonth, String idOrName) {
         Page<KpiAttendanceVo> kpiAttendancePage = baseMapper.selectAttendancePage(page, toMonth);
-        if (kpiAttendancePage.getRecords().size()==0) {
+        if (kpiAttendancePage.getRecords().size() == 0) {
             List<User> userList = userService.lambdaQuery().list();
             ArrayList<KpiAttendance> kpiAttendances = new ArrayList<>();
             for (User user : userList) {
@@ -44,20 +44,19 @@ public class KpiAttendanceServiceImpl extends ServiceImpl<KpiAttendanceMapper, K
             }
             this.saveBatch(kpiAttendances);
         }
-        if(idOrName!=null){
-			IPage<KpiAttendanceVo> kpiAttendanceVoStream = baseMapper.selectidOrName(page,idOrName,toMonth);
-			return kpiAttendanceVoStream;
-		}
+        if (idOrName != null) {
+            IPage<KpiAttendanceVo> kpiAttendanceVoStream = baseMapper.selectidOrName(page, idOrName, toMonth);
+            return kpiAttendanceVoStream;
+        }
         return kpiAttendancePage;
     }
 
-	@Override
-	public List<KpiAttendance> selectAttendance(UpdateDto param) {
-		 List<KpiAttendance> list= baseMapper.selectAttendance( param);
-		 return  list;
-	}
-
-
+    @Override
+    public List<KpiAttendance> selectAttendance(UpdateDto param) {
+        List<KpiAttendance> list = baseMapper.selectAttendance(param);
+        return list;
+    }
 }
+
 
 

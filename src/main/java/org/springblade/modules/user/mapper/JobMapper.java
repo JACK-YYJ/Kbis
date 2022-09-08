@@ -6,10 +6,10 @@ import org.apache.ibatis.annotations.Param;import org.springblade.modules.user.e
 
 /**
  * @Author 元杰
- * @Date 2022/8/29 11:22
+ * @Date 2022/9/8 16:01
  */
 
 @Mapper
 public interface JobMapper extends BaseMapper<Job> {
-	IPage<Job> selectJobPage(IPage<Object> page,@Param("jobName") String jobName);
+    IPage<Job> selectJobPage(IPage<Object> page, @Param("jobName") String jobName);
 }

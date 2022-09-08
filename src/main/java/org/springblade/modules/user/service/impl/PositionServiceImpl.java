@@ -17,11 +17,13 @@ import org.springblade.modules.user.service.PositionService;
 @Service
 public class PositionServiceImpl extends ServiceImpl<PositionMapper, Position> implements PositionService {
 
-	@Override
-	public IPage<Position> selectPositionPage(IPage<Object> page, String idOrName) {
-		IPage<Position> pages =  baseMapper.selectPositionPage(page,idOrName);
-		return pages;
-	}
+    @Override
+    public IPage<Position> selectPositionPage(IPage<Object> page, String idOrName) {
+        IPage<Position> pages = baseMapper.selectPositionPage(page, idOrName);
+        return pages;
+    }
 }
+
+
 
 

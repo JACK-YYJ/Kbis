@@ -1,6 +1,9 @@
 package org.springblade.modules.performance.entity;
 
-import com.baomidou.mybatisplus.annotation.*;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -13,9 +16,12 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  * @Author 元杰
- * @Date 2022/8/30 13:11
+ * @Date 2022/9/7 14:57
  */
 
+/**
+ * 出勤率
+ */
 @ApiModel(value = "org-springblade-modules-performance-entity-KpiAttendance")
 @Data
 @AllArgsConstructor

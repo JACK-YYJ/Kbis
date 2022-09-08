@@ -1,6 +1,9 @@
 package org.springblade.modules.user.entity;
 
-import com.baomidou.mybatisplus.annotation.*;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
@@ -11,7 +14,7 @@ import lombok.NoArgsConstructor;
 
  /**
  * @Author 元杰
- * @Date 2022/8/26 12:48
+ * @Date 2022/9/8 16:01
  */
 
 /**
@@ -93,19 +96,6 @@ public class User implements Serializable {
     @ApiModelProperty(value = "学历名称")
     private String degreeName;
 
-    /**
-     * 职称id
-     */
-    @TableField(value = "w_id")
-    @ApiModelProperty(value = "职称id")
-    private Integer wId;
-
-    /**
-     * 工作类型名称
-     */
-    @TableField(value = "work_name")
-    @ApiModelProperty(value = "工作类型名称")
-    private String workName;
 
     /**
      * 入职日期
@@ -132,7 +122,6 @@ public class User implements Serializable {
      * 1删除  默认0
      */
     @TableField(value = "is_deleted")
-	@TableLogic
     @ApiModelProperty(value = "1删除  默认0")
     private Byte isDeleted;
 

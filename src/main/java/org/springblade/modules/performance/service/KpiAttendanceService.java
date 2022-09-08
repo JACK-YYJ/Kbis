@@ -15,10 +15,11 @@ import java.util.List;
 
 public interface KpiAttendanceService extends IService<KpiAttendance> {
 
-    IPage<KpiAttendanceVo> selectAttendancePage(IPage<Object> page, String toMonth,String idOrName);
+    IPage<KpiAttendanceVo> selectAttendancePage(IPage<Object> page, String toMonth, String idOrName);
 
-	List<KpiAttendance> selectAttendance(UpdateDto param);
+    List<KpiAttendance> selectAttendance(UpdateDto param);
 
 }
+
 
 

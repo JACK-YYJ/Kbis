@@ -7,13 +7,14 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
  /**
  * @Author 元杰
- * @Date 2022/8/25 11:25
+ * @Date 2022/9/8 16:01
  */
 
 /**
@@ -44,7 +45,7 @@ public class Degree implements Serializable {
      */
     @TableField(value = "degree_score")
     @ApiModelProperty(value = "学历分值")
-    private Double degreeScore;
+    private BigDecimal degreeScore;
 
     private static final long serialVersionUID = 1L;
 

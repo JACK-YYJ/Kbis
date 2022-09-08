@@ -3,7 +3,6 @@ package org.springblade.modules.performance.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.springblade.modules.performance.entity.KpiOtherPerformance;
 import com.baomidou.mybatisplus.extension.service.IService;
-import org.springblade.modules.performance.vo.KpiAttendanceDataVo;
 
 import java.util.List;
 
@@ -14,10 +13,14 @@ import java.util.List;
 
 public interface KpiOtherPerformanceService extends IService<KpiOtherPerformance> {
 
+    IPage<KpiOtherPerformance> selectOpattendancePage(IPage<Object> page, String toMonth, String idOrName);
 
-    List<KpiAttendanceDataVo> select();
-
-	IPage<KpiAttendanceDataVo> seleckpitAttendancePage(IPage<Object> page, String toMonth, String idOrName);
+	void updateByAllPrice(KpiOtherPerformance param);
 
 }
+
+
+
+
+
 

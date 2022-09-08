@@ -7,13 +7,14 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
  /**
  * @Author 元杰
- * @Date 2022/8/29 11:22
+ * @Date 2022/9/8 16:01
  */
 
 /**
@@ -44,14 +45,14 @@ public class Job implements Serializable {
      */
     @TableField(value = "job_type")
     @ApiModelProperty(value = "岗位类别")
-    private String jobType;
+    private Byte jobType;
 
     /**
      * 岗位系数
      */
     @TableField(value = "job_ratio")
     @ApiModelProperty(value = "岗位系数")
-    private Double jobRatio;
+    private BigDecimal jobRatio;
 
     /**
      * 矫正固定绩效分值（公式id）
@@ -86,7 +87,7 @@ public class Job implements Serializable {
      */
     @TableField(value = "button_fixed")
     @ApiModelProperty(value = "固定绩效 按钮1：开  0：关")
-    private Integer buttonFixed;
+    private Boolean buttonFixed;
 
     /**
      * 固定绩效详情
@@ -100,7 +101,7 @@ public class Job implements Serializable {
      */
     @TableField(value = "button_workload")
     @ApiModelProperty(value = "工作量绩效 按钮1：开 0：关")
-    private Integer buttonWorkload;
+    private Boolean buttonWorkload;
 
     /**
      * 工作量绩效详情
@@ -114,7 +115,7 @@ public class Job implements Serializable {
      */
     @TableField(value = "button_other")
     @ApiModelProperty(value = "其他绩效 按钮 1：开 0：关")
-    private Integer buttonOther;
+    private Boolean buttonOther;
 
     private static final long serialVersionUID = 1L;
 

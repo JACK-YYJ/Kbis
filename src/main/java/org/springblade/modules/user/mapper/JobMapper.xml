@@ -6,8 +6,8 @@
     <!--@Table dict_job-->
     <id column="j_id" jdbcType="INTEGER" property="jId" />
     <result column="job_name" jdbcType="VARCHAR" property="jobName" />
-    <result column="job_type" jdbcType="VARCHAR" property="jobType" />
-    <result column="job_ratio" jdbcType="FLOAT" property="jobRatio" />
+    <result column="job_type" jdbcType="TINYINT" property="jobType" />
+    <result column="job_ratio" jdbcType="DECIMAL" property="jobRatio" />
     <result column="formula_fixed" jdbcType="INTEGER" property="formulaFixed" />
     <result column="fixed_than" jdbcType="VARCHAR" property="fixedThan" />
     <result column="formula_workload" jdbcType="INTEGER" property="formulaWorkload" />

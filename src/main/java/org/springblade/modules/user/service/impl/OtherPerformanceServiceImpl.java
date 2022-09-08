@@ -23,30 +23,16 @@ import org.springblade.modules.user.service.OtherPerformanceService;
 @Service
 public class OtherPerformanceServiceImpl extends ServiceImpl<OtherPerformanceMapper, OtherPerformance> implements OtherPerformanceService {
 
-	@Autowired
-	private KpiOtherPerformanceService kpiOtherPerformanceService;
-	@Autowired
-	private OpKpiService opKpiService;
 
-	@Override
-	public IPage<OtherPerformance> selectOtherPerformancePage(IPage<Object> page, String otherPerformanceName) {
-		IPage<OtherPerformance> pages = baseMapper.selectOtherPerformancePage(page,otherPerformanceName);
-		return pages;
-	}
+    @Override
+    public IPage<OtherPerformance> selectOtherPerformancePage(IPage<Object> page, String otherPerformanceName) {
+        IPage<OtherPerformance> pages = baseMapper.selectOtherPerformancePage(page, otherPerformanceName);
+        return pages;
+    }
 
-	@Override
-	public HashMap<String, String> selectBt() {
-		KpiOtherPerformance kpiOtherPerformance = kpiOtherPerformanceService.getById(1);
-		List<OpKpi> lambdaQueryOpKpi = opKpiService.lambdaQuery()
-			.eq(OpKpi::getKopId,kpiOtherPerformance.getKopId())
-			.list();
 
-		HashMap<String, String> btVOmap = new HashMap<>();
-		for (int i = 0; i < lambdaQueryOpKpi.size(); i++) {
-			OtherPerformance byId = this.getById(lambdaQueryOpKpi.get(i).getOpId());
-			btVOmap.put("Other"+(i+1),byId.getOpBtName());
-		}
-		return btVOmap;
-	}
 }
+
+
+
 

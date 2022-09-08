@@ -27,12 +27,12 @@
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    u_id, user_code, user_name, card_id, j_id, job_name, p_id, position_name, d_id, degree_name,
-    w_id, work_name, seniority, jc_id, job_certificate_name, is_deleted, create_by, create_time,
+    u_id, user_code, user_name, card_id, j_id, job_name, p_id, position_name, d_id, degree_name, 
+    w_id, work_name, seniority, jc_id, job_certificate_name, is_deleted, create_by, create_time, 
     update_by, update_time
   </sql>
     <select id="selectUserPage" resultType="org.springblade.modules.user.vo.UserVo">
-            SELECT  <include refid="Base_Column_List"/>
+            SELECT  <include refid="Base_Column_List" />
         FROM dict_user
         <where>
            is_deleted = 0
