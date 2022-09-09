@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 
  /**
  * @Author 元杰
- * @Date 2022/9/8 16:01
+ * @Date 2022/9/8 17:38
  */
 
 /**
@@ -26,6 +26,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @TableName(value = "dict_job_certificate")
 public class JobCertificate implements Serializable {
+    public static final String COL_JOB_CERTIFICATE_SCORE = "job_certificate_score";
     /**
      * 岗位证id
      */
@@ -41,11 +42,18 @@ public class JobCertificate implements Serializable {
     private String jobCertificateName;
 
     /**
-     * 岗位证分值
+     * 岗位证系数
      */
-    @TableField(value = "job_certificate_score")
-    @ApiModelProperty(value = "岗位证分值")
-    private BigDecimal jobCertificateScore;
+    @TableField(value = "job_certificate_factor")
+    @ApiModelProperty(value = "岗位证系数")
+    private BigDecimal jobCertificateFactor;
+
+    /**
+     * 工龄系数
+     */
+    @TableField(value = "age_factor")
+    @ApiModelProperty(value = "工龄系数")
+    private BigDecimal ageFactor;
 
     private static final long serialVersionUID = 1L;
 
@@ -53,5 +61,7 @@ public class JobCertificate implements Serializable {
 
     public static final String COL_JOB_CERTIFICATE_NAME = "job_certificate_name";
 
-    public static final String COL_JOB_CERTIFICATE_SCORE = "job_certificate_score";
+    public static final String COL_JOB_CERTIFICATE_FACTOR = "job_certificate_factor";
+
+    public static final String COL_AGE_FACTOR = "age_factor";
 }

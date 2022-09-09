@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 
  /**
  * @Author 元杰
- * @Date 2022/9/8 16:01
+ * @Date 2022/9/8 17:38
  */
 
 /**
@@ -26,6 +26,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @TableName(value = "dict_user")
 public class User implements Serializable {
+    public static final String COL_W_ID = "w_id";
+    public static final String COL_WORK_NAME = "work_name";
     /**
      * 用户id
      */
@@ -95,7 +97,6 @@ public class User implements Serializable {
     @TableField(value = "degree_name")
     @ApiModelProperty(value = "学历名称")
     private String degreeName;
-
 
     /**
      * 入职日期
@@ -174,10 +175,6 @@ public class User implements Serializable {
     public static final String COL_D_ID = "d_id";
 
     public static final String COL_DEGREE_NAME = "degree_name";
-
-    public static final String COL_W_ID = "w_id";
-
-    public static final String COL_WORK_NAME = "work_name";
 
     public static final String COL_SENIORITY = "seniority";
 

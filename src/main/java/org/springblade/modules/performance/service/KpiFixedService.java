@@ -1,0 +1,21 @@
+package org.springblade.modules.performance.service;
+
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import org.springblade.modules.performance.entity.KpiFixed;
+import com.baomidou.mybatisplus.extension.service.IService;
+
+import java.util.List;
+
+/**
+ * @Author 元杰
+ * @Date 2022/9/7 14:57
+ */
+
+public interface KpiFixedService extends IService<KpiFixed> {
+
+	IPage<KpiFixed> selectfixedPage(IPage<Object> page, String toMonth, String idOrName);
+
+	void updateByOne(KpiFixed param);
+
+	void updateByList(List<KpiFixed> kpiFixedList);
+}

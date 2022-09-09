@@ -59,6 +59,9 @@
                 user_code regexp #{idOrName}
                     or user_name regexp #{idOrName}
             </if>
+             <if test="toMonth != null and toMonth != ''">
+              and  date_format(attendance_month, '%Y-%m') = date_format(#{toMonth}, '%Y-%m')
+            </if>
         </where>
     </select>
 </mapper>

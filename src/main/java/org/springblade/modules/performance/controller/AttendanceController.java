@@ -1,9 +1,6 @@
 package org.springblade.modules.performance.controller;
 
 import cn.hutool.core.date.DateUtil;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import io.swagger.annotations.Api;
@@ -11,10 +8,8 @@ import io.swagger.annotations.ApiOperation;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.api.R;
-import org.springblade.modules.performance.dto.AttendanceDto;
 import org.springblade.modules.performance.dto.UpdateDto;
 import org.springblade.modules.performance.entity.KpiAttendance;
-import org.springblade.modules.performance.mapper.KpiAttendanceMapper;
 import org.springblade.modules.performance.service.KpiAttendanceService;
 import org.springblade.modules.performance.vo.KpiAttendanceVo;
 import org.springblade.modules.user.service.UserService;

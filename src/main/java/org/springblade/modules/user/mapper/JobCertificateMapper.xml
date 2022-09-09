@@ -6,11 +6,12 @@
     <!--@Table dict_job_certificate-->
     <id column="jc_id" jdbcType="INTEGER" property="jcId" />
     <result column="job_certificate_name" jdbcType="VARCHAR" property="jobCertificateName" />
-    <result column="job_certificate_score" jdbcType="DECIMAL" property="jobCertificateScore" />
+    <result column="job_certificate_factor" jdbcType="DECIMAL" property="jobCertificateFactor" />
+    <result column="age_factor" jdbcType="DECIMAL" property="ageFactor" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    jc_id, job_certificate_name, job_certificate_score
+    jc_id, job_certificate_name, job_certificate_factor, age_factor
   </sql>
     <select id="selectJobCertificatePage" resultMap="BaseResultMap">
         select

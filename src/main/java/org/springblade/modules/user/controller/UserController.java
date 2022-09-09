@@ -1,15 +1,10 @@
 package org.springblade.modules.user.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-
 import com.baomidou.mybatisplus.core.metadata.IPage;
-
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-
-import org.springblade.auth.config.YmlConfig;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.api.R;
@@ -61,10 +56,10 @@ public class UserController {
 			return R.fail("请勿重复添加");
 		}
 		//创建 添加用户会默认添加账号
-		SysUser sysUser = new SysUser();
-		sysUser.setUserCode(param.getUserCode());
-		sysUser.setCreateBy(param.getUserName());
-		sysUserService.add(sysUser);
+//		SysUser sysUser = new SysUser();
+//		sysUser.setUserCode(param.getUserCode());
+//		sysUser.setCreateBy(param.getUserName());
+//		sysUserService.add(sysUser);
 		userService.save(param);
 		return R.success("添加成功");
 	}
