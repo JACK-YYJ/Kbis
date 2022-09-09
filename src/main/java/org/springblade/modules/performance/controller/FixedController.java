@@ -67,7 +67,7 @@ public class FixedController {
 	 */
 	@PostMapping("/updateOneKpiFixed")
 	@ApiOperation(value = "编辑")
-	@ApiOperationSupport(order = 2)
+	@ApiOperationSupport(order = 3)
 	public R updateOneKpiFixed(@RequestBody KpiFixed param) {
 		kpiFixedService.updateByOne(param);
 		return R.success("操作成功");
@@ -80,7 +80,7 @@ public class FixedController {
 	 */
 	@PostMapping("/updateKpiFixedList")
 	@ApiOperation(value = "保存")
-	@ApiOperationSupport(order = 3)
+	@ApiOperationSupport(order = 4)
 	public R updateKpiFixedList(@RequestBody List<KpiFixed> kpiFixedList) {
 		kpiFixedService.updateByList(kpiFixedList);
 		return R.success("操作成功");

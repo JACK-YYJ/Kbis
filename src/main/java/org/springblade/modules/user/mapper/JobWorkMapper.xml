@@ -1,16 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.springblade.modules.user.mapper.JobWorkMapper">
-  <resultMap id="BaseResultMap" type="org.springblade.modules.user.entity.JobWork">
-    <!--@mbg.generated-->
-    <!--@Table job_work-->
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="j_id" jdbcType="INTEGER" property="jId" />
-    <result column="w_id" jdbcType="INTEGER" property="wId" />
-    <result column="w_sum" jdbcType="FLOAT" property="wSum" />
-  </resultMap>
-  <sql id="Base_Column_List">
-    <!--@mbg.generated-->
-    id, j_id, w_id, w_sum
-  </sql>
+    <resultMap id="BaseResultMap" type="org.springblade.modules.user.entity.JobWork">
+        <!--@mbg.generated-->
+        <!--@Table job_work-->
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="j_id" jdbcType="INTEGER" property="jId"/>
+        <result column="w_id" jdbcType="INTEGER" property="wId"/>
+        <result column="w_sum" jdbcType="FLOAT" property="wSum"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+       job_work.id, job_work.j_id, job_work.w_id, job_work.w_sum
+    </sql>
+    <select id="selectJobSumList" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/>
+        ,dw.work_name
+            from job_work
+                     left join dict_work dw on job_work.w_id = dw.w_id
+            where job_work.j_id = #{jId}
+    </select>
 </mapper>

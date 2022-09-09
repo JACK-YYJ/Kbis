@@ -39,6 +39,12 @@ public class Work implements Serializable {
     @TableField(value = "work_name")
     @ApiModelProperty(value = "工作类型名称")
     private String workName;
+	/**
+	 * 工作量计分值
+	 */
+	@TableField(value = "w_sum")
+	@ApiModelProperty(value = "工作量计分值")
+	private Double wSum;
 
     private static final long serialVersionUID = 1L;
 

@@ -36,5 +36,11 @@ public class JobWorkServiceImpl extends ServiceImpl<JobWorkMapper, JobWork> impl
 		//工作类型
 		this.saveBatch(jobWorkList1);
 	}
+
+	@Override
+	public List<JobWork> selectJobSumList(Integer jId) {
+
+		return baseMapper.selectJobSumList(jId);
+	}
 }
 
