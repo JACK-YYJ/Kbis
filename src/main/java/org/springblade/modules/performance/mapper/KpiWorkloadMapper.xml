@@ -1,29 +1,69 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.springblade.modules.performance.mapper.KpiWorkloadMapper">
-  <resultMap id="BaseResultMap" type="org.springblade.modules.performance.entity.KpiWorkload">
-    <!--@mbg.generated-->
-    <!--@Table kpi_workload-->
-    <id column="kpi_work_id" jdbcType="INTEGER" property="kpiWorkId" />
-    <result column="user_code" jdbcType="INTEGER" property="userCode" />
-    <result column="user_name" jdbcType="VARCHAR" property="userName" />
-    <result column="attendance_month" jdbcType="DATE" property="attendanceMonth" />
-    <result column="plain_film_sum" jdbcType="INTEGER" property="plainFilmSum" />
-    <result column="work_sum" jdbcType="DECIMAL" property="workSum" />
-    <result column="bowel_sum" jdbcType="INTEGER" property="bowelSum" />
-    <result column="breast_sum" jdbcType="INTEGER" property="breastSum" />
-    <result column="ct_flat_sweep_sum" jdbcType="INTEGER" property="ctFlatSweepSum" />
-    <result column="ct_intensifier_sum" jdbcType="INTEGER" property="ctIntensifierSum" />
-    <result column="ct_positioning_sum" jdbcType="INTEGER" property="ctPositioningSum" />
-    <result column="ct_hemal_sum" jdbcType="INTEGER" property="ctHemalSum" />
-    <result column="mr_intensifier_sum" jdbcType="INTEGER" property="mrIntensifierSum" />
-    <result column="mr_image_sum" jdbcType="INTEGER" property="mrImageSum" />
-    <result column="mr_breast_sum" jdbcType="INTEGER" property="mrBreastSum" />
-  </resultMap>
-  <sql id="Base_Column_List">
-    <!--@mbg.generated-->
-    kpi_work_id, user_code, user_name, attendance_month, plain_film_sum, work_sum, bowel_sum, 
-    breast_sum, ct_flat_sweep_sum, ct_intensifier_sum, ct_positioning_sum, ct_hemal_sum, 
-    mr_intensifier_sum, mr_image_sum, mr_breast_sum
-  </sql>
+    <resultMap id="BaseResultMap" type="org.springblade.modules.performance.entity.KpiWorkload">
+        <!--@mbg.generated-->
+        <!--@Table kpi_workload-->
+        <id column="kpi_work_id" jdbcType="INTEGER" property="kpiWorkId"/>
+        <result column="user_code" jdbcType="INTEGER" property="userCode"/>
+        <result column="user_name" jdbcType="VARCHAR" property="userName"/>
+        <result column="attendance_month" jdbcType="DATE" property="attendanceMonth"/>
+        <result column="plain_film_sum" jdbcType="DECIMAL" property="plainFilmSum"/>
+        <result column="bowel_sum" jdbcType="DECIMAL" property="bowelSum"/>
+        <result column="breast_sum" jdbcType="DECIMAL" property="breastSum"/>
+        <result column="ct_flat_sweep_sum" jdbcType="DECIMAL" property="ctFlatSweepSum"/>
+        <result column="ct_intensifier_sum" jdbcType="DECIMAL" property="ctIntensifierSum"/>
+        <result column="ct_positioning_sum" jdbcType="DECIMAL" property="ctPositioningSum"/>
+        <result column="ct_hemal_sum" jdbcType="DECIMAL" property="ctHemalSum"/>
+        <result column="mr_intensifier_sum" jdbcType="DECIMAL" property="mrIntensifierSum"/>
+        <result column="mr_image_sum" jdbcType="DECIMAL" property="mrImageSum"/>
+        <result column="mr_breast_sum" jdbcType="DECIMAL" property="mrBreastSum"/>
+        <result column="mr_flat_sweep_sum" jdbcType="DECIMAL" property="mrFlatSweepSum"/>
+        <result column="work_sum" jdbcType="DECIMAL" property="workSum"/>
+        <result column="work_correct" jdbcType="DECIMAL" property="workCorrect"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        kpi_work_id, user_code, user_name, attendance_month, plain_film_sum, bowel_sum, breast_sum,
+        ct_flat_sweep_sum, ct_intensifier_sum, ct_positioning_sum, ct_hemal_sum, mr_intensifier_sum,
+        mr_image_sum, mr_breast_sum, mr_flat_sweep_sum, work_sum,work_correct
+    </sql>
+    <select id="kpiWorkloadPage" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from kpi_workload
+        <where>
+            <if test="toMonth != null and toMonth != ''">
+                date_format(attendance_month, '%Y-%m') = date_format(#{toMonth}, '%Y-%m')
+            </if>
+        </where>
+    </select>
+    <select id="selectidOrName" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from kpi_workload
+        <where>
+            <if test="idOrName != null and idOrName != ''">
+                user_code regexp #{idOrName}
+                or user_name regexp #{idOrName}
+            </if>
+            <if test="toMonth != null and toMonth != ''">
+                and date_format(attendance_month, '%Y-%m') = date_format(#{toMonth}, '%Y-%m')
+            </if>
+        </where>
+    </select>
+    <select id="setectWorkSumByUserCode" resultType="org.springblade.modules.performance.vo.WorkSumByUserCode">
+        SELECT jw.w_id,
+        jw.w_sum,
+        dj.work_gs
+        FROM dict_user du
+        LEFT JOIN dict_job dj ON dj.j_id = du.j_id
+        LEFT JOIN job_work jw ON jw.j_id = du.j_id
+        <where>
+            du.user_code = #{userCode}
+            <if test="i != null and i != ''">
+               and jw.w_id = #{i}
+            </if>
+        </where>
+    </select>
 </mapper>

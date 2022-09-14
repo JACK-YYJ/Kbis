@@ -78,7 +78,7 @@ public class KpiFixedServiceImpl extends ServiceImpl<KpiFixedMapper, KpiFixed> i
 
 	 @Override
 	 public void updateByOne(KpiFixed param) {
-		 PercentageVo p = baseMapper.selectPercentageVo(param.getAttendanceMonth(),param.getUserCode());//出勤率
+		 PercentageVo p = baseMapper.selectPercentageVo(param.getAttendanceMonth(),param.getUserCode());//出勤率 和 公式
 			//合计分值
 		 param.setFixedCountScore(p.getPercentage().multiply(
 			 (param.getPositionScore().add(
@@ -91,16 +91,16 @@ public class KpiFixedServiceImpl extends ServiceImpl<KpiFixedMapper, KpiFixed> i
 				 )
 			 ))
 		 ));
-		 if(p.getJobGs()==1){
+		 if(p.getJobGs()==1){// 科室主任 、科室副主任  合计分值
 			 param.setFixedCorrectionScore(param.getFixedCountScore());
 		 }
-		 if(p.getJobGs()==2){
+		 if(p.getJobGs()==2){//合计分值*岗位系数*出勤率
 			 param.setFixedCorrectionScore(param.getFixedCountScore().multiply(p.getJobRatio().multiply(p.getPercentage())));
 		 }
-		 if(p.getJobGs()==3){
+		 if(p.getJobGs()==3){//合计分值*岗位系数
 			 param.setFixedCorrectionScore(param.getFixedCountScore().multiply(p.getJobRatio()));
 		 }
-		 if(p.getJobGs()==0){
+		 if(p.getJobGs()==0){//无
 			 param.setFixedCorrectionScore(BigDecimal.valueOf(0));
 		 }
 		 this.updateById(param);

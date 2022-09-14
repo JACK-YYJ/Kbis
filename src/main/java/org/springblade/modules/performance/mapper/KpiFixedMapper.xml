@@ -74,6 +74,7 @@
     <select id="selectPercentageVo" resultType="org.springblade.modules.performance.vo.PercentageVo">
         select
         dj.job_gs,
+        dj.work_gs,
         dj.job_ratio,
         CAST(
                    TRUNCATE(CAST(ka.attendance_day AS DECIMAL) /

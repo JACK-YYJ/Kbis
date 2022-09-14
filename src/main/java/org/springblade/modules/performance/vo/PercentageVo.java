@@ -1,5 +1,7 @@
 package org.springblade.modules.performance.vo;
 
+import com.baomidou.mybatisplus.annotation.TableField;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -12,5 +14,11 @@ import java.math.BigDecimal;
 public class PercentageVo {
 	private BigDecimal Percentage;
 	private Byte jobGs;
+	private Byte workGs;
+	/**
+	 * 岗位系数
+	 */
+	@TableField(value = "job_ratio")
+	@ApiModelProperty(value = "岗位系数")
 	private BigDecimal jobRatio;
 }
