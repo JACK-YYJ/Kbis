@@ -3,15 +3,16 @@ package org.springblade.modules.user.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.springblade.modules.user.entity.JobWork;
+import org.springblade.modules.user.vo.JobWorkVo;
 
 import java.util.List;
 
 /**
  * @Author 元杰
- * @Date 2022/8/29 11:30
+ * @Date 2022/9/13 15:13
  */
 
 @Mapper
 public interface JobWorkMapper extends BaseMapper<JobWork> {
-    List<JobWork> selectJobSumList(Integer jId);
+    List<JobWorkVo> selectJobSumList(Integer jId);
 }

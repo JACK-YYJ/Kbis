@@ -7,6 +7,8 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
+import java.math.BigDecimal;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -44,7 +46,7 @@ public class Work implements Serializable {
 	 */
 	@TableField(value = "w_sum")
 	@ApiModelProperty(value = "工作量计分值")
-	private Double wSum;
+	private BigDecimal wSum;
 
     private static final long serialVersionUID = 1L;
 

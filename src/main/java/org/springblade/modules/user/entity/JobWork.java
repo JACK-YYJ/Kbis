@@ -7,13 +7,14 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
  /**
  * @Author 元杰
- * @Date 2022/8/29 11:30
+ * @Date 2022/9/13 15:13
  */
 
 /**
@@ -26,7 +27,7 @@ import lombok.NoArgsConstructor;
 @TableName(value = "job_work")
 public class JobWork implements Serializable {
     @TableId(value = "id", type = IdType.AUTO)
-    @ApiModelProperty(value = "非必传（自增）")
+    @ApiModelProperty(value = "")
     private Integer id;
 
     /**
@@ -48,13 +49,7 @@ public class JobWork implements Serializable {
      */
     @TableField(value = "w_sum")
     @ApiModelProperty(value = "工作量计分值")
-    private Double wSum;
-	/**
-	 * 工作类型名称
-	 */
-	@TableField(value = "work_name")
-	@ApiModelProperty(value = "工作类型名称")
-	private String workName;
+    private BigDecimal wSum;
 
     private static final long serialVersionUID = 1L;
 

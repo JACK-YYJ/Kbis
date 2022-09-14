@@ -13,13 +13,11 @@ import org.springblade.modules.user.dto.UpdateJobDto;
 import org.springblade.modules.user.entity.*;
 import org.springblade.modules.user.service.*;
 import org.springblade.modules.user.vo.JobOtherPVo;
-import org.springblade.modules.user.vo.WorkVo;
+import org.springblade.modules.user.vo.JobWorkVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * @Author 元杰
@@ -61,7 +59,7 @@ public class JobController {
 	@ApiOperationSupport(order = 1)
 	@ApiOperation(value = "工作量计分值的查询", notes = "第一次添加会默认 加到关系表里默认值为0")
 	public R selectJobWork(Integer jId) {
-		List<JobWork> jobWorkList = jobWorkService.selectJobSumList(jId);
+		List<JobWorkVo> jobWorkList = jobWorkService.selectJobSumList(jId);
 		if (jobWorkList.size()==0){
 			return R.fail("请添加工作类型");
 		}

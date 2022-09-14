@@ -6,10 +6,11 @@
     <!--@Table dict_work-->
     <id column="w_id" jdbcType="INTEGER" property="wId" />
     <result column="work_name" jdbcType="VARCHAR" property="workName" />
+     <result column="w_sum" jdbcType="DECIMAL" property="wSum" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    w_id, work_name
+    w_id,work_name,w_sum
   </sql>
     <select id="selectWorkPage" resultMap="BaseResultMap">
         select

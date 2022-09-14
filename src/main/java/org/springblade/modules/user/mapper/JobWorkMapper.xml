@@ -7,17 +7,18 @@
         <id column="id" jdbcType="INTEGER" property="id"/>
         <result column="j_id" jdbcType="INTEGER" property="jId"/>
         <result column="w_id" jdbcType="INTEGER" property="wId"/>
-        <result column="w_sum" jdbcType="FLOAT" property="wSum"/>
+        <result column="w_sum" jdbcType="DECIMAL" property="wSum"/>
     </resultMap>
     <sql id="Base_Column_List">
         <!--@mbg.generated-->
        job_work.id, job_work.j_id, job_work.w_id, job_work.w_sum
     </sql>
-    <select id="selectJobSumList" resultMap="BaseResultMap">
-        select <include refid="Base_Column_List"/>
-        ,dw.work_name
-            from job_work
-                     left join dict_work dw on job_work.w_id = dw.w_id
-            where job_work.j_id = #{jId}
+    <select id="selectJobSumList" resultType="org.springblade.modules.user.vo.JobWorkVo">
+        select
+        jw.id, jw.j_id, jw.w_id, jw.w_sum
+        , dw.work_name
+            from job_work jw
+                     left join dict_work dw on jw.w_id = dw.w_id
+            where jw.j_id = #{jId}
     </select>
 </mapper>

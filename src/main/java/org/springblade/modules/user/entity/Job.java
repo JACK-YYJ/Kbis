@@ -61,12 +61,6 @@ public class Job implements Serializable {
     @ApiModelProperty(value = "矫正固定绩效分值（公式id）")
     private Integer formulaFixed;
 
-    /**
-     * 矫正固定绩效分值
-     */
-    @TableField(value = "fixed_than")
-    @ApiModelProperty(value = "矫正固定绩效分值")
-    private String fixedThan;
 
     /**
      * 矫正工作量分值（公式id）
@@ -75,12 +69,6 @@ public class Job implements Serializable {
     @ApiModelProperty(value = "矫正工作量分值（公式id）")
     private Integer formulaWorkload;
 
-    /**
-     * 矫正工作量分值
-     */
-    @TableField(value = "workload_than")
-    @ApiModelProperty(value = "矫正工作量分值")
-    private String workloadThan;
 
     /**
      * 固定绩效 按钮1：开  0：关
@@ -89,12 +77,6 @@ public class Job implements Serializable {
     @ApiModelProperty(value = "固定绩效 按钮1：开  0：关")
     private Boolean buttonFixed;
 
-    /**
-     * 固定绩效详情
-     */
-    @TableField(value = "fixed_text")
-    @ApiModelProperty(value = "固定绩效详情")
-    private String fixedText;
 
     /**
      * 工作量绩效 按钮1：开 0：关
@@ -103,12 +85,6 @@ public class Job implements Serializable {
     @ApiModelProperty(value = "工作量绩效 按钮1：开 0：关")
     private Boolean buttonWorkload;
 
-    /**
-     * 工作量绩效详情
-     */
-    @TableField(value = "workload_text")
-    @ApiModelProperty(value = "工作量绩效详情")
-    private String workloadText;
 
     /**
      * 其他绩效 按钮 1：开 0：关
@@ -129,19 +105,11 @@ public class Job implements Serializable {
 
     public static final String COL_FORMULA_FIXED = "formula_fixed";
 
-    public static final String COL_FIXED_THAN = "fixed_than";
-
     public static final String COL_FORMULA_WORKLOAD = "formula_workload";
-
-    public static final String COL_WORKLOAD_THAN = "workload_than";
 
     public static final String COL_BUTTON_FIXED = "button_fixed";
 
-    public static final String COL_FIXED_TEXT = "fixed_text";
-
     public static final String COL_BUTTON_WORKLOAD = "button_workload";
-
-    public static final String COL_WORKLOAD_TEXT = "workload_text";
 
     public static final String COL_BUTTON_OTHER = "button_other";
 }

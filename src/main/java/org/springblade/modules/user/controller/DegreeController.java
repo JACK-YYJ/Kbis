@@ -2,6 +2,7 @@ package org.springblade.modules.user.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -14,6 +15,7 @@ import org.springblade.modules.user.dto.UserDto;
 import org.springblade.modules.user.entity.Degree;
 import org.springblade.modules.user.entity.User;
 import org.springblade.modules.user.service.DegreeService;
+import org.springblade.modules.user.service.UserService;
 import org.springblade.modules.user.vo.UserVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -30,7 +32,8 @@ import java.util.List;
 public class DegreeController extends BladeController {
 	@Autowired
 	public DegreeService degreeService;
-
+	@Autowired
+	public UserService userService;
 	/**
 	 * 学历字典表分页查询
 	 */
@@ -83,6 +86,12 @@ public class DegreeController extends BladeController {
 	@ApiOperation(value = "删除")
 	@ApiOperationSupport(order = 4)
 	public R delete(@RequestBody List<Integer> param) {
+		for (Integer s : param) {
+			List<User> list = userService.lambdaQuery().eq(User::getDId, s).list();
+			if (!(list.size() == 0)) {
+				return R.fail("该学历下存在用户，不可删除");
+			}
+		}
 		return R.data(degreeService.removeByIds(param));
 	}
 }
