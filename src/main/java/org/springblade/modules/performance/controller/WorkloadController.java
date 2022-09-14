@@ -1,5 +1,6 @@
 package org.springblade.modules.performance.controller;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import io.swagger.annotations.Api;
@@ -48,8 +49,7 @@ public class WorkloadController {
 	@ApiOperation(value = "编辑")
 	@ApiOperationSupport(order = 3)
 	public R updateOneKpiFixed(@RequestBody KpiWorkload param) {
-		kpiWorkloadService.updateByOne(param);
-		return R.success("操作成功");
+		return kpiWorkloadService.updateByOne(param);
 	}
 	/**
 	 * 导入数据
@@ -60,7 +60,6 @@ public class WorkloadController {
 	@ApiOperation(value = "保存")
 	@ApiOperationSupport(order = 4)
 	public R updateKpiWorkList(@RequestBody List<KpiWorkload> kpiFixedList) {
-		kpiWorkloadService.updateByList(kpiFixedList);
-		return R.success("操作成功");
+		return kpiWorkloadService.updateByList(kpiFixedList);
 	}
 }

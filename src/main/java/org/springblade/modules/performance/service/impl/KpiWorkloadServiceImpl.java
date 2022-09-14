@@ -1,7 +1,9 @@
 package org.springblade.modules.performance.service.impl;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.springblade.core.tool.api.R;
 import org.springblade.modules.performance.entity.KpiAttendance;
 import org.springblade.modules.performance.mapper.KpiFixedMapper;
 import org.springblade.modules.performance.service.KpiFixedService;
@@ -61,7 +63,7 @@ public class KpiWorkloadServiceImpl extends ServiceImpl<KpiWorkloadMapper, KpiWo
     }
 
 	@Override
-	public void updateByOne(KpiWorkload param) {
+	public R updateByOne(KpiWorkload param) {
 		WorkSumByUserCode PlainFilmSum = baseMapper.setectWorkSumByUserCode(param.getUserCode(),1);
 		WorkSumByUserCode BowelSum = baseMapper.setectWorkSumByUserCode(param.getUserCode(),2);
 		WorkSumByUserCode BreastSum = baseMapper.setectWorkSumByUserCode(param.getUserCode(),3);
@@ -104,7 +106,9 @@ public class KpiWorkloadServiceImpl extends ServiceImpl<KpiWorkloadMapper, KpiWo
 		BigDecimal average = workSumList.stream().map(KpiWorkload::getWorkSum)
 			.reduce(BigDecimal.ZERO, BigDecimal::add)
 			.divide(BigDecimal.valueOf(workSumList.size()), 4, BigDecimal.ROUND_HALF_UP);
-
+		if(ObjectUtil.isEmpty(p)){
+			return R.fail("用户没出勤记录");
+		}
 		if(p.getWorkGs()==1){//总工作量
 			param.setWorkCorrect(param.getWorkSum());
 		}
@@ -117,13 +121,15 @@ public class KpiWorkloadServiceImpl extends ServiceImpl<KpiWorkloadMapper, KpiWo
 			);
 		}
 		baseMapper.updateById(param);
+		return R.success("编辑成功");
 	}
 
 	@Override
-	public void updateByList(List<KpiWorkload> kpiFixedList) {
+	public R updateByList(List<KpiWorkload> kpiFixedList) {
     	kpiFixedList.forEach(param->{
 			this.updateByOne(param);
 		});
+		return R.success("保存成功");
 	}
 }
 
