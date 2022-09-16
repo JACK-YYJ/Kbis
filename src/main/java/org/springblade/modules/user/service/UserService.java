@@ -19,6 +19,8 @@ public interface UserService extends IService<User> {
     IPage<UserVo> selectUserPage(IPage<Object> page, UserDto param);
 
 
+	void addIngMonthAttenddance();
+
 }
 
 

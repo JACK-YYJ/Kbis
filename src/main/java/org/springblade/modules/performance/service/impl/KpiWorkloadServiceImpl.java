@@ -1,5 +1,6 @@
 package org.springblade.modules.performance.service.impl;
 
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -41,7 +42,8 @@ public class KpiWorkloadServiceImpl extends ServiceImpl<KpiWorkloadMapper, KpiWo
     @Override
     public IPage<KpiWorkload> selectWorkloadPage(IPage<Object> page, String toMonth, String idOrName) {
         Page<KpiWorkload> kpiWorkloadPage = baseMapper.kpiWorkloadPage(page, toMonth);
-        if (kpiWorkloadPage.getRecords().size() == 0) {
+		String format = DateUtil.format(DateUtil.date(), "yyyy-MM");
+        if (kpiWorkloadPage.getRecords().size() == 0&&format.equals(toMonth))  {
             List<User> userList = userService.lambdaQuery().list();
             ArrayList<KpiWorkload> kpiAttendances = new ArrayList<>();
             for (User user : userList) {

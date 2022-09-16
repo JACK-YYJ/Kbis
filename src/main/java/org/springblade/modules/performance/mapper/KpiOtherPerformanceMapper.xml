@@ -22,8 +22,8 @@
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    kpi_op_id, user_code, user_name, attendance_month, manage_price, manage_performance_price, 
-    various_rewards_price, various_assessments_price, various_subsidies_price, other_night_shifts_sum, 
+    kpi_op_id, user_code, user_name, attendance_month, manage_price, manage_performance_price,
+    various_rewards_price, various_assessments_price, various_subsidies_price, other_night_shifts_sum,
     ct_night_shifts_sum, overtime_sum, radiation_price, bedside_sum, kpi_op_all_price
   </sql>
 
@@ -34,7 +34,7 @@
         <where>
 
             <if test="toMonth != null and toMonth != ''">
-                  date_format(attendance_month, '%Y-%m') = date_format(#{toMonth}, '%Y-%m')
+                  date_format(attendance_month, '%Y-%m') =  #{toMonth}
             </if>
         </where>
     </select>
@@ -48,7 +48,7 @@
                     or user_code regexp #{idOrName})
             </if>
             <if test="toMonth != null and toMonth != ''">
-                and   date_format(attendance_month, '%Y-%m') = date_format(#{toMonth}, '%Y-%m')
+                and   date_format(attendance_month, '%Y-%m') =  #{toMonth}
             </if>
         </where>
     </select>

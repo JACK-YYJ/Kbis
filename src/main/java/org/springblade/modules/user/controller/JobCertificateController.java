@@ -23,6 +23,7 @@ import java.util.List;
 @RestController
 @RequestMapping("api/set/JobCertificate")
 @Api(tags = "上岗证管理（字典表）")
+@CrossOrigin
 public class JobCertificateController {
 	@Autowired
 	private JobCertificateService jobCertificateService;

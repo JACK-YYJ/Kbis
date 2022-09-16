@@ -26,6 +26,7 @@ import java.util.List;
 @RestController
 @RequestMapping("api/set/job")
 @Api(tags = "岗位字典表(待处理)")
+@CrossOrigin
 public class JobController {
 	@Autowired
 	private JobService jobService;
@@ -85,7 +86,7 @@ public class JobController {
 	 */
 	@GetMapping("/selectJobOtherP")
 	@ApiOperationSupport(order = 3)
-	@ApiOperation(value = "其他绩效内容查询", notes = "第一次添加会默认 加到关系表里默认值为")
+	@ApiOperation(value = "其他绩效内容查询", notes = "")
 	public R selectJobOtherP(Integer jId) {
 		List<JobOtherPVo> jobOtherPList = jobOtherPService.selectJobOtherP(jId);
 		return R.data(jobOtherPList);

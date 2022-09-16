@@ -1,5 +1,6 @@
 package org.springblade.modules.performance.service.impl;
 
+import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springblade.modules.performance.dto.UpdateDto;
@@ -29,20 +30,18 @@ public class KpiAttendanceServiceImpl extends ServiceImpl<KpiAttendanceMapper, K
     @Override
     public IPage<KpiAttendanceVo> selectAttendancePage(IPage<Object> page, String toMonth, String idOrName) {
         Page<KpiAttendanceVo> kpiAttendancePage = baseMapper.selectAttendancePage(page, toMonth);
-        if (kpiAttendancePage.getRecords().size() == 0) {
-            List<User> userList = userService.lambdaQuery().list();
-            ArrayList<KpiAttendance> kpiAttendances = new ArrayList<>();
-            for (User user : userList) {
-                KpiAttendance kpiAttendance = new KpiAttendance();
-                kpiAttendance.setUserCode(user.getUserCode());
-                kpiAttendance.setUserName(user.getUserName());
-                kpiAttendance.setAttendanceMonth(DateUtils.getNowDate());
-                kpiAttendance.setAttendanceState(1);
-                kpiAttendance.setAttendanceDay(23);
-                kpiAttendance.setMonthDay(23);
-                kpiAttendances.add(kpiAttendance);
-            }
-            this.saveBatch(kpiAttendances);
+        List<KpiAttendanceVo> MonthIngList = baseMapper.selectByAdd(DateUtils.getNowDate());
+        int count = userService.count();
+
+        if (count!=kpiAttendancePage.getRecords().size()&&kpiAttendancePage.getRecords().size() != 0){
+        	MonthIngList.forEach(s->{
+				baseMapper.deleteById(s.getId());
+			});
+        	userService.addIngMonthAttenddance();
+		}
+		String format = DateUtil.format(DateUtil.date(), "yyyy-MM");
+        if (kpiAttendancePage.getRecords().size() == 0&&format.equals(toMonth)) {
+			userService.addIngMonthAttenddance();
         }
         if (idOrName != null) {
             IPage<KpiAttendanceVo> kpiAttendanceVoStream = baseMapper.selectidOrName(page, idOrName, toMonth);

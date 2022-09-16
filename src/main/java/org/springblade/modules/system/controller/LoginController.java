@@ -23,6 +23,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/in")
 @Api(tags = "登录登出")
+@CrossOrigin
 public class LoginController {
 
 	@Autowired

@@ -1,8 +1,11 @@
 package org.springblade.modules.user.service.impl;
 
 import org.springblade.modules.user.entity.JobWork;
+import org.springblade.modules.user.entity.OtherPerformance;
 import org.springblade.modules.user.entity.Work;
+import org.springblade.modules.user.service.OtherPerformanceService;
 import org.springblade.modules.user.vo.JobOtherPVo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -18,7 +21,8 @@ import org.springblade.modules.user.service.JobOtherPService;
 
 @Service
 public class JobOtherPServiceImpl extends ServiceImpl<JobOtherPMapper, JobOtherP> implements JobOtherPService{
-
+	@Autowired
+	private OtherPerformanceService otherPerformanceService;
 	 @Override
 	 public List<JobOtherPVo> selectJobOtherP(Integer jId) {
 		List<JobOtherPVo> list = baseMapper.selectJobOtherP(jId);
@@ -27,9 +31,9 @@ public class JobOtherPServiceImpl extends ServiceImpl<JobOtherPMapper, JobOtherP
 
 	 @Override
 	 public void add(Integer jId) {
-		 List<JobOtherP> list = this.lambdaQuery().list();
+		 List<OtherPerformance> list = otherPerformanceService.lambdaQuery().list();
 		 ArrayList<JobOtherP> jobOtherPList = new ArrayList<>();
-		 for (JobOtherP j : list) {
+		 for (OtherPerformance j : list) {
 			 JobOtherP jobOtherP = new JobOtherP();
 			 jobOtherP.setOpId(j.getOpId());
 			 jobOtherP.setJId(jId);

@@ -1,5 +1,6 @@
 package org.springblade.modules.performance.service.impl;
 
+import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.conditions.query.QueryChainWrapper;
@@ -43,7 +44,8 @@ public class KpiOtherPerformanceServiceImpl extends ServiceImpl<KpiOtherPerforma
     @Override
     public IPage<KpiOtherPerformance> selectOpattendancePage(IPage<Object> page, String toMonth, String idOrName) {
         Page<KpiOtherPerformance> allList = baseMapper.selectOpattendancePage(page, toMonth);
-        if (allList.getRecords().size() == 0) {
+		String format = DateUtil.format(DateUtil.date(), "yyyy-MM");
+        if (allList.getRecords().size() == 0&&format.equals(toMonth)) {
             List<User> userList = userService.lambdaQuery().list();
             ArrayList<KpiOtherPerformance> kpiopaddList = new ArrayList<>();
             for (User user : userList) {
@@ -92,7 +94,7 @@ public class KpiOtherPerformanceServiceImpl extends ServiceImpl<KpiOtherPerforma
 			)
 		);
 		kpiOp.setKpiOpAllPrice(j);
-		this.updateById(param);
+		this.updateById(kpiOp);
 	}
 }
 

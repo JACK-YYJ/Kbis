@@ -1,5 +1,6 @@
 package org.springblade.modules.performance.service.impl;
 
+import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.springblade.modules.performance.vo.FixedToMonth;
 import org.springblade.modules.performance.vo.KpiAttendanceVo;
@@ -29,7 +30,8 @@ public class KpiFixedServiceImpl extends ServiceImpl<KpiFixedMapper, KpiFixed> i
 	 @Override
 	 public IPage<KpiFixed> selectfixedPage(IPage<Object> page, String toMonth, String idOrName) {
 		IPage<KpiFixed> selectPage =  baseMapper.selectfixedPage(page,toMonth);
-		if (selectPage.getRecords().size()==0){
+		 String format = DateUtil.format(DateUtil.date(), "yyyy-MM");
+		if (selectPage.getRecords().size()==0&&format.equals(toMonth)){
 		 List<FixedToMonth>	 fixedToMonthList = baseMapper.selectToMonth();
 		 	// 工龄系数 和 上岗证 系数  （没数据 会出现数组下标越界）
 			JobCertificate xs = jobCertificateService.query().list().get(0);

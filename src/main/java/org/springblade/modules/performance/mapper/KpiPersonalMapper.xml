@@ -1,26 +1,125 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.springblade.modules.performance.mapper.KpiPersonalMapper">
-  <resultMap id="BaseResultMap" type="org.springblade.modules.performance.entity.KpiPersonal">
-    <!--@mbg.generated-->
-    <!--@Table kpi_personal-->
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="user_code" jdbcType="INTEGER" property="userCode" />
-    <result column="user_name" jdbcType="VARCHAR" property="userName" />
-    <result column="attendance_month" jdbcType="DATE" property="attendanceMonth" />
-    <result column="percentage" jdbcType="VARCHAR" property="percentage" />
-    <result column="job_type" jdbcType="TINYINT" property="jobType" />
-    <result column="job_name" jdbcType="VARCHAR" property="jobName" />
-    <result column="job_ratio" jdbcType="FLOAT" property="jobRatio" />
-    <result column="card_id" jdbcType="VARCHAR" property="cardId" />
-    <result column="op_sum" jdbcType="DECIMAL" property="opSum" />
-    <result column="fixed_sum" jdbcType="DECIMAL" property="fixedSum" />
-    <result column="work_sum" jdbcType="DECIMAL" property="workSum" />
-    <result column="personal_sum" jdbcType="DECIMAL" property="personalSum" />
-  </resultMap>
-  <sql id="Base_Column_List">
-    <!--@mbg.generated-->
-    id, user_code, user_name, attendance_month, percentage, job_type, job_name, job_ratio, 
-    card_id, op_sum, fixed_sum, work_sum, personal_sum
-  </sql>
+    <resultMap id="BaseResultMap" type="org.springblade.modules.performance.entity.KpiPersonal">
+        <!--@mbg.generated-->
+        <!--@Table kpi_personal-->
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="user_code" jdbcType="INTEGER" property="userCode"/>
+        <result column="user_name" jdbcType="VARCHAR" property="userName"/>
+        <result column="attendance_month" jdbcType="DATE" property="attendanceMonth"/>
+        <result column="percentage" jdbcType="VARCHAR" property="percentage"/>
+        <result column="job_type" jdbcType="TINYINT" property="jobType"/>
+        <result column="job_name" jdbcType="VARCHAR" property="jobName"/>
+        <result column="job_ratio" jdbcType="DECIMAL" property="jobRatio"/>
+        <result column="card_id" jdbcType="VARCHAR" property="cardId"/>
+        <result column="op_sum" jdbcType="DECIMAL" property="opSum"/>
+        <result column="fixed_sum" jdbcType="DECIMAL" property="fixedSum"/>
+        <result column="work_sum" jdbcType="DECIMAL" property="workSum"/>
+        <result column="personal_sum" jdbcType="DECIMAL" property="personalSum"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        id, user_code, user_name, attendance_month, percentage, job_type, job_name, job_ratio,
+        card_id, op_sum, fixed_sum, work_sum, personal_sum
+    </sql>
+    <select id="selectPersonalPage" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from kpi_personal
+        <where>
+            <if test="toMonth != null and toMonth != ''">
+                date_format(attendance_month, '%Y-%m') = #{toMonth}
+            </if>
+        </where>
+    </select>
+    <select id="selectByAdd" resultType="org.springblade.modules.performance.vo.KpiPersonalVo">
+        SELECT du.user_code,
+               du.user_name,
+               ka.attendance_month,
+               CONCAT(CAST(CONVERT(
+                   100 * CAST(ka.attendance_day AS DECIMAL) / CAST(ka.month_day AS DECIMAL), DECIMAL) AS CHAR),
+                      '%')               AS percentage,
+               dj.job_type,
+               dj.job_name,
+               dj.job_ratio,
+               du.card_id,
+
+               kop.kpi_op_all_price      AS op_sum,
+               kf.fixed_correction_score AS fixed_sum,
+               kw.work_correct           AS work_sum
+        FROM dict_user du
+                 LEFT JOIN kpi_attendance ka ON ka.user_code = du.user_code
+                 LEFT JOIN dict_job dj ON dj.j_id = du.j_id
+
+                 LEFT JOIN kpi_other_performance kop ON kop.user_code = du.user_code
+                 LEFT JOIN kpi_fixed kf ON kf.user_code = du.user_code
+                 LEFT JOIN kpi_workload kw ON kw.user_code = du.user_code
+        <where>
+            <if test="format != null and format != ''">
+                date_format(ka.attendance_month, '%Y-%m') = #{format}
+            </if>
+        </where>
+        GROUP BY user_code
+    </select>
+
+
+    <select id="selectidOrName" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from kpi_personal
+        <where>
+            <if test="idOrName != null and idOrName != ''">
+                (user_code regexp #{idOrName}
+                    or user_name regexp #{idOrName})
+            </if>
+            <if test="toMonth != null and toMonth != ''">
+                and  date_format(attendance_month, '%Y-%m') = #{toMonth}
+            </if>
+        </where>
+    </select>
+    <select id="selectByjobName" resultType="org.springblade.modules.performance.vo.StatisticsVo">
+        SELECT job_name          as name,
+               SUM(personal_sum) as personal_sum
+            ,
+               CONCAT(CAST(CONVERT(100 * CAST(sum(personal_sum) AS DECIMAL) /
+                                   CAST((SELECT SUM(personal_sum) FROM kpi_personal) AS DECIMAL
+                                       ),
+                   DECIMAL
+                   ) AS CHAR
+                          ),
+                      '%'
+                   )             AS percentage,
+               COUNT(1)          AS person_sum,
+               AVG(personal_sum) AS avg
+        FROM kpi_personal
+        <where>
+            <if test="toMonth != null and toMonth != ''">
+                date_format(attendance_month, '%Y-%m') = #{toMonth}
+            </if>
+        </where>
+        GROUP BY job_name
+    </select>
+    <select id="selectByjobtype" resultType="org.springblade.modules.performance.vo.StatisticsVo">
+        SELECT IF(job_type = '0','医师','医技') AS name,
+               SUM(personal_sum) as personal_sum
+            ,
+               CONCAT(CAST(CONVERT(100 * CAST(sum(personal_sum) AS DECIMAL) /
+                                   CAST((SELECT SUM(personal_sum) FROM kpi_personal) AS DECIMAL
+                                       ),
+                   DECIMAL
+                   ) AS CHAR
+                          ),
+                      '%'
+                   )             AS percentage,
+               COUNT(1)          AS person_sum,
+               AVG(personal_sum) AS avg
+        FROM kpi_personal
+        <where>
+            <if test="toMonth != null and toMonth != ''">
+                date_format(attendance_month, '%Y-%m') = #{toMonth}
+            </if>
+        </where>
+        GROUP BY job_type
+    </select>
 </mapper>

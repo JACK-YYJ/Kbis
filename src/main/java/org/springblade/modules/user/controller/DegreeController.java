@@ -29,6 +29,7 @@ import java.util.List;
 @RestController
 @RequestMapping("api/set/degree")
 @Api(tags = "学历字典表（字典表）")
+@CrossOrigin
 public class DegreeController extends BladeController {
 	@Autowired
 	public DegreeService degreeService;
@@ -54,7 +55,7 @@ public class DegreeController extends BladeController {
 	@ApiOperation(value = "添加")
 	@ApiOperationSupport(order = 2)
 	public R add(@RequestBody Degree param) {
-		Degree em = degreeService.getOne(new QueryWrapper<Degree>().eq(Degree.COL_D_ID,param.getDId()));
+		Degree em = degreeService.getOne(new QueryWrapper<Degree>().eq(Degree.COL_DEGREE_NAME,param.getDegreeName()));
 		if (em != null) {
 			return R.fail("请勿重复添加");
 		}

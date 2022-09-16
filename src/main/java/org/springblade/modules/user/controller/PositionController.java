@@ -22,6 +22,7 @@ import java.util.List;
 @RestController
 @RequestMapping("api/set/Position")
 @Api(tags = "职称管理（字典表）")
+@CrossOrigin
 public class PositionController {
 	@Autowired
 	private PositionService positionService;
@@ -59,7 +60,6 @@ public class PositionController {
 	 * @param param
 	 * @return
 	 */
-
 	@PostMapping("/update")
 	@ApiOperation(value = "编辑")
 	@ApiOperationSupport(order = 3)

@@ -28,6 +28,7 @@ import java.util.List;
 @RestController
 @RequestMapping("api/set/user")
 @Api(tags = "用户管理（字典表）")
+@CrossOrigin
 public class UserController {
 	@Autowired
 	public UserService userService;
@@ -88,7 +89,6 @@ public class UserController {
 
 	/**
 	 * 修改密码
-	 *
 	 * @param userDTO
 	 * @return
 	 */

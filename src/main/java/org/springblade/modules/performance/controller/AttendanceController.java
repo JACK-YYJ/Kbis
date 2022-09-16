@@ -26,9 +26,8 @@ import java.util.List;
 @RestController
 @RequestMapping("api/kpi/attendance")
 @Api(tags = "出勤率")
+@CrossOrigin
 public class AttendanceController {
-	@Autowired
-	public UserService userService;
 
 	@Autowired
 	private KpiAttendanceService kpiAttendanceService;

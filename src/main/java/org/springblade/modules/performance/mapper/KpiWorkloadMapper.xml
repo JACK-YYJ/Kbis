@@ -34,7 +34,7 @@
         from kpi_workload
         <where>
             <if test="toMonth != null and toMonth != ''">
-                date_format(attendance_month, '%Y-%m') = date_format(#{toMonth}, '%Y-%m')
+                date_format(attendance_month, '%Y-%m') = #{toMonth}
             </if>
         </where>
     </select>
@@ -48,7 +48,7 @@
                 or user_name regexp #{idOrName}
             </if>
             <if test="toMonth != null and toMonth != ''">
-                and date_format(attendance_month, '%Y-%m') = date_format(#{toMonth}, '%Y-%m')
+                and date_format(attendance_month, '%Y-%m') =  #{toMonth}
             </if>
         </where>
     </select>

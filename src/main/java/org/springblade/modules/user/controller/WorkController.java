@@ -22,6 +22,7 @@ import java.util.List;
 @RestController
 @RequestMapping("api/set/work")
 @Api(tags = "工作类型管理（字典表）")
+@CrossOrigin
 public class WorkController {
 	@Autowired
 	private WorkService workService;

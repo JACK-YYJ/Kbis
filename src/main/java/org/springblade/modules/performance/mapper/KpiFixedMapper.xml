@@ -29,7 +29,7 @@
         <where>
             <if test="toMonth != null and toMonth != ''">
                 <if test="toMonth != null and toMonth != ''">
-                    date_format(attendance_month, '%Y-%m') = date_format(#{toMonth}, '%Y-%m')
+                    date_format(attendance_month, '%Y-%m') =  #{toMonth}
                 </if>
             </if>
         </where>
@@ -62,35 +62,34 @@
         <include refid="Base_Column_List"/>
         from kpi_fixed
         <where>
-           <if test="idOrName != null and idOrName != ''">
+            <if test="idOrName != null and idOrName != ''">
                 user_code regexp #{idOrName}
                     or user_name regexp #{idOrName}
             </if>
             <if test="toMonth != null and toMonth != ''">
-                and date_format(attendance_month, '%Y-%m') = date_format(#{toMonth}, '%Y-%m')
+                and date_format(attendance_month, '%Y-%m') =  #{toMonth}
             </if>
         </where>
     </select>
     <select id="selectPercentageVo" resultType="org.springblade.modules.performance.vo.PercentageVo">
-        select
-        dj.job_gs,
-        dj.work_gs,
-        dj.job_ratio,
-        CAST(
+        select dj.job_gs,
+               dj.work_gs,
+               dj.job_ratio,
+               CAST(
                    TRUNCATE(CAST(ka.attendance_day AS DECIMAL) /
                             CAST(ka.month_day AS DECIMAL(5, 2)
                                 ), 4
                        ) AS DECIMAL(5, 4)
                    ) AS percentage
-       FROM dict_user du
+        FROM dict_user du
                  LEFT JOIN kpi_attendance ka ON ka.user_code = du.user_code
                  LEFT JOIN dict_job dj ON dj.j_id = du.j_id
         <where>
             <if test="userCode != null and userCode != ''">
-               du.user_code = #{userCode}
+                du.user_code = #{userCode}
             </if>
             <if test="attendanceMonth != null">
-              and   date_format(ka.attendance_month, '%Y-%m') = date_format(#{attendanceMonth}, '%Y-%m')
+                and   date_format(ka.attendance_month, '%Y-%m') = date_format(#{attendanceMonth}, '%Y-%m')
             </if>
         </where>
     </select>
