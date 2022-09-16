@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.springblade.modules.performance.mapper.KpiAccountingMapper">
+  <resultMap id="BaseResultMap" type="org.springblade.modules.performance.entity.KpiAccounting">
+    <!--@mbg.generated-->
+    <!--@Table kpi_accounting-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="attendance_month" jdbcType="DATE" property="attendanceMonth" />
+    <result column="performance_sum" jdbcType="DECIMAL" property="performanceSum" />
+    <result column="onther_performance_sum" jdbcType="DECIMAL" property="ontherPerformanceSum" />
+    <result column="allot_sum" jdbcType="DECIMAL" property="allotSum" />
+    <result column="phy_centum" jdbcType="DECIMAL" property="phyCentum" />
+    <result column="med_centum" jdbcType="DECIMAL" property="medCentum" />
+    <result column="phy_fixed_coefficient" jdbcType="DECIMAL" property="phyFixedCoefficient" />
+    <result column="phy_work_coefficient" jdbcType="DECIMAL" property="phyWorkCoefficient" />
+    <result column="med_fixed_coefficient" jdbcType="DECIMAL" property="medFixedCoefficient" />
+    <result column="med_work_coefficient" jdbcType="DECIMAL" property="medWorkCoefficient" />
+    <result column="phy_fixed_sum" jdbcType="DECIMAL" property="phyFixedSum" />
+    <result column="phy_work_sum" jdbcType="DECIMAL" property="phyWorkSum" />
+    <result column="med_fixed_sum" jdbcType="DECIMAL" property="medFixedSum" />
+    <result column="med_work_sum" jdbcType="DECIMAL" property="medWorkSum" />
+    <result column="phy_fixed_correction_score_sum" jdbcType="DECIMAL" property="phyFixedCorrectionScoreSum" />
+    <result column="phy_work_correct_sum" jdbcType="DECIMAL" property="phyWorkCorrectSum" />
+    <result column="med_fixed_correction_score_sum" jdbcType="DECIMAL" property="medFixedCorrectionScoreSum" />
+    <result column="med_work_correct_sum" jdbcType="DECIMAL" property="medWorkCorrectSum" />
+    <result column="phy_fixed_unit" jdbcType="DECIMAL" property="phyFixedUnit" />
+    <result column="phy_work_unit" jdbcType="DECIMAL" property="phyWorkUnit" />
+    <result column="med_fixed_unit" jdbcType="DECIMAL" property="medFixedUnit" />
+    <result column="med_work_unit" jdbcType="DECIMAL" property="medWorkUnit" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, attendance_month, performance_sum, onther_performance_sum, allot_sum, phy_centum, 
+    med_centum, phy_fixed_coefficient, phy_work_coefficient, med_fixed_coefficient, med_work_coefficient, 
+    phy_fixed_sum, phy_work_sum, med_fixed_sum, med_work_sum, phy_fixed_correction_score_sum, 
+    phy_work_correct_sum, med_fixed_correction_score_sum, med_work_correct_sum, phy_fixed_unit, 
+    phy_work_unit, med_fixed_unit, med_work_unit
+  </sql>
+    <select id="selectSumPhyMed" resultType="org.springblade.modules.performance.vo.SumVo">
+        SELECT ka.attendance_month,
+               dj.job_type,
+               kf.fixed_count_score,
+               kf.fixed_correction_score,
+               kw.work_sum,
+               kw.work_correct,
+               kop.kpi_op_all_price
+
+        FROM dict_user du
+                 LEFT JOIN kpi_attendance ka ON ka.user_code = du.user_code
+                 LEFT JOIN kpi_other_performance kop ON kop.user_code = du.user_code
+                 LEFT JOIN dict_job dj ON dj.j_id = du.j_id
+                 LEFT JOIN kpi_fixed kf ON kf.user_code = du.user_code
+                 LEFT JOIN kpi_workload kw ON kw.user_code = du.user_code
+
+        <where>
+            <if test="toMonth != null and toMonth != ''">
+                <if test="toMonth != null and toMonth != ''">
+                    date_format(ka.attendance_month, '%Y-%m') = #{toMonth}
+                </if>
+            </if>
+        </where>
+    </select>
+    <select id="selectByToMonth" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from kpi_accounting
+        <where>
+            <if test="toMonth != null and toMonth != ''">
+                <if test="toMonth != null and toMonth != ''">
+                    date_format(attendance_month, '%Y-%m') = #{toMonth}
+                </if>
+            </if>
+        </where>
+    </select>
+</mapper>
