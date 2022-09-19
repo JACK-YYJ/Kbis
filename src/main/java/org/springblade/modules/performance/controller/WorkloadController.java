@@ -25,6 +25,7 @@ import java.util.List;
 @RestController
 @RequestMapping("api/kpi/work")
 @Api(tags = "工作量绩效分值")
+@CrossOrigin
 public class WorkloadController {
 	@Autowired
 	private KpiWorkloadService kpiWorkloadService;
