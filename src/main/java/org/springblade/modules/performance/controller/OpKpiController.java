@@ -29,6 +29,7 @@ import java.util.List;
 @RestController
 @RequestMapping("api/kpi/opattendance")
 @Api(tags = "其它绩效")
+@CrossOrigin
 public class OpKpiController {
 
 
@@ -40,7 +41,7 @@ public class OpKpiController {
 	@GetMapping("/selectOpattendancePage")
 	@ApiOperationSupport(order = 1)
 	@ApiOperation(value = "条件分页查询", notes = "传入toMonth")
-	public R<IPage<KpiOtherPerformance>> selectOpattendancePage(Query page, String toMonth,String idOrName) {
+	public R selectOpattendancePage(Query page, String toMonth,String idOrName) {
 		if (toMonth==null){
 			return R.fail("请从新输入月份");
 		}
