@@ -24,6 +24,7 @@ import java.util.List;
 @RestController
 @RequestMapping("api/kpi/fixed")
 @Api(tags = "固定绩效考核分值")
+@CrossOrigin
 public class FixedController {
     @Autowired
 	private KpiFixedService kpiFixedService;
@@ -34,7 +35,7 @@ public class FixedController {
 	@GetMapping("/selectfixedPage")
 	@ApiOperationSupport(order = 1)
 	@ApiOperation(value = "条件分页查询", notes = "传入toMonth")
-	public R<IPage<KpiFixed>> selectfixedPage(Query page, String toMonth, String idOrName) {
+	public R selectfixedPage(Query page, String toMonth, String idOrName) {
 		if (toMonth==null){
 			return R.fail("请从新输入月份");
 		}
