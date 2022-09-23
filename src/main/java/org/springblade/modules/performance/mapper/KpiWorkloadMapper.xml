@@ -45,25 +45,35 @@
         <where>
             <if test="idOrName != null and idOrName != ''">
                 user_code regexp #{idOrName}
-                or user_name regexp #{idOrName}
+                    or user_name regexp #{idOrName}
             </if>
             <if test="toMonth != null and toMonth != ''">
-                and date_format(attendance_month, '%Y-%m') =  #{toMonth}
+                and date_format(attendance_month, '%Y-%m') = #{toMonth}
             </if>
         </where>
     </select>
     <select id="setectWorkSumByUserCode" resultType="org.springblade.modules.performance.vo.WorkSumByUserCode">
         SELECT jw.w_id,
-        jw.w_sum,
-        dj.work_gs
+               jw.w_sum,
+               dj.work_gs
         FROM dict_user du
-        LEFT JOIN dict_job dj ON dj.j_id = du.j_id
-        LEFT JOIN job_work jw ON jw.j_id = du.j_id
+                 LEFT JOIN dict_job dj ON dj.j_id = du.j_id
+                 LEFT JOIN job_work jw ON jw.j_id = du.j_id
         <where>
             du.user_code = #{userCode}
             <if test="i != null and i != ''">
-               and jw.w_id = #{i}
+                and jw.w_id = #{i}
             </if>
         </where>
+    </select>
+
+    <select id="selectWorkLoadVo" resultType="org.springblade.modules.performance.vo.kpiWorkloadVo">
+        select kw.work_sum,
+               dj.job_type
+        FROM dict_user du
+                 LEFT JOIN kpi_attendance ka ON ka.user_code = du.user_code
+                 LEFT JOIN dict_job dj ON dj.j_id = du.j_id
+                 LEFT JOIN kpi_workload kw ON kw.user_code = du.user_code
+        where   date_format(ka.attendance_month, '%Y-%m') = date_format(#{attendanceMonth}, '%Y-%m')
     </select>
 </mapper>

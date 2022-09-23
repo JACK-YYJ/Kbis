@@ -55,9 +55,14 @@ public class AttendanceController {
 	 */
 	@PostMapping("/update")
 	@ApiOperation(value = "编辑")
-	@ApiOperationSupport(order = 3)
+	@ApiOperationSupport(order = 2)
 	public R update(@RequestBody List<KpiAttendance> param) {
-
+//			param.forEach(s->{
+//				if(s.getAttendanceState().equals(2) || s.getAttendanceMonth().equals(3)){
+//					s.setAttendanceDay(0);
+//				}
+//			});
+		//前端处理了
 			kpiAttendanceService.updateBatchById(param);
 		return R.success("操作成功");
 	}
@@ -73,7 +78,6 @@ public class AttendanceController {
 	@ApiOperationSupport(order = 3)
 	public R updateDaySum(@RequestBody UpdateDto param) {
 		//str 转 date
-		Date stf = DateUtil.parse(param.getToMonth());
 		List<KpiAttendance> kpiAttendanceList = kpiAttendanceService.selectAttendance(param);
 		for (KpiAttendance kpiAttendance : kpiAttendanceList) {
 			kpiAttendance.setMonthDay(param.getToDaySum());

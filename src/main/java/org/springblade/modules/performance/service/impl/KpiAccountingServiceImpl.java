@@ -85,38 +85,31 @@ public class KpiAccountingServiceImpl extends ServiceImpl<KpiAccountingMapper, K
 //		BigDecimal PhyWorkCorrect = new BigDecimal(0.00000);
 //		BigDecimal MedFixedCorrectionScore = new BigDecimal(0.00000);
 //		BigDecimal MedWorkCorrect = new BigDecimal(0.00000);
+		List<SumVo> phycollect = kpiFixeds.stream().filter(s -> s.getJobType()==0).collect(Collectors.toList());
+		List<SumVo> medcollect = kpiFixeds.stream().filter(s -> s.getJobType()==1).collect(Collectors.toList());
 
-		BigDecimal PhyFixedCorrectionScore = kpiFixeds.stream().filter(s -> s.getJobType().equals(0)).map(SumVo::getFixedCorrectionScore).reduce(BigDecimal.ZERO, BigDecimal::add)
-			.divide(BigDecimal.valueOf(kpiFixeds.size()), 5, BigDecimal.ROUND_HALF_DOWN);
-		BigDecimal PhyWorkCorrect = kpiFixeds.stream().filter(s -> s.getJobType().equals(0)).map(SumVo::getWorkCorrect).reduce(BigDecimal.ZERO, BigDecimal::add)
-			.divide(BigDecimal.valueOf(kpiFixeds.size()), 5, BigDecimal.ROUND_HALF_DOWN);
-		BigDecimal MedFixedCorrectionScore = kpiFixeds.stream().filter(s -> s.getJobType().equals(1)).map(SumVo::getFixedCorrectionScore).reduce(BigDecimal.ZERO, BigDecimal::add)
-			.divide(BigDecimal.valueOf(kpiFixeds.size()), 5, BigDecimal.ROUND_HALF_DOWN);
-		BigDecimal MedWorkCorrect = kpiFixeds.stream().filter(s -> s.getJobType().equals(1)).map(SumVo::getWorkCorrect).reduce(BigDecimal.ZERO, BigDecimal::add)
-			.divide(BigDecimal.valueOf(kpiFixeds.size()), 5, BigDecimal.ROUND_HALF_DOWN);
+		BigDecimal PhyFixedCorrectionScore = phycollect.stream().map(SumVo::getFixedCorrectionScore).reduce(BigDecimal.ZERO, BigDecimal::add);
+		BigDecimal PhyWorkCorrect = phycollect.stream().map(SumVo::getWorkCorrect).reduce(BigDecimal.ZERO, BigDecimal::add);
+
+		BigDecimal MedFixedCorrectionScore = medcollect.stream().map(SumVo::getFixedCorrectionScore).reduce(BigDecimal.ZERO, BigDecimal::add);
+		BigDecimal MedWorkCorrect = medcollect.stream().map(SumVo::getWorkCorrect).reduce(BigDecimal.ZERO, BigDecimal::add);
 
 		byId.setPhyFixedCorrectionScoreSum(PhyFixedCorrectionScore);//医师固定绩效矫正之和A1
 		byId.setPhyWorkCorrectSum(PhyWorkCorrect);//医师工作量绩效矫正之和A2
 		byId.setMedFixedCorrectionScoreSum(MedFixedCorrectionScore);//医技固定绩效矫正之和B1
 		byId.setMedWorkCorrectSum(MedWorkCorrect);//医技工作量绩效矫正之和B1
 
-//		BigDecimal PhyFixedCountScore = new BigDecimal(0.00000);
-//		BigDecimal PhyWorkSum = new BigDecimal(0.00000);
-//		BigDecimal MedFixedCountScore = new BigDecimal(0.00000);
-//		BigDecimal medWorkSum = new BigDecimal(0.00000);
-		BigDecimal PhyFixedCountScore = kpiFixeds.stream().filter(s -> s.getJobType().equals(0)).map(SumVo::getFixedCountScore).reduce(BigDecimal.ZERO, BigDecimal::add)
-			.divide(BigDecimal.valueOf(kpiFixeds.size()), 5, BigDecimal.ROUND_HALF_DOWN);
-		BigDecimal PhyWorkSum = kpiFixeds.stream().filter(s -> s.getJobType().equals(0)).map(SumVo::getWorkSum).reduce(BigDecimal.ZERO, BigDecimal::add)
-			.divide(BigDecimal.valueOf(kpiFixeds.size()), 5, BigDecimal.ROUND_HALF_DOWN);
-		BigDecimal MedFixedCountScore = kpiFixeds.stream().filter(s -> s.getJobType().equals(0)).map(SumVo::getFixedCountScore).reduce(BigDecimal.ZERO, BigDecimal::add)
-			.divide(BigDecimal.valueOf(kpiFixeds.size()), 5, BigDecimal.ROUND_HALF_DOWN);
-		BigDecimal medWorkSum = kpiFixeds.stream().filter(s -> s.getJobType().equals(0)).map(SumVo::getWorkSum).reduce(BigDecimal.ZERO, BigDecimal::add)
-			.divide(BigDecimal.valueOf(kpiFixeds.size()), 5, BigDecimal.ROUND_HALF_DOWN);
 
-		byId.setPhyFixedUnit(PhyFixedCountScore.subtract(PhyFixedCorrectionScore));//医师固定绩每分绩效
-		byId.setPhyWorkUnit(PhyWorkSum.subtract(PhyWorkCorrect));//医师工作量绩效每分绩效
-		byId.setMedFixedUnit(MedFixedCountScore.subtract(MedFixedCorrectionScore));//医技固定量绩效每分绩效
-		byId.setMedWorkUnit(medWorkSum.subtract(MedWorkCorrect));//医技工作量绩效每分绩效
+		BigDecimal PhyFixedCountScore = phycollect.stream().map(SumVo::getFixedCountScore).reduce(BigDecimal.ZERO, BigDecimal::add);
+		BigDecimal PhyWorkSum = phycollect.stream().map(SumVo::getWorkSum).reduce(BigDecimal.ZERO, BigDecimal::add);
+
+		BigDecimal MedFixedCountScore = medcollect.stream().map(SumVo::getFixedCountScore).reduce(BigDecimal.ZERO, BigDecimal::add);
+		BigDecimal medWorkSum = medcollect.stream().map(SumVo::getWorkSum).reduce(BigDecimal.ZERO, BigDecimal::add);
+
+		byId.setPhyFixedUnit((byId.getPhyFixedSum().divide(PhyFixedCorrectionScore,4, BigDecimal.ROUND_HALF_UP)));//医师固定绩每分绩效
+		byId.setPhyWorkUnit((byId.getPhyWorkSum().divide(PhyWorkCorrect,4, BigDecimal.ROUND_HALF_UP)));//医师工作量绩效每分绩效
+		byId.setMedFixedUnit((byId.getMedFixedSum().divide(MedFixedCorrectionScore,4, BigDecimal.ROUND_HALF_UP)));//医技固定量绩效每分绩效
+		byId.setMedWorkUnit((byId.getMedWorkSum().divide(MedWorkCorrect,4, BigDecimal.ROUND_HALF_UP)));//医技工作量绩效每分绩效
 		this.updateById(byId);
 		return R.success("保存成功");
 	}
@@ -156,36 +149,36 @@ public class KpiAccountingServiceImpl extends ServiceImpl<KpiAccountingMapper, K
 
 
 
-		BigDecimal PhyFixedCorrectionScore = kpiFixeds.stream().filter(s -> s.getJobType().equals(0)).map(SumVo::getFixedCorrectionScore).reduce(BigDecimal.ZERO, BigDecimal::add)
-			.divide(BigDecimal.valueOf(kpiFixeds.size()), 5, BigDecimal.ROUND_HALF_DOWN);
+		List<SumVo> phycollect = kpiFixeds.stream().filter(s -> s.getJobType().equals(0)).collect(Collectors.toList());
+		List<SumVo> medcollect = kpiFixeds.stream().filter(s -> s.getJobType().equals(1)).collect(Collectors.toList());
 
-		BigDecimal PhyWorkCorrect = kpiFixeds.stream().filter(s -> s.getJobType().equals(0)).map(SumVo::getWorkCorrect).reduce(BigDecimal.ZERO, BigDecimal::add)
-			.divide(BigDecimal.valueOf(kpiFixeds.size()), 5, BigDecimal.ROUND_HALF_DOWN);
+		BigDecimal PhyFixedCorrectionScore = phycollect.stream().map(SumVo::getFixedCorrectionScore).reduce(BigDecimal.ZERO, BigDecimal::add);
+		BigDecimal PhyWorkCorrect = phycollect.stream().map(SumVo::getWorkCorrect).reduce(BigDecimal.ZERO, BigDecimal::add);
 
-		BigDecimal MedFixedCorrectionScore = kpiFixeds.stream().filter(s -> s.getJobType().equals(1)).map(SumVo::getFixedCorrectionScore).reduce(BigDecimal.ZERO, BigDecimal::add)
-			.divide(BigDecimal.valueOf(kpiFixeds.size()), 5, BigDecimal.ROUND_HALF_DOWN);
-
-		BigDecimal MedWorkCorrect = kpiFixeds.stream().filter(s -> s.getJobType().equals(1)).map(SumVo::getWorkCorrect).reduce(BigDecimal.ZERO, BigDecimal::add)
-			.divide(BigDecimal.valueOf(kpiFixeds.size()), 5, BigDecimal.ROUND_HALF_DOWN);
-
-		BigDecimal PhyFixedCountScore = kpiFixeds.stream().filter(s -> s.getJobType().equals(0)).map(SumVo::getFixedCountScore).reduce(BigDecimal.ZERO, BigDecimal::add)
-			.divide(BigDecimal.valueOf(kpiFixeds.size()), 5, BigDecimal.ROUND_HALF_DOWN);
-		BigDecimal PhyWorkSum = kpiFixeds.stream().filter(s -> s.getJobType().equals(0)).map(SumVo::getWorkSum).reduce(BigDecimal.ZERO, BigDecimal::add)
-			.divide(BigDecimal.valueOf(kpiFixeds.size()), 5, BigDecimal.ROUND_HALF_DOWN);
-		BigDecimal MedFixedCountScore = kpiFixeds.stream().filter(s -> s.getJobType().equals(0)).map(SumVo::getFixedCountScore).reduce(BigDecimal.ZERO, BigDecimal::add)
-			.divide(BigDecimal.valueOf(kpiFixeds.size()), 5, BigDecimal.ROUND_HALF_DOWN);
-		BigDecimal medWorkSum = kpiFixeds.stream().filter(s -> s.getJobType().equals(0)).map(SumVo::getWorkSum).reduce(BigDecimal.ZERO, BigDecimal::add)
-			.divide(BigDecimal.valueOf(kpiFixeds.size()), 5, BigDecimal.ROUND_HALF_DOWN);
+		BigDecimal MedFixedCorrectionScore = medcollect.stream().map(SumVo::getFixedCorrectionScore).reduce(BigDecimal.ZERO, BigDecimal::add);
+		BigDecimal MedWorkCorrect = medcollect.stream().map(SumVo::getWorkCorrect).reduce(BigDecimal.ZERO, BigDecimal::add);
 
 		byId.setPhyFixedCorrectionScoreSum(PhyFixedCorrectionScore);//医师固定绩效矫正之和A1
 		byId.setPhyWorkCorrectSum(PhyWorkCorrect);//医师工作量绩效矫正之和A2
 		byId.setMedFixedCorrectionScoreSum(MedFixedCorrectionScore);//医技固定绩效矫正之和B1
 		byId.setMedWorkCorrectSum(MedWorkCorrect);//医技工作量绩效矫正之和B1
 
-		byId.setPhyFixedUnit(PhyFixedCountScore.subtract(PhyFixedCorrectionScore));//医师固定绩每分绩效
-		byId.setPhyWorkUnit(PhyWorkSum.subtract(PhyWorkCorrect));//医师工作量绩效每分绩效
-		byId.setMedFixedUnit(MedFixedCountScore.subtract(MedFixedCorrectionScore));//医技固定量绩效每分绩效
-		byId.setMedWorkUnit(medWorkSum.subtract(MedWorkCorrect));//医技工作量绩效每分绩效
+
+		BigDecimal PhyFixedCountScore = phycollect.stream().map(SumVo::getFixedCountScore).reduce(BigDecimal.ZERO, BigDecimal::add);
+		BigDecimal PhyWorkSum = phycollect.stream().map(SumVo::getWorkSum).reduce(BigDecimal.ZERO, BigDecimal::add);
+
+		BigDecimal MedFixedCountScore = medcollect.stream().map(SumVo::getFixedCountScore).reduce(BigDecimal.ZERO, BigDecimal::add);
+		BigDecimal medWorkSum = medcollect.stream().map(SumVo::getWorkSum).reduce(BigDecimal.ZERO, BigDecimal::add);
+
+		byId.setPhyFixedCorrectionScoreSum(PhyFixedCorrectionScore);//医师固定绩效矫正之和A1
+		byId.setPhyWorkCorrectSum(PhyWorkCorrect);//医师工作量绩效矫正之和A2
+		byId.setMedFixedCorrectionScoreSum(MedFixedCorrectionScore);//医技固定绩效矫正之和B1
+		byId.setMedWorkCorrectSum(MedWorkCorrect);//医技工作量绩效矫正之和B1
+
+		byId.setPhyFixedUnit((byId.getPhyFixedSum().divide(PhyFixedCorrectionScore,4, BigDecimal.ROUND_HALF_UP)));//医师固定绩每分绩效
+		byId.setPhyWorkUnit((byId.getPhyWorkSum().divide(PhyWorkCorrect,4, BigDecimal.ROUND_HALF_UP)));//医师工作量绩效每分绩效
+		byId.setMedFixedUnit((byId.getMedFixedSum().divide(MedFixedCorrectionScore,4, BigDecimal.ROUND_HALF_UP)));//医技固定量绩效每分绩效
+		byId.setMedWorkUnit((byId.getMedWorkSum().divide(MedWorkCorrect,4, BigDecimal.ROUND_HALF_UP)));//医技工作量绩效每分绩效
 		this.updateById(byId);
 	}
 }

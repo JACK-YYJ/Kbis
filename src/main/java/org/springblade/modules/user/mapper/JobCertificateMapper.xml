@@ -23,5 +23,6 @@
                     or job_certificate_name regexp #{idOrName}
             </if>
         </where>
+        order by job_certificate_factor desc
     </select>
 </mapper>

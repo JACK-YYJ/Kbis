@@ -4,6 +4,7 @@ import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
+import com.sun.corba.se.spi.orbutil.threadpool.WorkQueue;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springblade.core.mp.support.Condition;
@@ -100,15 +101,16 @@ public class JobController {
 	@PostMapping("/add")
 	@ApiOperation(value = "添加",notes = "")
 	@ApiOperationSupport(order = 4)
-	public R add(@RequestBody Job param) {
+	public R add(@RequestBody UpdateJobDto param) {
 		Job em = jobService.getOne(new QueryWrapper<Job>().eq(Job.COL_JOB_NAME,param.getJobName()).eq(Job.COL_J_ID,param.getJId()));
 		if (em != null) {
 			return R.fail("请勿重复添加");
 		}
 		//工作类型 添加
-		jobWorkService.add(param.getJId());
-		//其他绩效
-		jobOtherPService.add(param.getJId());
+		if(ObjectUtil.isEmpty(param.getButtonWorkload())||ObjectUtil.isEmpty(param.getButtonFixed())){
+			R.fail("请重新添加（开关为null）");
+		}
+		jobWorkService.add(param);
 		jobService.save(param);
 		return R.success("添加成功");
 	}
@@ -127,17 +129,12 @@ public class JobController {
 		if(param.getJobWorkList().size()==0){
 			return R.fail("请到工作类型管理添加数据");
 		}
+		if(ObjectUtil.isEmpty(param.getButtonWorkload())||ObjectUtil.isEmpty(param.getButtonFixed())){
+			R.fail("请重新添加（开关为null）");
+		}
 		param.getJobWorkList().forEach(s->{
 			if(param.getJId().equals(s.getJId())){
 				jobWorkService.updateById(s);
-			}
-		});
-		if (param.getJobOtherPList().size()==0){
-			return R.fail("请到其他绩效管理添加数据");
-		}
-		param.getJobOtherPList().forEach(s->{
-			if (param.getJId().equals(s.getJId())){
-				jobOtherPService.updateById(s);
 			}
 		});
 		return R.success("操作成功");
@@ -153,12 +150,20 @@ public class JobController {
 	@ApiOperation(value = "删除")
 	@ApiOperationSupport(order = 6)
 	public R delete(@RequestBody List<Integer> param) {
-		for (Integer ids : param) {
-			User serviceOne = userService.getOne(new QueryWrapper<User>().eq(User.COL_JC_ID, ids));
-			if (ObjectUtil.isNotNull(serviceOne)) {
-				return R.fail("该岗位下存在用户，不可删除");
+		int count = userService.count();
+		if(count==0){
+			jobService.removeByIds(param);
+		}else {
+			for (Integer ids : param) {
+				User serviceOne = userService.getOne(new QueryWrapper<User>().eq(User.COL_JC_ID, ids));
+				List<JobWork> jobWorkList = jobWorkService.query().eq(JobWork.COL_J_ID, ids).list();
+				jobWorkService.removeByIds(jobWorkList);
+				if (ObjectUtil.isNotNull(serviceOne)) {
+					return R.fail("该岗位下存在用户，不可删除");
+				}
+				jobService.removeByIds(param);
 			}
 		}
-		return R.data(jobService.removeByIds(param));
+		return R.success("删除成功");
 	}
 }

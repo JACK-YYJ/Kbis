@@ -75,6 +75,7 @@
         select dj.job_gs,
                dj.work_gs,
                dj.job_ratio,
+               dj.job_type,
                CAST(
                    TRUNCATE(CAST(ka.attendance_day AS DECIMAL) /
                             CAST(ka.month_day AS DECIMAL(5, 2)

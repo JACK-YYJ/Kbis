@@ -6,22 +6,21 @@
     <!--@Table dict_job-->
     <id column="j_id" jdbcType="INTEGER" property="jId" />
     <result column="job_name" jdbcType="VARCHAR" property="jobName" />
+    <result column="job_gs" jdbcType="TINYINT" property="jobGs" />
+    <result column="work_gs" jdbcType="TINYINT" property="workGs" />
     <result column="job_type" jdbcType="TINYINT" property="jobType" />
     <result column="job_ratio" jdbcType="DECIMAL" property="jobRatio" />
     <result column="formula_fixed" jdbcType="INTEGER" property="formulaFixed" />
-<!--    <result column="fixed_than" jdbcType="VARCHAR" property="fixedThan" />-->
     <result column="formula_workload" jdbcType="INTEGER" property="formulaWorkload" />
-<!--    <result column="workload_than" jdbcType="VARCHAR" property="workloadThan" />-->
     <result column="button_fixed" jdbcType="BOOLEAN" property="buttonFixed" />
-<!--    <result column="fixed_text" jdbcType="VARCHAR" property="fixedText" />-->
     <result column="button_workload" jdbcType="BOOLEAN" property="buttonWorkload" />
-<!--    <result column="workload_text" jdbcType="VARCHAR" property="workloadText" />-->
     <result column="button_other" jdbcType="BOOLEAN" property="buttonOther" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    j_id, job_name, job_type, job_ratio, formula_fixed,  formula_workload,
-     button_fixed, button_workload, button_other
+    j_id, job_name, job_gs, work_gs, job_type, job_ratio, formula_fixed, formula_workload,
+    button_fixed, button_workload, button_other, create_time
   </sql>
     <select id="selectJobPage" resultMap="BaseResultMap">
         select
@@ -32,5 +31,6 @@
                 job_name REGEXP #{jobName}
             </if>
         </where>
+        order by job_ratio desc
     </select>
 </mapper>

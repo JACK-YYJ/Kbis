@@ -14,5 +14,5 @@ import java.util.List;
 public interface JobOtherPService extends IService<JobOtherP> {
 	List<JobOtherPVo> selectJobOtherP(Integer jId);
 
-	void add(Integer jId);
+
 }

@@ -71,7 +71,7 @@ public class KpiPersonal implements Serializable {
      */
     @TableField(value = "job_type")
     @ApiModelProperty(value = "岗位类别")
-    private Byte jobType;
+    private Integer jobType;
 
     /**
      * 岗位名称

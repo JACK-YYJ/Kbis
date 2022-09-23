@@ -107,12 +107,18 @@ public class OPController {
 	@ApiOperation(value = "删除")
 	@ApiOperationSupport(order = 4)
 	public R delete(@RequestBody List<Integer> param) {
-		for (Integer ids : param) {
-			JobOtherP em = jobOtherPService.getOne(new QueryWrapper<JobOtherP>().eq(JobOtherP.COL_J_ID,ids));
-			if (ObjectUtil.isNotNull(em)) {
-				return R.fail("该绩效下存在岗位id为"+em.getJId()+"在使用");
+		int count = jobOtherPService.count();
+		if(count==0){
+			otherPerformanceService.removeByIds(param);
+		}else {
+			for (Integer ids : param) {
+				JobOtherP em = jobOtherPService.getOne(new QueryWrapper<JobOtherP>().eq(JobOtherP.COL_J_ID,ids));
+				if (ObjectUtil.isNotNull(em)) {
+					return R.fail("该绩效下存在岗位id为"+em.getJId()+"在使用");
+				}
 			}
+			otherPerformanceService.removeByIds(param);
 		}
-		return R.data(otherPerformanceService.removeByIds(param));
+		return R.success("删除成功");
 	}
 }

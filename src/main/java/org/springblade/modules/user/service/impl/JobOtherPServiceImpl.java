@@ -21,24 +21,10 @@ import org.springblade.modules.user.service.JobOtherPService;
 
 @Service
 public class JobOtherPServiceImpl extends ServiceImpl<JobOtherPMapper, JobOtherP> implements JobOtherPService{
-	@Autowired
-	private OtherPerformanceService otherPerformanceService;
 	 @Override
 	 public List<JobOtherPVo> selectJobOtherP(Integer jId) {
 		List<JobOtherPVo> list = baseMapper.selectJobOtherP(jId);
 	 	return list;
 	 }
 
-	 @Override
-	 public void add(Integer jId) {
-		 List<OtherPerformance> list = otherPerformanceService.lambdaQuery().list();
-		 ArrayList<JobOtherP> jobOtherPList = new ArrayList<>();
-		 for (OtherPerformance j : list) {
-			 JobOtherP jobOtherP = new JobOtherP();
-			 jobOtherP.setOpId(j.getOpId());
-			 jobOtherP.setJId(jId);
-			 jobOtherPList.add(jobOtherP);
-		 }
-		 this.saveBatch(jobOtherPList);
-	 }
  }

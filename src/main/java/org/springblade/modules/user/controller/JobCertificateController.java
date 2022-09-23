@@ -10,7 +10,9 @@ import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.api.R;
 import org.springblade.modules.user.entity.Degree;
 import org.springblade.modules.user.entity.JobCertificate;
+import org.springblade.modules.user.entity.User;
 import org.springblade.modules.user.service.JobCertificateService;
+import org.springblade.modules.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,7 +29,8 @@ import java.util.List;
 public class JobCertificateController {
 	@Autowired
 	private JobCertificateService jobCertificateService;
-
+	@Autowired
+	public UserService userService;
 	/**
 	 * 上岗证管理
 	 */
@@ -79,7 +82,19 @@ public class JobCertificateController {
 	@ApiOperation(value = "删除")
 	@ApiOperationSupport(order = 4)
 	public R delete(@RequestBody List<Integer> param) {
-		return R.data(jobCertificateService.removeByIds(param));
+		int count = jobCertificateService.count();
+		if(count==0){
+			jobCertificateService.removeByIds(param);
+		}else {
+			User user = userService.lambdaQuery()
+				.orderByDesc(User::getJcId).list().get(0);
+
+			if(user.getJcId()>=count){
+				return R.fail("该上岗证已有用户");
+			}
+			jobCertificateService.removeByIds(param);
+		}
+		return R.success("删除成功");
 	}
 
 }

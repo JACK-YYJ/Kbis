@@ -22,7 +22,7 @@ public class ShiroUtils {
 	}
 
 	public static void main(String[] args) {
-		System.out.println(enPas("123", "123456"));
+		System.out.println(enPas("1", "1"));
 	}
 
 }

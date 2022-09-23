@@ -1,5 +1,6 @@
 package org.springblade.modules.user.controller;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
@@ -57,10 +58,10 @@ public class UserController {
 			return R.fail("请勿重复添加");
 		}
 		//创建 添加用户会默认添加账号
-//		SysUser sysUser = new SysUser();
-//		sysUser.setUserCode(param.getUserCode());
-//		sysUser.setCreateBy(param.getUserName());
-//		sysUserService.add(sysUser);
+//		User sysUser = new SysUser();
+//		User.setUserCode(param.getUserCode());
+//		User.setCreateBy(param.getUserName());
+//		User.add(sysUser);
 		userService.save(param);
 		return R.success("添加成功");
 	}
@@ -98,6 +99,9 @@ public class UserController {
 	public R upDataTechUser(@RequestBody SysUserPwdDto userDTO) {
 		String Userid = String.valueOf(userDTO.getUserCode());
 		SysUser userInfo = sysUserService.getById(userDTO.getUserCode());
+		if(ObjectUtil.isEmpty(userInfo)){
+			R.fail("没有此用户信息");
+		}
 		if (userInfo.getUserPwd().equals(ShiroUtils.enPas(userDTO.getUserPwd(), Userid))) {
 			return R.fail(400, "与旧密码一样");
 		}

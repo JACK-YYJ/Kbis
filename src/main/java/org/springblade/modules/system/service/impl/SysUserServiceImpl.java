@@ -4,6 +4,7 @@ import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import org.springblade.auth.config.YmlConfig;
 import org.springblade.core.tool.api.R;
+import org.springblade.modules.system.dto.SysUserE;
 import org.springblade.modules.user.entity.TechuserDict;
 import org.springblade.modules.user.tool.utils.ShiroUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 	@Autowired
 	private YmlConfig ymlConfig;
 	@Override
-	public R enroll(SysUser user) {
+	public R enroll(SysUserE user) {
 		SysUser byId = this.getById(user.getUserCode());
 		if (ObjectUtils.isNotEmpty(byId)) {
 			return R.success("该用户已存在");

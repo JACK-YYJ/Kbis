@@ -46,8 +46,13 @@ public class KpiPersonalVo {
 	 */
 	@TableField(value = "job_type")
 	@ApiModelProperty(value = "岗位类别")
-	private Byte jobType;
-
+	private Integer jobType;
+	/**
+	 * 岗位类别
+	 */
+	@TableField(value = "job_gs")
+	@ApiModelProperty(value = "岗位类别")
+	private Integer jobGs;
 	/**
 	 * 岗位名称
 	 */

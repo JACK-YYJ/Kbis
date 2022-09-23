@@ -25,5 +25,5 @@ public interface KpiAttendanceMapper extends BaseMapper<KpiAttendance> {
 
 	Page<KpiAttendanceVo> selectidOrName(@Param("page") IPage<Object> page, @Param("idOrName") String idOrName, @Param("toMonth") String toMonth);
 
-	List<KpiAttendanceVo> selectByAdd(@Param("nowDate") Date nowDate);
+	List<KpiAttendanceVo> selectByAdd();
 }

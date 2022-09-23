@@ -1,6 +1,6 @@
 package org.springblade.modules.performance.controller;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
+
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -8,6 +8,7 @@ import org.springblade.core.tool.api.R;
 import org.springblade.modules.performance.dto.AccountingDto;
 import org.springblade.modules.performance.entity.KpiAccounting;
 import org.springblade.modules.performance.service.KpiAccountingService;
+import org.springblade.modules.performance.service.KpiPersonalService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,6 +27,8 @@ public class AccountingController {
 
 	@Autowired
 	private KpiAccountingService kpiAccountingService;
+	@Autowired
+	private KpiPersonalService kpiPersonalService;
 
 	/**
 	 *查询
@@ -41,13 +44,13 @@ public class AccountingController {
 		return R.data(pages);
 	}
 	@PostMapping("/Save")
-	@ApiOperationSupport(order = 1)
+	@ApiOperationSupport(order = 2)
 	@ApiOperation(value = "保存", notes = "")
 	public R Save(@RequestBody AccountingDto param) {
 		if (param==null){
 			return R.fail("请从新输入");
 		}
-
+		kpiPersonalService.deleteBysaveAccounting(param.getToMonth());
 		return kpiAccountingService.saves(param);
 	}
 

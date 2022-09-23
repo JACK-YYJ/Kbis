@@ -1,17 +1,23 @@
 package org.springblade.modules.performance.service.impl;
 
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.ObjectUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import org.springblade.core.tool.api.R;
 import org.springblade.modules.performance.vo.FixedToMonth;
 import org.springblade.modules.performance.vo.KpiAttendanceVo;
 import org.springblade.modules.performance.vo.PercentageVo;
 import org.springblade.modules.user.entity.JobCertificate;
+import org.springblade.modules.user.entity.User;
 import org.springblade.modules.user.service.JobCertificateService;
+import org.springblade.modules.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springblade.modules.performance.entity.KpiFixed;
@@ -24,7 +30,8 @@ import org.springblade.modules.performance.service.KpiFixedService;
 
 @Service
 public class KpiFixedServiceImpl extends ServiceImpl<KpiFixedMapper, KpiFixed> implements KpiFixedService{
-
+	 @Autowired
+	 private UserService userService;
 	@Autowired
 	private JobCertificateService jobCertificateService;
 	 @Override
@@ -109,9 +116,19 @@ public class KpiFixedServiceImpl extends ServiceImpl<KpiFixedMapper, KpiFixed> i
 	 }
 
 	 @Override
-	 public void updateByList(List<KpiFixed> kpiFixedList) {
+	 public R updateByList(List<KpiFixed> kpiFixedList) {
+	 	List<R> rList =new ArrayList<>();
 		 kpiFixedList.forEach(param->{
-		 	this.updateByOne(param);
+			 //校验工号
+			 User one = userService.getOne(new QueryWrapper<User>().eq(User.COL_USER_CODE, param.getUserCode()));
+			 if(one==null){
+				 rList.add(R.data(one));
+			 }
+			 this.updateByOne(param);
 		 });
+		 if (ObjectUtil.isAllNotEmpty(rList)){
+		 	return R.fail("校验到Excel不存在的工号");
+		 }
+		 return R.success("编辑成功");
 	 }
  }

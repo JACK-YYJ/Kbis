@@ -20,8 +20,9 @@
         from dict_other_performance
         <where>
             <if test="otherPerformanceName != null and otherPerformanceName != ''">
-                other_performance_name = #{otherPerformanceName}
+                other_performance_name regexp #{otherPerformanceName}
             </if>
         </where>
+        order by op_id desc
     </select>
 </mapper>

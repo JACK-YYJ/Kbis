@@ -8,18 +8,16 @@ import java.math.BigDecimal;
 
 /**
  * @Author 元杰
- * @Date 2022/9/9 15:36
+ * @Date 2022/9/20 17:22
  */
 @Data
-public class PercentageVo {
-	private BigDecimal Percentage;
-	private Integer jobGs;
-	private Integer workGs;
+public class kpiWorkloadVo {
 	private Integer jobType;
+
 	/**
-	 * 岗位系数
+	 * 工作量绩效合计
 	 */
-	@TableField(value = "job_ratio")
-	@ApiModelProperty(value = "岗位系数")
-	private BigDecimal jobRatio;
+	@TableField(value = "work_sum")
+	@ApiModelProperty(value = "工作量绩效合计")
+	private BigDecimal workSum;
 }

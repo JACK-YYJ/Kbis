@@ -87,12 +87,18 @@ public class DegreeController extends BladeController {
 	@ApiOperation(value = "删除")
 	@ApiOperationSupport(order = 4)
 	public R delete(@RequestBody List<Integer> param) {
-		for (Integer s : param) {
-			List<User> list = userService.lambdaQuery().eq(User::getDId, s).list();
-			if (!(list.size() == 0)) {
-				return R.fail("该学历下存在用户，不可删除");
+		int count = userService.count();
+		if(count==0){
+			degreeService.removeByIds(param);
+		}else {
+			for (Integer s : param) {
+				List<User> list = userService.lambdaQuery().eq(User::getDId, s).list();
+				if (!(list.size() == 0)) {
+					return R.fail("该学历下存在用户，不可删除");
+				}
 			}
+			degreeService.removeByIds(param);
 		}
-		return R.data(degreeService.removeByIds(param));
+		return R.success("删除成功");
 	}
 }

@@ -7,7 +7,9 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springblade.modules.performance.entity.KpiWorkload;
 import org.springblade.modules.performance.vo.WorkSumByUserCode;
+import org.springblade.modules.performance.vo.kpiWorkloadVo;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -21,5 +23,7 @@ public interface KpiWorkloadMapper extends BaseMapper<KpiWorkload> {
 
 	IPage<KpiWorkload> selectidOrName(@Param("page") IPage<Object> page, @Param("idOrName") String idOrName, @Param("toMonth") String toMonth);
 
-	WorkSumByUserCode setectWorkSumByUserCode(@Param("userCode") Integer userCode, @Param("i") int i);
+	WorkSumByUserCode setectWorkSumByUserCode(@Param("userCode") Integer userCode, @Param("i") Integer i);
+
+	List<kpiWorkloadVo> selectWorkLoadVo(@Param("attendanceMonth") Date attendanceMonth);
 }

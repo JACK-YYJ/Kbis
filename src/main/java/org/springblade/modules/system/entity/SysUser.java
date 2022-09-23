@@ -34,12 +34,12 @@ public class SysUser implements Serializable {
     @ApiModelProperty(value = "密码")
     private String userPwd;
 
-    /**
-     * 创建者
-     */
-    @TableField(value = "create_by")
-    @ApiModelProperty(value = "创建者")
-    private String createBy;
+	/**
+	 * 创建者
+	 */
+	@TableField(value = "create_by")
+	@ApiModelProperty(value = "创建者")
+	private String createBy;
 
     /**
      * 创建时间

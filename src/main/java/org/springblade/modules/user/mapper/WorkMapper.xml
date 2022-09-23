@@ -18,9 +18,9 @@
         from dict_work
         <where>
             <if test="idOrName != null and idOrName != ''">
-                w_id regexp #{idOrName}
-                    or work_name regexp #{idOrName}
+                   work_name regexp #{idOrName}
             </if>
         </where>
+        order by w_id desc
     </select>
 </mapper>

@@ -1,5 +1,6 @@
 package org.springblade.modules.performance.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import io.swagger.annotations.Api;
@@ -12,6 +13,7 @@ import org.springblade.modules.performance.entity.KpiFixed;
 import org.springblade.modules.performance.service.KpiFixedService;
 import org.springblade.modules.user.entity.JobCertificate;
 import org.springblade.modules.user.service.JobCertificateService;
+import org.springblade.modules.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -62,6 +64,23 @@ public class FixedController {
 	}
 
 	/**
+	 * 系数返回
+	 * @return
+	 */
+	@GetMapping("/selectfactor")
+	@ApiOperationSupport(order = 2)
+	@ApiOperation(value = "系数查询", notes = "")
+	public R selectfactor() {
+		JobCertificate s = jobCertificateService.lambdaQuery()
+			.list().get(0);
+
+		SetFactorDto param = new SetFactorDto();
+		param.setAgeFactor(s.getAgeFactor());
+		param.setJobCertificateFactor(s.getJobCertificateFactor());
+		return R.data(param);
+	}
+
+	/**
 	 * 编辑
 	 * @param param
 	 * @return
@@ -83,7 +102,6 @@ public class FixedController {
 	@ApiOperation(value = "保存")
 	@ApiOperationSupport(order = 4)
 	public R updateKpiFixedList(@RequestBody List<KpiFixed> kpiFixedList) {
-		kpiFixedService.updateByList(kpiFixedList);
-		return R.success("操作成功");
+		return kpiFixedService.updateByList(kpiFixedList);
 	}
 }

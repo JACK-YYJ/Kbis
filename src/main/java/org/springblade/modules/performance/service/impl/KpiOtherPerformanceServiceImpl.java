@@ -64,6 +64,10 @@ public class KpiOtherPerformanceServiceImpl extends ServiceImpl<KpiOtherPerforma
         return allList;
     }
 
+	/**
+	 *
+	 * @param param
+	 */
 	@Override
 	public void updateByAllPrice(KpiOtherPerformance param) {
 		KpiOtherPerformance kpiOp = this.getById(param.getKpiOpId());
@@ -72,6 +76,12 @@ public class KpiOtherPerformanceServiceImpl extends ServiceImpl<KpiOtherPerforma
 		kpiOp.setVariousRewardsPrice(param.getVariousRewardsPrice());
 		kpiOp.setVariousAssessmentsPrice(param.getVariousAssessmentsPrice());
 		kpiOp.setVariousSubsidiesPrice(param.getVariousSubsidiesPrice());
+
+		kpiOp.setOtherNightShiftsSum(param.getOtherNightShiftsSum());
+		kpiOp.setCtNightShiftsSum(param.getCtNightShiftsSum());
+		kpiOp.setOvertimeSum(param.getOvertimeSum());
+		kpiOp.setBedsideSum(param.getBedsideSum());
+
 		kpiOp.setRadiationPrice(param.getRadiationPrice());
 		BigDecimal i = param.getManagePrice()
 			.add(param.getManagePerformancePrice()

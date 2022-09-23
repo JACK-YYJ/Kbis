@@ -33,6 +33,9 @@
             </if>
         </where>
     </select>
+    <delete id="deleteBysaveAccounting">
+        delete from kpi_personal where  date_format(attendance_month, '%Y-%m') = #{toMonth}
+    </delete>
     <select id="selectByAdd" resultType="org.springblade.modules.performance.vo.KpiPersonalVo">
         SELECT du.user_code,
                du.user_name,
@@ -44,7 +47,7 @@
                dj.job_name,
                dj.job_ratio,
                du.card_id,
-
+               dj.job_gs,
                kop.kpi_op_all_price      AS op_sum,
                kf.fixed_correction_score AS fixed_sum,
                kw.work_correct           AS work_sum

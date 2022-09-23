@@ -110,7 +110,7 @@ public class User implements Serializable {
      */
     @TableField(value = "jc_id")
     @ApiModelProperty(value = "岗位证id")
-    private Byte jcId;
+    private Integer jcId;
 
     /**
      * 岗位证名称

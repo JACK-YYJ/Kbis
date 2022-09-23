@@ -1,5 +1,6 @@
 package org.springblade.modules.performance.controller;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
@@ -12,7 +13,9 @@ import org.springblade.core.tool.api.R;
 import org.springblade.modules.performance.entity.KpiOtherPerformance;
 import org.springblade.modules.performance.service.KpiOtherPerformanceService;
 import org.springblade.modules.user.entity.OtherPerformance;
+import org.springblade.modules.user.entity.User;
 import org.springblade.modules.user.service.OtherPerformanceService;
+import org.springblade.modules.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,7 +39,7 @@ public class OpKpiController {
 	@Autowired
 	private KpiOtherPerformanceService kpiOtherPerformanceService;
 	@Autowired
-	private OtherPerformanceService otherPerformanceService;
+	private UserService userService;
 
 	@GetMapping("/selectOpattendancePage")
 	@ApiOperationSupport(order = 1)
@@ -56,12 +59,26 @@ public class OpKpiController {
 		kpiOtherPerformanceService.updateByAllPrice(param);
 		return R.success("操作成功");
 	}
+
+	/**
+	 * 保存
+	 * @param paramList
+	 * @return
+	 */
 	@PostMapping("/add")
 	@ApiOperation(value = "保存")
 	@ApiOperationSupport(order = 3)
 	public R add(@RequestBody List<KpiOtherPerformance> paramList) {
+		List<R> rList =new ArrayList<>();
 		for (KpiOtherPerformance s : paramList) {
+			User one = userService.getOne(new QueryWrapper<User>().eq(User.COL_USER_CODE, s.getUserCode()));
+			if(one==null){
+				rList.add(R.data(one));
+			}
 			kpiOtherPerformanceService.updateByAllPrice(s);
+		}
+		if (ObjectUtil.isAllNotEmpty(rList)){
+			return R.fail("校验到Excel不存在的工号");
 		}
 		return R.success("操作成功");
 	}

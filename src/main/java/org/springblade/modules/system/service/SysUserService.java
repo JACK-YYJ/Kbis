@@ -1,6 +1,7 @@
 package org.springblade.modules.system.service;
 
 import org.springblade.core.tool.api.R;
+import org.springblade.modules.system.dto.SysUserE;
 import org.springblade.modules.system.entity.SysUser;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -12,7 +13,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface SysUserService extends IService<SysUser> {
 
 
-    R enroll(SysUser user);
+    R enroll(SysUserE user);
 
 
     void add(SysUser user);

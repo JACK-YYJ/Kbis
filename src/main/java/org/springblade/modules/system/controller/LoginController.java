@@ -4,6 +4,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springblade.core.tool.api.R;
 import org.springblade.modules.system.dto.SysUserDto;
+import org.springblade.modules.system.dto.SysUserE;
 import org.springblade.modules.system.entity.SysUser;
 import org.springblade.modules.system.service.SysUserService;
 import org.springblade.modules.user.service.ShiroService;
@@ -92,7 +93,7 @@ public class LoginController {
 	 */
 	@RequestMapping(value = "/enroll", method = RequestMethod.POST)
 	@ApiOperation("注册")
-	public R enroll(@RequestBody SysUser user) {
+	public R enroll(@RequestBody SysUserE user) {
 		if (user.getUserCode() == null || user.getUserPwd() == null) {
 			return R.fail(200, "请传入登录账号和密码");
 		}

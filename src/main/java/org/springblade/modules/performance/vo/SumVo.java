@@ -19,7 +19,7 @@ public class 	SumVo {
 
 	@TableField(value = "job_type")
 	@ApiModelProperty(value = "岗位类型")
-	private Byte jobType;
+	private Integer jobType;
 
 	@TableField(value = "fixed_count_score")
 	@ApiModelProperty(value = "固定绩效")

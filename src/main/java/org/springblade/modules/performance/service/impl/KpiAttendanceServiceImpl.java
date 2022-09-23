@@ -30,10 +30,10 @@ public class KpiAttendanceServiceImpl extends ServiceImpl<KpiAttendanceMapper, K
     @Override
     public IPage<KpiAttendanceVo> selectAttendancePage(IPage<Object> page, String toMonth, String idOrName) {
         Page<KpiAttendanceVo> kpiAttendancePage = baseMapper.selectAttendancePage(page, toMonth);
-        List<KpiAttendanceVo> MonthIngList = baseMapper.selectByAdd(DateUtils.getNowDate());
+        List<KpiAttendanceVo> MonthIngList = baseMapper.selectByAdd();
         int count = userService.count();
 
-        if (count!=kpiAttendancePage.getRecords().size()&&kpiAttendancePage.getRecords().size() != 0){
+        if (!(kpiAttendancePage.getTotal()==count)){
         	MonthIngList.forEach(s->{
 				baseMapper.deleteById(s.getId());
 			});

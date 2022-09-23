@@ -29,4 +29,6 @@ public interface KpiPersonalMapper extends BaseMapper<KpiPersonal> {
 	List<StatisticsVo> selectByjobName(@Param("toMonth") String toMonth);
 
 	List<StatisticsVo> selectByjobtype(@Param("toMonth") String toMonth);
+
+	void deleteBysaveAccounting(@Param("toMonth") String toMonth);
 }

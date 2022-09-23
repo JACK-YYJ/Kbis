@@ -14,5 +14,4 @@ import java.util.List;
 @Data
 public class UpdateJobDto extends Job {
 	private List<JobWork> jobWorkList;
-	private List<JobOtherP> jobOtherPList;
 }

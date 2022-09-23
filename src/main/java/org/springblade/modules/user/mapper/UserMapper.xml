@@ -25,8 +25,8 @@
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    u_id, user_code, user_name, card_id, j_id, job_name, p_id, position_name, d_id, degree_name, 
-    seniority, jc_id, job_certificate_name, is_deleted, create_by, create_time, update_by, 
+    u_id, user_code, user_name, card_id, j_id, job_name, p_id, position_name, d_id, degree_name,
+    seniority, jc_id, job_certificate_name, is_deleted, create_by, create_time, update_by,
     update_time
   </sql>
     <select id="selectUserPage" resultType="org.springblade.modules.user.vo.UserVo">
@@ -47,5 +47,6 @@
                 and d_id = #{param.dId}
             </if>
         </where>
+         order by create_time desc
     </select>
 </mapper>

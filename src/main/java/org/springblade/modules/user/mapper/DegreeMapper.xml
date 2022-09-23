@@ -18,8 +18,9 @@
         from dict_degree
         <where>
             <if test="degreeName != null and degreeName != ''">
-                degree_name regexp #{degreeName} or d_id  regexp #{degreeName}
+                degree_name regexp #{degreeName}
             </if>
         </where>
+        order by degree_score desc
     </select>
 </mapper>

@@ -22,5 +22,6 @@
                     or position_name regexp #{idOrName}
             </if>
         </where>
+        order by position_score desc
     </select>
 </mapper>

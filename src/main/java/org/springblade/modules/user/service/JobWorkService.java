@@ -1,5 +1,6 @@
 package org.springblade.modules.user.service;
 
+import org.springblade.modules.user.dto.UpdateJobDto;
 import org.springblade.modules.user.entity.JobWork;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.springblade.modules.user.vo.JobWorkVo;
@@ -14,7 +15,7 @@ import java.util.List;
 public interface JobWorkService extends IService<JobWork> {
 
 
-    void add(Integer jId);
+	void add(UpdateJobDto param);
 
     List<JobWorkVo> selectJobSumList(Integer jId);
 }

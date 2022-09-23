@@ -32,7 +32,6 @@
         <include refid="Base_Column_List" />
         from kpi_other_performance
         <where>
-
             <if test="toMonth != null and toMonth != ''">
                   date_format(attendance_month, '%Y-%m') =  #{toMonth}
             </if>
