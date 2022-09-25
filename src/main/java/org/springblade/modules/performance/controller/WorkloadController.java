@@ -50,6 +50,8 @@ public class WorkloadController {
 	@ApiOperation(value = "编辑")
 	@ApiOperationSupport(order = 3)
 	public R updateOneKpiFixed(@RequestBody KpiWorkload param) {
+
+
 		return kpiWorkloadService.updateByOne(param);
 	}
 	/**

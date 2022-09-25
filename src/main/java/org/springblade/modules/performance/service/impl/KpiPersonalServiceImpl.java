@@ -53,7 +53,7 @@ public class KpiPersonalServiceImpl extends ServiceImpl<KpiPersonalMapper, KpiPe
 				personal.setCardId(s.getCardId());
 				personal.setOpSum(s.getOpSum());//	其他绩效
 				//实习生 公式
-				if (s.getJobGs()==0){
+				if (s.getJobGs()==3){
 					personal.setFixedSum(BigDecimal.valueOf(0));
 					personal.setWorkSum(BigDecimal.valueOf(0));
 				}
@@ -63,11 +63,11 @@ public class KpiPersonalServiceImpl extends ServiceImpl<KpiPersonalMapper, KpiPe
 				}
 				if (s.getJobType()==1){
 					personal.setFixedSum(s.getFixedSum().multiply(kpiAccounting.getMedFixedUnit()));//	重新计算
-					personal.setWorkSum(s.getWorkSum().multiply(kpiAccounting.getMedWorkSum()));//	重新计算
+					personal.setWorkSum(s.getWorkSum().multiply(kpiAccounting.getMedWorkUnit()));//	重新计算
 				}
 
 				personal.setPersonalSum(
-					personal.getFixedSum()
+					personal.getOpSum()
 					.add(personal.getFixedSum()
 						.add(personal.getWorkSum())
 					)
@@ -100,6 +100,49 @@ public class KpiPersonalServiceImpl extends ServiceImpl<KpiPersonalMapper, KpiPe
 		baseMapper.deleteBysaveAccounting(toMonth);
 
 	}
+
+	@Override
+	public void add(String toMonth) {
+		KpiAccounting kpiAccounting = kpiAccountingMapper.selectByToMonth(toMonth);
+
+		List<KpiPersonalVo> MonthIngList = baseMapper.selectByAdd(toMonth);
+		MonthIngList.forEach(s->{
+			KpiPersonal personal = new KpiPersonal();
+			personal.setUserCode(s.getUserCode());
+			personal.setUserName(s.getUserName());
+			personal.setAttendanceMonth(s.getAttendanceMonth());
+			personal.setPercentage(s.getPercentage());
+
+			personal.setJobType(s.getJobType());
+			personal.setJobName(s.getJobName());
+			personal.setJobRatio(s.getJobRatio());
+
+			personal.setCardId(s.getCardId());
+			personal.setOpSum(s.getOpSum());//	其他绩效
+			//实习生 公式
+			if (s.getJobGs()==3){
+				personal.setFixedSum(BigDecimal.valueOf(0));
+				personal.setWorkSum(BigDecimal.valueOf(0));
+			}
+			if (s.getJobType()==0){
+				personal.setFixedSum(s.getFixedSum().multiply(kpiAccounting.getPhyFixedUnit()));//	重新计算
+				personal.setWorkSum(s.getWorkSum().multiply(kpiAccounting.getPhyWorkUnit()));//	重新计算
+			}
+			if (s.getJobType()==1){
+				personal.setFixedSum(s.getFixedSum().multiply(kpiAccounting.getMedFixedUnit()));//	重新计算
+				personal.setWorkSum(s.getWorkSum().multiply(kpiAccounting.getMedWorkUnit()));//	重新计算
+			}
+
+			personal.setPersonalSum(
+				personal.getOpSum()
+					.add(personal.getFixedSum()
+						.add(personal.getWorkSum())
+					)
+			);
+			this.save(personal);
+		});
+	}
+
 }
 
 

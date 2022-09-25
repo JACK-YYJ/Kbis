@@ -21,5 +21,7 @@ public interface KpiWorkloadService extends IService<KpiWorkload> {
 	R updateByOne(KpiWorkload param);
 
 	R updateByList(List<KpiWorkload> kpiFixedList);
+
+
 }
 

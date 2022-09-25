@@ -114,6 +114,59 @@ public class KpiAccountingServiceImpl extends ServiceImpl<KpiAccountingMapper, K
 		return R.success("保存成功");
 	}
 
+	@Override
+	public void savess(AccountingDto param) {
+
+		KpiAccounting byId = baseMapper.selectByToMonth(param.getToMonth());
+
+
+
+		String format = DateUtil.format(byId.getAttendanceMonth(), "yyyy-MM");
+		List<SumVo> kpiFixeds = baseMapper.selectSumPhyMed(format);
+		BigDecimal num1 = new BigDecimal(1.00);
+		BigDecimal opsum = kpiFixeds.stream().map(SumVo::getKpiOpAllPrice).reduce(BigDecimal.ZERO, BigDecimal::add);
+		byId.setOntherPerformanceSum(opsum);//其他绩效总额
+
+		BigDecimal PerformanceSum = byId.getPerformanceSum().subtract(opsum);
+		byId.setAllotSum(PerformanceSum);//可分配绩效总额
+
+		byId.setPhyCentum(param.getPhyCentum());//医师分配占比
+		BigDecimal MedCentum = num1.subtract(param.getPhyCentum());
+		byId.setMedCentum(MedCentum);//医技分配占比
+
+
+		BigDecimal PhyWorkCoefficient = num1.subtract(byId.getPhyFixedCoefficient());
+		byId.setPhyWorkCoefficient(PhyWorkCoefficient);//医师工作量绩效分配系数
+
+
+		BigDecimal WorkCoefficient = num1.subtract(byId.getMedFixedCoefficient());
+		byId.setMedWorkCoefficient(WorkCoefficient);//医技工作量绩效分配系数
+
+		byId.setPhyFixedSum(PerformanceSum.multiply(param.getPhyCentum().multiply(byId.getPhyFixedCoefficient())));//医师固定绩效总额
+		byId.setPhyWorkSum(PerformanceSum.multiply(param.getPhyCentum().multiply(PhyWorkCoefficient)));//医师工作量绩效总额
+
+		byId.setMedFixedSum(PerformanceSum.multiply(MedCentum.multiply(byId.getMedFixedCoefficient())));//医技固定绩效总额
+		byId.setMedWorkSum(PerformanceSum.multiply(MedCentum.multiply(WorkCoefficient)));//医技工作量绩效总额
+
+		List<SumVo> phycollect = kpiFixeds.stream().filter(s -> s.getJobType()==0).collect(Collectors.toList());
+		List<SumVo> medcollect = kpiFixeds.stream().filter(s -> s.getJobType()==1).collect(Collectors.toList());
+
+		BigDecimal PhyFixedCorrectionScore = phycollect.stream().map(SumVo::getFixedCorrectionScore).reduce(BigDecimal.ZERO, BigDecimal::add);
+		BigDecimal PhyWorkCorrect = phycollect.stream().map(SumVo::getWorkCorrect).reduce(BigDecimal.ZERO, BigDecimal::add);
+
+		BigDecimal MedFixedCorrectionScore = medcollect.stream().map(SumVo::getFixedCorrectionScore).reduce(BigDecimal.ZERO, BigDecimal::add);
+		BigDecimal MedWorkCorrect = medcollect.stream().map(SumVo::getWorkCorrect).reduce(BigDecimal.ZERO, BigDecimal::add);
+
+
+
+		byId.setPhyFixedUnit((byId.getPhyFixedSum().divide(PhyFixedCorrectionScore,4, BigDecimal.ROUND_HALF_UP)));//医师固定绩每分绩效
+		byId.setPhyWorkUnit((byId.getPhyWorkSum().divide(PhyWorkCorrect,4, BigDecimal.ROUND_HALF_UP)));//医师工作量绩效每分绩效
+		byId.setMedFixedUnit((byId.getMedFixedSum().divide(MedFixedCorrectionScore,4, BigDecimal.ROUND_HALF_UP)));//医技固定量绩效每分绩效
+		byId.setMedWorkUnit((byId.getMedWorkSum().divide(MedWorkCorrect,4, BigDecimal.ROUND_HALF_UP)));//医技工作量绩效每分绩效
+		this.updateById(byId);
+
+	}
+
 
 	public void install(KpiAccounting param) {
 
@@ -157,11 +210,6 @@ public class KpiAccountingServiceImpl extends ServiceImpl<KpiAccountingMapper, K
 
 		BigDecimal MedFixedCorrectionScore = medcollect.stream().map(SumVo::getFixedCorrectionScore).reduce(BigDecimal.ZERO, BigDecimal::add);
 		BigDecimal MedWorkCorrect = medcollect.stream().map(SumVo::getWorkCorrect).reduce(BigDecimal.ZERO, BigDecimal::add);
-
-		byId.setPhyFixedCorrectionScoreSum(PhyFixedCorrectionScore);//医师固定绩效矫正之和A1
-		byId.setPhyWorkCorrectSum(PhyWorkCorrect);//医师工作量绩效矫正之和A2
-		byId.setMedFixedCorrectionScoreSum(MedFixedCorrectionScore);//医技固定绩效矫正之和B1
-		byId.setMedWorkCorrectSum(MedWorkCorrect);//医技工作量绩效矫正之和B1
 
 
 		BigDecimal PhyFixedCountScore = phycollect.stream().map(SumVo::getFixedCountScore).reduce(BigDecimal.ZERO, BigDecimal::add);

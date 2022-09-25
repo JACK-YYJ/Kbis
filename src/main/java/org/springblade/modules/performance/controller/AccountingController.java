@@ -7,6 +7,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springblade.core.tool.api.R;
 import org.springblade.modules.performance.dto.AccountingDto;
 import org.springblade.modules.performance.entity.KpiAccounting;
+import org.springblade.modules.performance.mapper.KpiAccountingMapper;
 import org.springblade.modules.performance.service.KpiAccountingService;
 import org.springblade.modules.performance.service.KpiPersonalService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,8 @@ public class AccountingController {
 	private KpiAccountingService kpiAccountingService;
 	@Autowired
 	private KpiPersonalService kpiPersonalService;
+	@Autowired
+	private KpiAccountingMapper kpiAccountingMapper;
 
 	/**
 	 *查询
@@ -50,8 +53,23 @@ public class AccountingController {
 		if (param==null){
 			return R.fail("请从新输入");
 		}
+
 		kpiPersonalService.deleteBysaveAccounting(param.getToMonth());
 		return kpiAccountingService.saves(param);
 	}
 
+
+
+	@PostMapping("/Savetj")
+	@ApiOperationSupport(order = 3)
+	@ApiOperation(value = "统计保存", notes = "")
+	public R savetj(@RequestBody AccountingDto param) {
+		if (param==null){
+			return R.fail("请从新输入");
+		}
+		kpiPersonalService.deleteBysaveAccounting(param.getToMonth());
+		kpiAccountingService.savess(param);
+		kpiPersonalService.add(param.getToMonth());
+		return R.success("保存成功");
+	}
 }

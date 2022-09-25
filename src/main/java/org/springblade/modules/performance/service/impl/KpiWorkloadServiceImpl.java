@@ -5,6 +5,7 @@ import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.sun.jersey.core.impl.provider.xml.ThreadLocalSingletonContextProvider;
 import org.springblade.core.tool.api.R;
 import org.springblade.modules.performance.entity.KpiAttendance;
 import org.springblade.modules.performance.mapper.KpiFixedMapper;
@@ -109,6 +110,27 @@ public class KpiWorkloadServiceImpl extends ServiceImpl<KpiWorkloadMapper, KpiWo
 				)
 		);
 		baseMapper.updateById(param);
+		List<kpiWorkloadVo> kWVoList = baseMapper.selectWorkLoadVo(param.getAttendanceMonth());
+		List<kpiWorkloadVo> kpiWorkloadVoStream = kWVoList.stream()
+			.filter(s ->
+				(s.getWorkSum()
+					.compareTo(  (BigDecimal.valueOf(0))  ) !=0))
+			.collect(Collectors.toList());
+		//A医师
+		List<kpiWorkloadVo> phykWVoList = kpiWorkloadVoStream.stream()
+			.filter(s -> s.getJobType().equals(0))
+			.collect(Collectors.toList());
+		//B医技
+		List<kpiWorkloadVo> medkWVoList = kpiWorkloadVoStream.stream()
+			.filter(s -> s.getJobType() == 1)
+			.collect(Collectors.toList());
+		if (phykWVoList.size()==0&&medkWVoList.size()==0){
+			this.updateVerify(param);
+		}
+		return R.success("编辑成功");
+	}
+
+	private R updateVerify(KpiWorkload param) {
 		//根据 公式生成 矫正工作量绩效分值
 		PercentageVo p = kpiFixedMapper.selectPercentageVo(param.getAttendanceMonth(), param.getUserCode());
 		List<kpiWorkloadVo> kWVoList = baseMapper.selectWorkLoadVo(param.getAttendanceMonth());
@@ -128,7 +150,7 @@ public class KpiWorkloadServiceImpl extends ServiceImpl<KpiWorkloadMapper, KpiWo
 
 		//B医技
 		List<kpiWorkloadVo> medkWVoList = kpiWorkloadVoStream.stream()
-			.filter(s -> s.getJobType().equals(0))
+			.filter(s -> s.getJobType() == 1)
 			.collect(Collectors.toList());
 
 		BigDecimal medAverage = medkWVoList.stream().map(kpiWorkloadVo::getWorkSum)    //求平均值
@@ -151,7 +173,7 @@ public class KpiWorkloadServiceImpl extends ServiceImpl<KpiWorkloadMapper, KpiWo
 								.multiply(p.getPercentage())
 							)
 					);
-				// a<b
+					// a<b
 				} else {
 					param.setWorkCorrect(param.getWorkSum());
 				}
@@ -195,12 +217,13 @@ public class KpiWorkloadServiceImpl extends ServiceImpl<KpiWorkloadMapper, KpiWo
 			}
 		}
 		baseMapper.updateById(param);
-		return R.success("编辑成功");
+		return null;
 	}
 
 	@Override
 	public R updateByList(List<KpiWorkload> kpiFixedList) {
 		List<KpiWorkload> data = new ArrayList<>();
+		List<R> R2 = new ArrayList<>();
 		List<R> rList = new ArrayList<>();
 		kpiFixedList.forEach(param -> {
 			//校验工号
@@ -210,15 +233,25 @@ public class KpiWorkloadServiceImpl extends ServiceImpl<KpiWorkloadMapper, KpiWo
 			}
 			//循环校验
 			R r = this.updateByOne(param);
+
 			if (!r.isSuccess()) {
 				data.add(param);
 			}
+		});
+
+		kpiFixedList.forEach(s->{
+			KpiWorkload param = this.getById(s);
+			R r2 = this.updateVerify(param);
+			R2.add(r2);
 		});
 		if (ObjectUtil.isAllNotEmpty(data)) {
 			return R.fail("请重新下载模板");
 		}
 		if (ObjectUtil.isAllNotEmpty(rList)) {
 			return R.fail("校验到Excel不存在的工号");
+		}
+		if (ObjectUtil.isAllNotEmpty(R2)) {
+			return R.success("初始计算请忽略");
 		}
 		return R.success("保存成功");
 	}

@@ -110,7 +110,10 @@ public class JobController {
 		if(ObjectUtil.isEmpty(param.getButtonWorkload())||ObjectUtil.isEmpty(param.getButtonFixed())){
 			R.fail("请重新添加（开关为null）");
 		}
-		jobWorkService.add(param);
+		List<JobWork> jobWorkList = jobWorkService.query().eq(JobWork.COL_J_ID, param.getJId()).list();
+		if (jobWorkList.size()==0){
+			jobWorkService.add(param);
+		}
 		jobService.save(param);
 		return R.success("添加成功");
 	}

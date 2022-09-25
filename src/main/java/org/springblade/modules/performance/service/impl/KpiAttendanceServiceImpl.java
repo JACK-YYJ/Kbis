@@ -33,14 +33,14 @@ public class KpiAttendanceServiceImpl extends ServiceImpl<KpiAttendanceMapper, K
         List<KpiAttendanceVo> MonthIngList = baseMapper.selectByAdd();
         int count = userService.count();
 
-        if (!(kpiAttendancePage.getTotal()==count)){
+        if (!(MonthIngList.size()==count)){
         	MonthIngList.forEach(s->{
 				baseMapper.deleteById(s.getId());
 			});
         	userService.addIngMonthAttenddance();
 		}
 		String format = DateUtil.format(DateUtil.date(), "yyyy-MM");
-        if (kpiAttendancePage.getRecords().size() == 0&&format.equals(toMonth)) {
+        if (kpiAttendancePage.getRecords().size() == 0&&format.equals(toMonth)&&MonthIngList.size()==0) {
 			userService.addIngMonthAttenddance();
         }
         if (idOrName != null) {
