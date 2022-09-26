@@ -46,7 +46,7 @@ public class KpiOtherPerformanceServiceImpl extends ServiceImpl<KpiOtherPerforma
         Page<KpiOtherPerformance> allList = baseMapper.selectOpattendancePage(page, toMonth);
 		String format = DateUtil.format(DateUtil.date(), "yyyy-MM");
         if (allList.getRecords().size() == 0&&format.equals(toMonth)) {
-            List<User> userList = userService.lambdaQuery().list();
+            List<User> userList = userService.lambdaQuery().orderByDesc(User::getCreateTime).list();
             ArrayList<KpiOtherPerformance> kpiopaddList = new ArrayList<>();
             for (User user : userList) {
                 KpiOtherPerformance addKpiOp = new KpiOtherPerformance();

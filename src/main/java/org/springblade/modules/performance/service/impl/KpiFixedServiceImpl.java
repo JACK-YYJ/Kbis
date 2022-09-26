@@ -66,11 +66,11 @@ public class KpiFixedServiceImpl extends ServiceImpl<KpiFixedMapper, KpiFixed> i
 			 if(s.getJobGs()==0){
 			 	fixed.setFixedCorrectionScore(fixed.getFixedCountScore());
 			 }
-			 if(s.getJobGs()==2){
-				 fixed.setFixedCorrectionScore(fixed.getFixedCountScore().multiply(s.getJobRatio().multiply(s.getPercentage())));
-			 }
-			 if(s.getJobGs()==3){
+			 if(s.getJobGs()==1){
 				 fixed.setFixedCorrectionScore(fixed.getFixedCountScore().multiply(s.getJobRatio()));
+			 }
+			 if(s.getJobGs()==2){
+			 	fixed.setFixedCorrectionScore(fixed.getFixedCountScore().multiply(s.getJobRatio().multiply(s.getPercentage())));
 			 }
 			 if(s.getJobGs()==3){
 			 	fixed.setFixedCorrectionScore(BigDecimal.valueOf(0));
@@ -103,11 +103,11 @@ public class KpiFixedServiceImpl extends ServiceImpl<KpiFixedMapper, KpiFixed> i
 		 if(p.getJobGs()==0){// 科室主任 、科室副主任  合计分值
 			 param.setFixedCorrectionScore(param.getFixedCountScore());
 		 }
-		 if(p.getJobGs()==1){//合计分值*岗位系数*出勤率
-			 param.setFixedCorrectionScore(param.getFixedCountScore().multiply(p.getJobRatio().multiply(p.getPercentage())));
-		 }
-		 if(p.getJobGs()==2){//合计分值*岗位系数
+		 if(p.getJobGs()==1){//合计分值*岗位系数
 			 param.setFixedCorrectionScore(param.getFixedCountScore().multiply(p.getJobRatio()));
+		 }
+		 if(p.getJobGs()==2){//合计分值*岗位系数*出勤率
+			 param.setFixedCorrectionScore(param.getFixedCountScore().multiply(p.getJobRatio().multiply(p.getPercentage())));
 		 }
 		 if(p.getJobGs()==3){//无
 			 param.setFixedCorrectionScore(BigDecimal.valueOf(0));

@@ -34,7 +34,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
 	@Override
 	public void addIngMonthAttenddance() {
-		List<User> userList = this.lambdaQuery().list();
+		List<User> userList = this.lambdaQuery().orderByDesc(User::getCreateTime).list();
 		ArrayList<KpiAttendance> kpiAttendances = new ArrayList<>();
 		for (User user : userList) {
 			KpiAttendance kpiAttendance = new KpiAttendance();

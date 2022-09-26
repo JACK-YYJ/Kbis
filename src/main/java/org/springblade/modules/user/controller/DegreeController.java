@@ -89,7 +89,10 @@ public class DegreeController extends BladeController {
 	public R delete(@RequestBody List<Integer> param) {
 		int count = userService.count();
 		if(count==0){
-			degreeService.removeByIds(param);
+			param.forEach(s->{
+				degreeService.removeById(s);
+			});
+
 		}else {
 			for (Integer s : param) {
 				List<User> list = userService.lambdaQuery().eq(User::getDId, s).list();
@@ -97,7 +100,9 @@ public class DegreeController extends BladeController {
 					return R.fail("该学历下存在用户，不可删除");
 				}
 			}
-			degreeService.removeByIds(param);
+			param.forEach(s->{
+				degreeService.removeById(s);
+			});
 		}
 		return R.success("删除成功");
 	}

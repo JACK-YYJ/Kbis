@@ -84,7 +84,10 @@ public class JobCertificateController {
 	public R delete(@RequestBody List<Integer> param) {
 		int count = jobCertificateService.count();
 		if(count==0){
-			jobCertificateService.removeByIds(param);
+			param.forEach(s->{
+				jobCertificateService.removeById(s);
+			});
+
 		}else {
 			User user = userService.lambdaQuery()
 				.orderByDesc(User::getJcId).list().get(0);
@@ -92,7 +95,9 @@ public class JobCertificateController {
 			if(user.getJcId()>=count){
 				return R.fail("该上岗证已有用户");
 			}
-			jobCertificateService.removeByIds(param);
+			param.forEach(s->{
+				jobCertificateService.removeById(s);
+			});
 		}
 		return R.success("删除成功");
 	}

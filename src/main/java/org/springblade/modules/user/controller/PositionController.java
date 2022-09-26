@@ -84,7 +84,10 @@ public class PositionController {
 	public R delete(@RequestBody List<Integer> param) {
 		int count = userService.count();
 		if(count==0){
-			positionService.removeByIds(param);
+			param.forEach(s-> {
+				positionService.removeById(s);
+			});
+
 		}else {
 			for (Integer ids : param) {
 				User serviceOne = userService.getOne(new QueryWrapper<User>().eq(User.COL_P_ID, ids));
@@ -92,7 +95,9 @@ public class PositionController {
 					return R.fail("该职称下存在用户，不可删除");
 				}
 			}
-			positionService.removeByIds(param);
+			param.forEach(s-> {
+				positionService.removeById(s);
+			});
 		}
 		return R.success("删除成功");
 	}

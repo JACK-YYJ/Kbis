@@ -4,6 +4,7 @@ import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ObjectUtil;
 import org.springblade.core.tool.api.R;
 import org.springblade.modules.performance.dto.AccountingDto;
+import org.springblade.modules.performance.service.KpiPersonalService;
 import org.springblade.modules.performance.vo.SumVo;
 import org.springblade.modules.user.service.UserService;
 import org.springblade.modules.util.DateUtils;
@@ -31,7 +32,7 @@ public class KpiAccountingServiceImpl extends ServiceImpl<KpiAccountingMapper, K
 	public UserService userService;
 
 	@Override
-	public KpiAccounting selectAccountingPage(String toMonth) {
+	public R selectAccountingPage(String toMonth) {
 		KpiAccounting kpiAccounting = baseMapper.selectByToMonth(toMonth);//根据月份查询
 
 		String format = DateUtil.format(DateUtil.date(), "yyyy-MM");
@@ -42,7 +43,10 @@ public class KpiAccountingServiceImpl extends ServiceImpl<KpiAccountingMapper, K
 			KpiAccounting byId = baseMapper.selectByToMonth(toMonth);
 			this.install(byId);
 		}
-		return kpiAccounting;
+		if(ObjectUtil.isEmpty(kpiAccounting)&&(!format.equals(toMonth))){
+			return R.fail("当前月份数据为空");
+		}
+		return R.data(kpiAccounting);
 	}
 
 	@Override
@@ -51,7 +55,9 @@ public class KpiAccountingServiceImpl extends ServiceImpl<KpiAccountingMapper, K
 			return R.fail("请输入月份");
 		}
 		KpiAccounting byId = baseMapper.selectByToMonth(param.getToMonth());
-
+		if (ObjectUtil.isEmpty(byId)){
+			return R.fail("当前月份数据为空");
+		}
 		byId.setPerformanceSum(param.getPerformanceSum());//科室分配绩效总额
 
 		String format = DateUtil.format(byId.getAttendanceMonth(), "yyyy-MM");
@@ -107,6 +113,7 @@ public class KpiAccountingServiceImpl extends ServiceImpl<KpiAccountingMapper, K
 		BigDecimal medWorkSum = medcollect.stream().map(SumVo::getWorkSum).reduce(BigDecimal.ZERO, BigDecimal::add);
 
 		byId.setPhyFixedUnit((byId.getPhyFixedSum().divide(PhyFixedCorrectionScore,4, BigDecimal.ROUND_HALF_UP)));//医师固定绩每分绩效
+
 		byId.setPhyWorkUnit((byId.getPhyWorkSum().divide(PhyWorkCorrect,4, BigDecimal.ROUND_HALF_UP)));//医师工作量绩效每分绩效
 		byId.setMedFixedUnit((byId.getMedFixedSum().divide(MedFixedCorrectionScore,4, BigDecimal.ROUND_HALF_UP)));//医技固定量绩效每分绩效
 		byId.setMedWorkUnit((byId.getMedWorkSum().divide(MedWorkCorrect,4, BigDecimal.ROUND_HALF_UP)));//医技工作量绩效每分绩效

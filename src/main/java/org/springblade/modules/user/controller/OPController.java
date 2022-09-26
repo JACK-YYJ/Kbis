@@ -109,7 +109,10 @@ public class OPController {
 	public R delete(@RequestBody List<Integer> param) {
 		int count = jobOtherPService.count();
 		if(count==0){
-			otherPerformanceService.removeByIds(param);
+			param.forEach(s->{
+				otherPerformanceService.removeById(s);
+			});
+
 		}else {
 			for (Integer ids : param) {
 				JobOtherP em = jobOtherPService.getOne(new QueryWrapper<JobOtherP>().eq(JobOtherP.COL_J_ID,ids));
@@ -117,7 +120,9 @@ public class OPController {
 					return R.fail("该绩效下存在岗位id为"+em.getJId()+"在使用");
 				}
 			}
-			otherPerformanceService.removeByIds(param);
+			param.forEach(s->{
+				otherPerformanceService.removeById(s);
+			});
 		}
 		return R.success("删除成功");
 	}

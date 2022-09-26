@@ -34,7 +34,7 @@ public class KpiPersonalServiceImpl extends ServiceImpl<KpiPersonalMapper, KpiPe
     public IPage<KpiPersonal> selectPersonalPage(IPage<Object> page, String toMonth, String idOrName) {
 		String format = DateUtil.format(DateUtil.date(), "yyyy-MM");
 		Page<KpiPersonal> kpiAttendancePage = baseMapper.selectPersonalPage(page, toMonth);
-		if (kpiAttendancePage.getRecords().size()==0&&format.equals(toMonth)){
+		if (kpiAttendancePage.getRecords().size() ==0 && format.equals(toMonth)){
 
 			KpiAccounting kpiAccounting = kpiAccountingMapper.selectByToMonth(format);
 
@@ -57,11 +57,11 @@ public class KpiPersonalServiceImpl extends ServiceImpl<KpiPersonalMapper, KpiPe
 					personal.setFixedSum(BigDecimal.valueOf(0));
 					personal.setWorkSum(BigDecimal.valueOf(0));
 				}
-				if (s.getJobType()==0){
+				if (s.getJobType().equals(0)){
 					personal.setFixedSum(s.getFixedSum().multiply(kpiAccounting.getPhyFixedUnit()));//	重新计算
 					personal.setWorkSum(s.getWorkSum().multiply(kpiAccounting.getPhyWorkUnit()));//	重新计算
 				}
-				if (s.getJobType()==1){
+				if (s.getJobType().equals(1)){
 					personal.setFixedSum(s.getFixedSum().multiply(kpiAccounting.getMedFixedUnit()));//	重新计算
 					personal.setWorkSum(s.getWorkSum().multiply(kpiAccounting.getMedWorkUnit()));//	重新计算
 				}
@@ -139,7 +139,7 @@ public class KpiPersonalServiceImpl extends ServiceImpl<KpiPersonalMapper, KpiPe
 						.add(personal.getWorkSum())
 					)
 			);
-			this.save(personal);
+			this.updateById(personal);
 		});
 	}
 

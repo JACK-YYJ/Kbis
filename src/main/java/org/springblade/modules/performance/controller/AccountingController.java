@@ -43,9 +43,9 @@ public class AccountingController {
 		if (toMonth==null){
 			return R.fail("请从新输入月份");
 		}
-		KpiAccounting pages = kpiAccountingService.selectAccountingPage(toMonth);
-		return R.data(pages);
+		return kpiAccountingService.selectAccountingPage(toMonth);
 	}
+
 	@PostMapping("/Save")
 	@ApiOperationSupport(order = 2)
 	@ApiOperation(value = "保存", notes = "")

@@ -49,7 +49,7 @@ public class KpiWorkloadServiceImpl extends ServiceImpl<KpiWorkloadMapper, KpiWo
 		Page<KpiWorkload> kpiWorkloadPage = baseMapper.kpiWorkloadPage(page, toMonth);
 		String format = DateUtil.format(DateUtil.date(), "yyyy-MM");
 		if (kpiWorkloadPage.getRecords().size() == 0 && format.equals(toMonth)) {
-			List<User> userList = userService.lambdaQuery().list();
+			List<User> userList = userService.lambdaQuery().orderByDesc(User::getCreateTime).list();
 			ArrayList<KpiWorkload> kpiAttendances = new ArrayList<>();
 			for (User user : userList) {
 				KpiWorkload kpiWorkload = new KpiWorkload();
@@ -82,8 +82,18 @@ public class KpiWorkloadServiceImpl extends ServiceImpl<KpiWorkloadMapper, KpiWo
 		WorkSumByUserCode mrIntensifierSum = baseMapper.setectWorkSumByUserCode(param.getUserCode(), 9);
 		WorkSumByUserCode mrImageSum = baseMapper.setectWorkSumByUserCode(param.getUserCode(), 10);
 		WorkSumByUserCode mrBreastSum = baseMapper.setectWorkSumByUserCode(param.getUserCode(), 11);
-		if (ObjectUtil.isEmpty(PlainFilmSum)) {
-			return R.fail("请重新下载模板");
+		if (ObjectUtil.isEmpty(PlainFilmSum)&&
+			ObjectUtil.isEmpty(BowelSum)&&
+			ObjectUtil.isEmpty(BreastSum)&&
+			ObjectUtil.isEmpty(ctFlatSweepSum)&&
+			ObjectUtil.isEmpty(ctIntensifierSum)&&
+			ObjectUtil.isEmpty(ctPositioningSum)&&
+			ObjectUtil.isEmpty(ctHemalSum)&&
+			ObjectUtil.isEmpty(mrFlatSweepSum)&&
+			ObjectUtil.isEmpty(mrIntensifierSum)&&
+			ObjectUtil.isEmpty(mrImageSum)&&
+			ObjectUtil.isEmpty(mrBreastSum)) {
+			return R.fail("工作量分值数据缺失");
 		}
 
 		//计算 总和
@@ -122,14 +132,19 @@ public class KpiWorkloadServiceImpl extends ServiceImpl<KpiWorkloadMapper, KpiWo
 			.collect(Collectors.toList());
 		//B医技
 		List<kpiWorkloadVo> medkWVoList = kpiWorkloadVoStream.stream()
-			.filter(s -> s.getJobType() == 1)
+			.filter(s -> s.getJobType().equals(1) )
 			.collect(Collectors.toList());
-		if (phykWVoList.size()==0&&medkWVoList.size()==0){
+		if (phykWVoList.size()!=0&&medkWVoList.size()!=0){
 			this.updateVerify(param);
 		}
 		return R.success("编辑成功");
 	}
 
+	/**
+	 * 矫正分值
+	 * @param param
+	 * @return
+	 */
 	private R updateVerify(KpiWorkload param) {
 		//根据 公式生成 矫正工作量绩效分值
 		PercentageVo p = kpiFixedMapper.selectPercentageVo(param.getAttendanceMonth(), param.getUserCode());
@@ -150,7 +165,7 @@ public class KpiWorkloadServiceImpl extends ServiceImpl<KpiWorkloadMapper, KpiWo
 
 		//B医技
 		List<kpiWorkloadVo> medkWVoList = kpiWorkloadVoStream.stream()
-			.filter(s -> s.getJobType() == 1)
+			.filter(s -> s.getJobType().equals(1) )
 			.collect(Collectors.toList());
 
 		BigDecimal medAverage = medkWVoList.stream().map(kpiWorkloadVo::getWorkSum)    //求平均值
@@ -245,7 +260,7 @@ public class KpiWorkloadServiceImpl extends ServiceImpl<KpiWorkloadMapper, KpiWo
 			R2.add(r2);
 		});
 		if (ObjectUtil.isAllNotEmpty(data)) {
-			return R.fail("请重新下载模板");
+			return R.fail("工作量分值数据缺失");
 		}
 		if (ObjectUtil.isAllNotEmpty(rList)) {
 			return R.fail("校验到Excel不存在的工号");

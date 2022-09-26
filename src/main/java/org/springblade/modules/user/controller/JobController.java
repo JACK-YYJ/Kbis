@@ -111,7 +111,10 @@ public class JobController {
 			R.fail("请重新添加（开关为null）");
 		}
 		List<JobWork> jobWorkList = jobWorkService.query().eq(JobWork.COL_J_ID, param.getJId()).list();
-		if (jobWorkList.size()==0){
+		if (jobWorkList.size()!=0){
+			jobWorkService.remove(new QueryWrapper<JobWork>().eq(JobWork.COL_J_ID, param.getJId()));
+			jobWorkService.add(param);
+		}else {
 			jobWorkService.add(param);
 		}
 		jobService.save(param);
@@ -155,16 +158,18 @@ public class JobController {
 	public R delete(@RequestBody List<Integer> param) {
 		int count = userService.count();
 		if(count==0){
-			jobService.removeByIds(param);
+			param.forEach(s->{
+				jobService.removeById(s);
+			});
+
 		}else {
 			for (Integer ids : param) {
-				User serviceOne = userService.getOne(new QueryWrapper<User>().eq(User.COL_JC_ID, ids));
-				List<JobWork> jobWorkList = jobWorkService.query().eq(JobWork.COL_J_ID, ids).list();
-				jobWorkService.removeByIds(jobWorkList);
-				if (ObjectUtil.isNotNull(serviceOne)) {
-					return R.fail("该岗位下存在用户，不可删除");
+				User serviceOne = userService.getOne(new QueryWrapper<User>().eq(User.COL_J_ID, ids));
+				if (ObjectUtil.isNotEmpty(serviceOne)) {
+					return R.fail(500,"该岗位下存在用户，不可删除");
 				}
-				jobService.removeByIds(param);
+				//删除
+				jobService.removeById(ids);
 			}
 		}
 		return R.success("删除成功");

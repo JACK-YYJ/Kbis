@@ -32,15 +32,15 @@ public class KpiAttendanceServiceImpl extends ServiceImpl<KpiAttendanceMapper, K
         Page<KpiAttendanceVo> kpiAttendancePage = baseMapper.selectAttendancePage(page, toMonth);
         List<KpiAttendanceVo> MonthIngList = baseMapper.selectByAdd();
         int count = userService.count();
-
-        if (!(MonthIngList.size()==count)){
-        	MonthIngList.forEach(s->{
-				baseMapper.deleteById(s.getId());
-			});
-        	userService.addIngMonthAttenddance();
-		}
+		//判断当前 用户数据是不是 最新数据
+//        if (!(MonthIngList.size()==count)){
+//        	MonthIngList.forEach(s->{
+//				baseMapper.deleteById(s.getId());
+//			});
+//        	userService.addIngMonthAttenddance();
+//		}
 		String format = DateUtil.format(DateUtil.date(), "yyyy-MM");
-        if (kpiAttendancePage.getRecords().size() == 0&&format.equals(toMonth)&&MonthIngList.size()==0) {
+        if (kpiAttendancePage.getRecords().size() == 0 && format.equals(toMonth)&&MonthIngList.size()==0) {
 			userService.addIngMonthAttenddance();
         }
         if (idOrName != null) {

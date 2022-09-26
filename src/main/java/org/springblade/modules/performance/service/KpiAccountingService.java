@@ -15,7 +15,7 @@ import java.util.List;
 
 public interface KpiAccountingService extends IService<KpiAccounting> {
 
-    KpiAccounting selectAccountingPage(String toMonth);
+    R selectAccountingPage(String toMonth);
 
     R saves(AccountingDto param);
 

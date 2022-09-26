@@ -56,6 +56,7 @@
                  LEFT JOIN dict_degree dd ON dd.d_id = du.d_id
                  LEFT JOIN dict_job dj ON dj.j_id = du.j_id
         WHERE date_format(ka.attendance_month, '%Y-%m') = date_format(CURDATE(), '%Y-%m')
+        order by du.create_time desc
     </select>
     <select id="selectidOrName" resultMap="BaseResultMap">
         select
