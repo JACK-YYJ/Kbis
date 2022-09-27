@@ -11,10 +11,11 @@
         <result column="attendance_state" jdbcType="INTEGER" property="attendanceState"/>
         <result column="attendance_day" jdbcType="INTEGER" property="attendanceDay"/>
         <result column="month_day" jdbcType="INTEGER" property="monthDay"/>
+        <result column="compute_status" jdbcType="INTEGER" property="computeStatus"/>
     </resultMap>
     <sql id="Base_Column_List">
         <!--@mbg.generated-->
-        id, user_code, user_name, attendance_month, attendance_state, attendance_day, month_day
+        id, user_code, user_name, attendance_month, attendance_state, attendance_day, month_day,compute_status
     </sql>
     <select id="selectAttendancePage" resultType="org.springblade.modules.performance.vo.KpiAttendanceVo">
         select
@@ -34,6 +35,7 @@
                 date_format(attendance_month, '%Y-%m') =  #{toMonth}
             </if>
         </where>
+        order by id desc
     </select>
     <select id="selectAttendance" resultMap="BaseResultMap">
         select

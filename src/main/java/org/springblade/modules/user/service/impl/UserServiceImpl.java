@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springblade.modules.performance.entity.KpiAttendance;
 import org.springblade.modules.performance.service.KpiAttendanceService;
+import org.springblade.modules.performance.service.KpiFixedService;
 import org.springblade.modules.user.dto.UserDto;
 import org.springblade.modules.user.vo.UserVo;
 import org.springblade.modules.util.DateUtils;
@@ -26,6 +27,8 @@ import org.springblade.modules.user.service.UserService;
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
 	@Autowired
 	public KpiAttendanceService kpiAttendanceService;
+	@Autowired
+	private KpiFixedService kpiFixedService;
     @Override
     public IPage<UserVo> selectUserPage(IPage<Object> page, UserDto param) {
         Page<UserVo> userVoPage = baseMapper.selectUserPage(page, param);
@@ -47,6 +50,18 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 			kpiAttendances.add(kpiAttendance);
 		}
 		kpiAttendanceService.saveBatch(kpiAttendances);
+	}
+
+	@Override
+	public void addCompute(User param) {
+		KpiAttendance kpiAttendance = new KpiAttendance();
+		kpiAttendance.setUserCode(param.getUserCode());
+		kpiAttendance.setUserName(param.getUserName());
+		kpiAttendance.setAttendanceMonth(DateUtils.getNowDate());
+		kpiAttendance.setAttendanceState(1);
+		kpiAttendance.setAttendanceDay(23);
+		kpiAttendance.setMonthDay(23);
+		kpiAttendanceService.save(kpiAttendance);
 	}
 
 }

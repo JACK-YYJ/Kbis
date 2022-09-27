@@ -9,6 +9,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.api.R;
+import org.springblade.modules.performance.service.KpiAttendanceService;
 import org.springblade.modules.system.dto.SysUserPwdDto;
 import org.springblade.modules.system.entity.SysUser;
 import org.springblade.modules.system.service.SysUserService;
@@ -63,6 +64,7 @@ public class UserController {
 //		User.setCreateBy(param.getUserName());
 //		User.add(sysUser);
 		userService.save(param);
+		userService.addCompute(param);
 		return R.success("添加成功");
 	}
 

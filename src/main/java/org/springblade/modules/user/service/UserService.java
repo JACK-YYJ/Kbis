@@ -21,6 +21,7 @@ public interface UserService extends IService<User> {
 
 	void addIngMonthAttenddance();
 
+	void addCompute(User param);
 }
 
 

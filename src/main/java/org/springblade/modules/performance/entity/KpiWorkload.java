@@ -150,6 +150,16 @@ public class KpiWorkload implements Serializable {
 	@TableField(value = "work_correct")
 	@ApiModelProperty(value = "矫正工作量绩效分值")
 	private BigDecimal workCorrect;
+
+	/**
+	 * 计算状态0 ：插入 1：计算
+	 */
+	@TableField(value = "compute_status")
+	@ApiModelProperty(value = "计算状态0 ：插入 1：计算")
+	private Integer computeStatus;
+
+
+	public static final String COL_COMPUTE_STATUS = "compute_status";
     private static final long serialVersionUID = 1L;
 
     public static final String COL_KPI_WORK_ID = "kpi_work_id";

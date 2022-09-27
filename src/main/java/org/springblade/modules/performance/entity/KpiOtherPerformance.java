@@ -35,6 +35,15 @@ public class KpiOtherPerformance implements Serializable {
     public static final String COL_CT_NIGHT_SHIFTS_PRICE = "ct_night_shifts_price";
     public static final String COL_OVERTIME_PRICE = "overtime_price";
     public static final String COL_BEDSIDE_PRICE = "bedside_price";
+	/**
+	 * 计算状态0 ：插入 1：计算
+	 */
+	@TableField(value = "compute_status")
+	@ApiModelProperty(value = "计算状态0 ：插入 1：计算")
+	private Integer computeStatus;
+
+
+	public static final String COL_COMPUTE_STATUS = "compute_status";
     /**
      * 出勤管理id
      */

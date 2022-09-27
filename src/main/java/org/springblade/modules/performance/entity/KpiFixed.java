@@ -114,6 +114,15 @@ public class KpiFixed implements Serializable {
     @TableField(value = "fixed_correction_score")
     @ApiModelProperty(value="矫正固定分值")
     private BigDecimal fixedCorrectionScore;
+	/**
+	 * 计算状态0 ：插入 1：计算
+	 */
+	@TableField(value = "compute_status")
+	@ApiModelProperty(value = "计算状态0 ：插入 1：计算")
+	private Integer computeStatus;
+
+
+	public static final String COL_COMPUTE_STATUS = "compute_status";
 
 
     private static final long serialVersionUID = 1L;

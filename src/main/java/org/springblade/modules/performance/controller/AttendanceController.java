@@ -66,6 +66,22 @@ public class AttendanceController {
 			kpiAttendanceService.updateBatchById(param);
 		return R.success("操作成功");
 	}
+	/**
+	 *
+	 *
+	 * @param param
+	 * @return
+	 */
+	@PostMapping("/compute")
+	@ApiOperation(value = "从新计算")
+	@ApiOperationSupport(order = 2)
+	public R compute(@RequestBody List<KpiAttendance> param) {
+			param.forEach(s->{
+				s.setComputeStatus(1);
+				kpiAttendanceService.updateById(s);
+			});
+		return R.success("操作成功");
+	}
 
 	/**
 	 * 出勤率 update

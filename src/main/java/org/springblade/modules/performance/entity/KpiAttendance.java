@@ -79,6 +79,15 @@ public class KpiAttendance implements Serializable {
     @ApiModelProperty(value = "全勤天数")
     private Integer monthDay;
 
+	/**
+	 * 计算状态0 ：插入 1：计算
+	 */
+	@TableField(value = "compute_status")
+	@ApiModelProperty(value = "计算状态0 ：插入 1：计算")
+	private Integer computeStatus;
+
+
+	public static final String COL_COMPUTE_STATUS = "compute_status";
     private static final long serialVersionUID = 1L;
 
     public static final String COL_ID = "id";
@@ -94,4 +103,6 @@ public class KpiAttendance implements Serializable {
     public static final String COL_ATTENDANCE_DAY = "attendance_day";
 
     public static final String COL_MONTH_DAY = "month_day";
+
+
 }
