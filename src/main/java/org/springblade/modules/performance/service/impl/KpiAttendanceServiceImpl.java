@@ -55,6 +55,12 @@ public class KpiAttendanceServiceImpl extends ServiceImpl<KpiAttendanceMapper, K
         List<KpiAttendance> list = baseMapper.selectAttendance(param);
         return list;
     }
+
+	@Override
+	public List<KpiAttendance> selectToMonth(String format) {
+		List<KpiAttendance> list = baseMapper.selectToMonth(format);
+    	return list;
+	}
 }
 
 

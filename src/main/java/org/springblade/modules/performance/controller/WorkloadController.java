@@ -65,4 +65,15 @@ public class WorkloadController {
 	public R updateKpiWorkList(@RequestBody List<KpiWorkload> kpiFixedList) {
 		return kpiWorkloadService.updateByList(kpiFixedList);
 	}
+	/**
+	 * 导入数据
+	 * @param kpiFixedList
+	 * @return
+	 */
+	@PostMapping("/compute")
+	@ApiOperation(value = "保存")
+	@ApiOperationSupport(order = 4)
+	public R compute(@RequestBody List<KpiWorkload> kpiFixedList) {
+		return kpiWorkloadService.computeByList(kpiFixedList);
+	}
 }

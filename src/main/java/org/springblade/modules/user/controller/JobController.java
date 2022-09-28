@@ -74,7 +74,7 @@ public class JobController {
 	@ApiOperationSupport(order = 1)
 	@ApiOperation(value = "工作量计分值第一次添加查询", notes = "第一次添加会默认 加到关系表里默认值为0")
 	public R selectJobWork() {
-		List<Work> jobWorkList = workService.query().list();
+		List<Work> jobWorkList = workService.lambdaQuery().orderByDesc(Work::getWId).list();
 		if (jobWorkList.size()==0){
 			return R.fail("请添加工作类型");
 		}
@@ -110,6 +110,9 @@ public class JobController {
 		if(ObjectUtil.isEmpty(param.getButtonWorkload())||ObjectUtil.isEmpty(param.getButtonFixed())){
 			R.fail("请重新添加（开关为null）");
 		}
+		jobService.save(param);
+		Job serviceOne = jobService.getOne(new QueryWrapper<Job>().eq(Job.COL_JOB_NAME,param.getJobName()));
+		param.setJId(serviceOne.getJId());
 		List<JobWork> jobWorkList = jobWorkService.query().eq(JobWork.COL_J_ID, param.getJId()).list();
 		if (jobWorkList.size()!=0){
 			jobWorkService.remove(new QueryWrapper<JobWork>().eq(JobWork.COL_J_ID, param.getJId()));
@@ -117,7 +120,7 @@ public class JobController {
 		}else {
 			jobWorkService.add(param);
 		}
-		jobService.save(param);
+
 		return R.success("添加成功");
 	}
 

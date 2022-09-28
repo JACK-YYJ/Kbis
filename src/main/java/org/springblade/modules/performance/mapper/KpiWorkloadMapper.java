@@ -26,4 +26,6 @@ public interface KpiWorkloadMapper extends BaseMapper<KpiWorkload> {
 	WorkSumByUserCode setectWorkSumByUserCode(@Param("userCode") Integer userCode, @Param("i") Integer i);
 
 	List<kpiWorkloadVo> selectWorkLoadVo(@Param("attendanceMonth") Date attendanceMonth);
+
+	List<KpiWorkload> selectToMonth(String format);
 }

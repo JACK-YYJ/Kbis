@@ -33,6 +33,7 @@
             </if>
         </where>
         GROUP BY user_code
+        order by id desc
     </select>
     <delete id="deleteBysaveAccounting">
         delete from kpi_personal where  date_format(attendance_month, '%Y-%m') = #{toMonth}
@@ -65,7 +66,7 @@
             </if>
         </where>
         GROUP BY du.user_code
-        order by du.create_time desc
+        order by du.create_time
     </select>
 
 

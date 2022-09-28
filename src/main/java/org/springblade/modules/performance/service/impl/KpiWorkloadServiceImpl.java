@@ -49,7 +49,7 @@ public class KpiWorkloadServiceImpl extends ServiceImpl<KpiWorkloadMapper, KpiWo
 		Page<KpiWorkload> kpiWorkloadPage = baseMapper.kpiWorkloadPage(page, toMonth);
 		String format = DateUtil.format(DateUtil.date(), "yyyy-MM");
 		if (kpiWorkloadPage.getRecords().size() == 0 && format.equals(toMonth)) {
-			List<User> userList = userService.lambdaQuery().orderByDesc(User::getCreateTime).list();
+			List<User> userList = userService.lambdaQuery().orderByAsc(User::getUId).list();
 			ArrayList<KpiWorkload> kpiAttendances = new ArrayList<>();
 			for (User user : userList) {
 				KpiWorkload kpiWorkload = new KpiWorkload();
@@ -207,7 +207,6 @@ public class KpiWorkloadServiceImpl extends ServiceImpl<KpiWorkloadMapper, KpiWo
 				}
 			}
 		}
-
 		if (p.getWorkGs() == 1) {//总工作量
 			param.setWorkCorrect(param.getWorkSum());
 		}
@@ -269,6 +268,20 @@ public class KpiWorkloadServiceImpl extends ServiceImpl<KpiWorkloadMapper, KpiWo
 			return R.success("初始计算请忽略");
 		}
 		return R.success("保存成功");
+	}
+
+	@Override
+	public List<KpiWorkload> selectToMonth(String format) {
+		List<KpiWorkload> kpiWorkloadList =  baseMapper.selectToMonth(format);
+		return kpiWorkloadList;
+	}
+
+	@Override
+	public R computeByList(List<KpiWorkload> kpiFixedList) {
+		kpiFixedList.forEach(param->{
+
+		});
+		return null;
 	}
 }
 

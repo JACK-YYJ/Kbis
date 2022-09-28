@@ -30,7 +30,7 @@ public class Job implements Serializable {
     /**
      * 岗位id
      */
-    @TableId(value = "j_id", type = IdType.INPUT)
+    @TableId(value = "j_id", type = IdType.AUTO)
     @ApiModelProperty(value = "岗位id")
     private Integer jId;
 

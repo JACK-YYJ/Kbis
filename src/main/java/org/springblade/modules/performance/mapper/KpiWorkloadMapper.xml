@@ -21,12 +21,13 @@
         <result column="mr_flat_sweep_sum" jdbcType="DECIMAL" property="mrFlatSweepSum"/>
         <result column="work_sum" jdbcType="DECIMAL" property="workSum"/>
         <result column="work_correct" jdbcType="DECIMAL" property="workCorrect"/>
+        <result column="compute_status" jdbcType="INTEGER" property="computeStatus"/>
     </resultMap>
     <sql id="Base_Column_List">
         <!--@mbg.generated-->
         kpi_work_id, user_code, user_name, attendance_month, plain_film_sum, bowel_sum, breast_sum,
         ct_flat_sweep_sum, ct_intensifier_sum, ct_positioning_sum, ct_hemal_sum, mr_intensifier_sum,
-        mr_image_sum, mr_breast_sum, mr_flat_sweep_sum, work_sum,work_correct
+        mr_image_sum, mr_breast_sum, mr_flat_sweep_sum, work_sum,work_correct,compute_status
     </sql>
     <select id="kpiWorkloadPage" resultMap="BaseResultMap">
         select
@@ -37,6 +38,7 @@
                 date_format(attendance_month, '%Y-%m') = #{toMonth}
             </if>
         </where>
+        order by kpi_work_id desc
     </select>
     <select id="selectidOrName" resultMap="BaseResultMap">
         select
@@ -74,6 +76,12 @@
                  LEFT JOIN kpi_attendance ka ON ka.user_code = du.user_code
                  LEFT JOIN dict_job dj ON dj.j_id = du.j_id
                  LEFT JOIN kpi_workload kw ON kw.user_code = du.user_code
-        where   date_format(ka.attendance_month, '%Y-%m') = date_format(#{attendanceMonth}, '%Y-%m')
+        where date_format(ka.attendance_month, '%Y-%m') = date_format(#{attendanceMonth}, '%Y-%m')
+    </select>
+    <select id="selectToMonth" resultMap="BaseResultMap">
+     select
+        <include refid="Base_Column_List"/>
+        from kpi_workload
+        where date_format(attendance_month, '%Y-%m') = #{format}
     </select>
 </mapper>

@@ -20,5 +20,6 @@
             from job_work jw
                      left join dict_work dw on jw.w_id = dw.w_id
             where jw.j_id = #{jId}
+            order by jw.w_id desc
     </select>
 </mapper>

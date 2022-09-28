@@ -64,7 +64,7 @@ public class UserController {
 //		User.setCreateBy(param.getUserName());
 //		User.add(sysUser);
 		userService.save(param);
-		userService.addCompute(param);
+//		userService.addCompute(param);
 		return R.success("添加成功");
 	}
 

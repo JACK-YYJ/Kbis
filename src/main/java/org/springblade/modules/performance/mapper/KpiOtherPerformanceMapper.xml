@@ -1,45 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.springblade.modules.performance.mapper.KpiOtherPerformanceMapper">
-  <resultMap id="BaseResultMap" type="org.springblade.modules.performance.entity.KpiOtherPerformance">
-    <!--@mbg.generated-->
-    <!--@Table kpi_other_performance-->
-    <id column="kpi_op_id" jdbcType="INTEGER" property="kpiOpId" />
-    <result column="user_code" jdbcType="INTEGER" property="userCode" />
-    <result column="user_name" jdbcType="VARCHAR" property="userName" />
-    <result column="attendance_month" jdbcType="DATE" property="attendanceMonth" />
-    <result column="manage_price" jdbcType="DECIMAL" property="managePrice" />
-    <result column="manage_performance_price" jdbcType="DECIMAL" property="managePerformancePrice" />
-    <result column="various_rewards_price" jdbcType="DECIMAL" property="variousRewardsPrice" />
-    <result column="various_assessments_price" jdbcType="DECIMAL" property="variousAssessmentsPrice" />
-    <result column="various_subsidies_price" jdbcType="DECIMAL" property="variousSubsidiesPrice" />
-    <result column="other_night_shifts_sum" jdbcType="DECIMAL" property="otherNightShiftsSum" />
-    <result column="ct_night_shifts_sum" jdbcType="DECIMAL" property="ctNightShiftsSum" />
-    <result column="overtime_sum" jdbcType="DECIMAL" property="overtimeSum" />
-    <result column="radiation_price" jdbcType="DECIMAL" property="radiationPrice" />
-    <result column="bedside_sum" jdbcType="DECIMAL" property="bedsideSum" />
-    <result column="kpi_op_all_price" jdbcType="DECIMAL" property="kpiOpAllPrice" />
-  </resultMap>
-  <sql id="Base_Column_List">
-    <!--@mbg.generated-->
-    kpi_op_id, user_code, user_name, attendance_month, manage_price, manage_performance_price,
-    various_rewards_price, various_assessments_price, various_subsidies_price, other_night_shifts_sum,
-    ct_night_shifts_sum, overtime_sum, radiation_price, bedside_sum, kpi_op_all_price
-  </sql>
+    <resultMap id="BaseResultMap" type="org.springblade.modules.performance.entity.KpiOtherPerformance">
+        <!--@mbg.generated-->
+        <!--@Table kpi_other_performance-->
+        <id column="kpi_op_id" jdbcType="INTEGER" property="kpiOpId"/>
+        <result column="user_code" jdbcType="INTEGER" property="userCode"/>
+        <result column="user_name" jdbcType="VARCHAR" property="userName"/>
+        <result column="attendance_month" jdbcType="DATE" property="attendanceMonth"/>
+        <result column="manage_price" jdbcType="DECIMAL" property="managePrice"/>
+        <result column="manage_performance_price" jdbcType="DECIMAL" property="managePerformancePrice"/>
+        <result column="various_rewards_price" jdbcType="DECIMAL" property="variousRewardsPrice"/>
+        <result column="various_assessments_price" jdbcType="DECIMAL" property="variousAssessmentsPrice"/>
+        <result column="various_subsidies_price" jdbcType="DECIMAL" property="variousSubsidiesPrice"/>
+        <result column="other_night_shifts_sum" jdbcType="DECIMAL" property="otherNightShiftsSum"/>
+        <result column="ct_night_shifts_sum" jdbcType="DECIMAL" property="ctNightShiftsSum"/>
+        <result column="overtime_sum" jdbcType="DECIMAL" property="overtimeSum"/>
+        <result column="radiation_price" jdbcType="DECIMAL" property="radiationPrice"/>
+        <result column="bedside_sum" jdbcType="DECIMAL" property="bedsideSum"/>
+        <result column="kpi_op_all_price" jdbcType="DECIMAL" property="kpiOpAllPrice"/>
+        <result column="compute_status" jdbcType="INTEGER" property="computeStatus"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        kpi_op_id, user_code, user_name, attendance_month, manage_price, manage_performance_price,
+        various_rewards_price, various_assessments_price, various_subsidies_price, other_night_shifts_sum,
+        ct_night_shifts_sum, overtime_sum, radiation_price, bedside_sum, kpi_op_all_price,compute_status
+    </sql>
 
     <select id="selectOpattendancePage" resultMap="BaseResultMap">
         select
-        <include refid="Base_Column_List" />
+        <include refid="Base_Column_List"/>
         from kpi_other_performance
         <where>
             <if test="toMonth != null and toMonth != ''">
-                  date_format(attendance_month, '%Y-%m') =  #{toMonth}
+                date_format(attendance_month, '%Y-%m') = #{toMonth}
             </if>
         </where>
+        order by kpi_op_id desc
     </select>
     <select id="selectidOrName" resultMap="BaseResultMap">
-    select
-        <include refid="Base_Column_List" />
+        select
+        <include refid="Base_Column_List"/>
         from kpi_other_performance
         <where>
             <if test="idOrName != null and idOrName != ''">
@@ -47,8 +49,14 @@
                     or user_code regexp #{idOrName})
             </if>
             <if test="toMonth != null and toMonth != ''">
-                and   date_format(attendance_month, '%Y-%m') =  #{toMonth}
+                and   date_format(attendance_month, '%Y-%m') = #{toMonth}
             </if>
         </where>
+    </select>
+    <select id="selectToMonth" resultMap="BaseResultMap">
+     select
+        <include refid="Base_Column_List"/>
+        from kpi_other_performance
+        where date_format(attendance_month, '%Y-%m') = #{format}
     </select>
 </mapper>

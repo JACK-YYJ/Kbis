@@ -82,4 +82,17 @@ public class OpKpiController {
 		}
 		return R.success("操作成功");
 	}
+
+	/**
+	 * 从新计算一下
+	 * @param paramList
+	 * @return
+	 */
+	@PostMapping("/compute")
+	@ApiOperation(value = "从新计算一下")
+	@ApiOperationSupport(order = 2)
+	public R compute(@RequestBody List<KpiOtherPerformance> paramList) {
+		kpiOtherPerformanceService.updateByAllCompute(paramList);
+		return R.success("操作成功");
+	}
 }

@@ -19,6 +19,7 @@ public interface KpiAttendanceService extends IService<KpiAttendance> {
 
     List<KpiAttendance> selectAttendance(UpdateDto param);
 
+	List<KpiAttendance> selectToMonth(String format);
 }
 
 

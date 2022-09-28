@@ -26,4 +26,6 @@ public interface KpiAttendanceMapper extends BaseMapper<KpiAttendance> {
 	Page<KpiAttendanceVo> selectidOrName(@Param("page") IPage<Object> page, @Param("idOrName") String idOrName, @Param("toMonth") String toMonth);
 
 	List<KpiAttendanceVo> selectByAdd();
+
+	List<KpiAttendance> selectToMonth(String format);
 }

@@ -26,4 +26,8 @@ public interface KpiFixedMapper extends BaseMapper<KpiFixed> {
 	IPage<KpiFixed> selectidOrName(@Param("page") IPage<Object> page, @Param("idOrName") String idOrName, @Param("toMonth") String toMonth);
 
 	PercentageVo selectPercentageVo(@Param("attendanceMonth") Date attendanceMonth, @Param("userCode") Integer userCode);
+
+	List<KpiFixed> selectListifNUll(String format);
+
+	FixedToMonth selectToMonthOne(Integer userCode);
 }

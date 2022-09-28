@@ -16,11 +16,12 @@
         <result column="three_exam" jdbcType="DECIMAL" property="threeExam"/>
         <result column="fixed_count_score" jdbcType="DECIMAL" property="fixedCountScore"/>
         <result column="fixed_correction_score" jdbcType="DECIMAL" property="fixedCorrectionScore"/>
+        <result column="compute_status" jdbcType="INTEGER" property="computeStatus"/>
     </resultMap>
     <sql id="Base_Column_List">
         <!--@mbg.generated-->
         kpi_fixed_id, user_code, user_name, attendance_month, position_score, degree_score,
-        seniority, seniority_score, jc_sum, three_exam, fixed_count_score, fixed_correction_score
+        seniority, seniority_score, jc_sum, three_exam, fixed_count_score, fixed_correction_score,compute_status
     </sql>
     <select id="selectfixedPage" resultMap="BaseResultMap">
         select
@@ -29,13 +30,81 @@
         <where>
             <if test="toMonth != null and toMonth != ''">
                 <if test="toMonth != null and toMonth != ''">
-                    date_format(attendance_month, '%Y-%m') =  #{toMonth}
+                    date_format(attendance_month, '%Y-%m') = #{toMonth}
                 </if>
             </if>
         </where>
+        order by kpi_fixed_id desc
     </select>
     <select id="selectToMonth" resultType="org.springblade.modules.performance.vo.FixedToMonth">
         SELECT du.user_code,
+               du.user_name,
+               ka.attendance_month,
+               dp.position_score,
+               dd.degree_score,
+               TIMESTAMPDIFF(YEAR, du.seniority, CURDATE()) as seniority,
+               du.jc_id                                     as jc_sum,
+                 CAST(
+                TRUNCATE(CAST(ka.attendance_day AS DECIMAL) /
+                            CAST(ka.month_day AS DECIMAL(13, 2)
+                                ), 11
+                       ) AS DECIMAL(11, 6)
+                   )                                        AS percentage,
+               dj.job_gs,
+               dj.job_ratio
+        FROM dict_user du
+                 LEFT JOIN kpi_attendance ka ON ka.user_code = du.user_code
+                 LEFT JOIN dict_position dp ON dp.p_id = du.p_id
+                 LEFT JOIN dict_degree dd ON dd.d_id = du.d_id
+                 LEFT JOIN dict_job dj ON dj.j_id = du.j_id
+        WHERE date_format(ka.attendance_month, '%Y-%m') = date_format(CURDATE(), '%Y-%m')
+        order by du.create_time
+    </select>
+    <select id="selectidOrName" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from kpi_fixed
+        <where>
+            <if test="idOrName != null and idOrName != ''">
+                user_code regexp #{idOrName}
+                    or user_name regexp #{idOrName}
+            </if>
+            <if test="toMonth != null and toMonth != ''">
+                and date_format(attendance_month, '%Y-%m') = #{toMonth}
+            </if>
+        </where>
+    </select>
+    <select id="selectPercentageVo" resultType="org.springblade.modules.performance.vo.PercentageVo">
+        select dj.job_gs,
+               dj.work_gs,
+               dj.job_ratio,
+               dj.job_type,
+               CAST(
+                   TRUNCATE(CAST(ka.attendance_day AS DECIMAL) /
+                            CAST(ka.month_day AS DECIMAL(5, 2)
+                                ), 6
+                       ) AS DECIMAL(9, 6)
+                   ) AS percentage
+        FROM dict_user du
+                 LEFT JOIN kpi_attendance ka ON ka.user_code = du.user_code
+                 LEFT JOIN dict_job dj ON dj.j_id = du.j_id
+        <where>
+            <if test="userCode != null and userCode != ''">
+                du.user_code = #{userCode}
+            </if>
+            <if test="attendanceMonth != null">
+                and   date_format(ka.attendance_month, '%Y-%m') = date_format(#{attendanceMonth}, '%Y-%m')
+            </if>
+        </where>
+    </select>
+    <select id="selectListifNUll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from kpi_fixed
+        where date_format(attendance_month, '%Y-%m') = #{format}
+    </select>
+    <select id="selectToMonthOne" resultType="org.springblade.modules.performance.vo.FixedToMonth">
+    SELECT du.user_code,
                du.user_name,
                ka.attendance_month,
                dp.position_score,
@@ -56,43 +125,7 @@
                  LEFT JOIN dict_degree dd ON dd.d_id = du.d_id
                  LEFT JOIN dict_job dj ON dj.j_id = du.j_id
         WHERE date_format(ka.attendance_month, '%Y-%m') = date_format(CURDATE(), '%Y-%m')
+        and du.user_code =#{userCode}
         order by du.create_time desc
-    </select>
-    <select id="selectidOrName" resultMap="BaseResultMap">
-        select
-        <include refid="Base_Column_List"/>
-        from kpi_fixed
-        <where>
-            <if test="idOrName != null and idOrName != ''">
-                user_code regexp #{idOrName}
-                    or user_name regexp #{idOrName}
-            </if>
-            <if test="toMonth != null and toMonth != ''">
-                and date_format(attendance_month, '%Y-%m') =  #{toMonth}
-            </if>
-        </where>
-    </select>
-    <select id="selectPercentageVo" resultType="org.springblade.modules.performance.vo.PercentageVo">
-        select dj.job_gs,
-               dj.work_gs,
-               dj.job_ratio,
-               dj.job_type,
-               CAST(
-                   TRUNCATE(CAST(ka.attendance_day AS DECIMAL) /
-                            CAST(ka.month_day AS DECIMAL(5, 2)
-                                ), 4
-                       ) AS DECIMAL(5, 4)
-                   ) AS percentage
-        FROM dict_user du
-                 LEFT JOIN kpi_attendance ka ON ka.user_code = du.user_code
-                 LEFT JOIN dict_job dj ON dj.j_id = du.j_id
-        <where>
-            <if test="userCode != null and userCode != ''">
-                du.user_code = #{userCode}
-            </if>
-            <if test="attendanceMonth != null">
-                and   date_format(ka.attendance_month, '%Y-%m') = date_format(#{attendanceMonth}, '%Y-%m')
-            </if>
-        </where>
     </select>
 </mapper>

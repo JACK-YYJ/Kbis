@@ -131,4 +131,28 @@ public class KpiFixedServiceImpl extends ServiceImpl<KpiFixedMapper, KpiFixed> i
 		 }
 		 return R.success("编辑成功");
 	 }
+
+	 @Override
+	 public List<KpiFixed> selectToMonth(String format) {
+		 List<KpiFixed>  kpiFixedList  =  baseMapper.selectListifNUll(format);
+	 	return kpiFixedList;
+	 }
+
+	 @Override
+	 public R computeByList(List<KpiFixed> kpiFixedList) {
+		 List<R> rList =new ArrayList<>();
+		 kpiFixedList.forEach(param->{
+			 //校验工号
+			 User one = userService.getOne(new QueryWrapper<User>().eq(User.COL_USER_CODE, param.getUserCode()));
+			 if(one==null){
+				 rList.add(R.data(one));
+			 }
+			 param.setComputeStatus(1);
+			 this.updateByOne(param);
+		 });
+		 if (ObjectUtil.isAllNotEmpty(rList)){
+			 return R.fail("校验到Excel不存在的工号");
+		 }
+		 return R.success("编辑成功");
+	 }
  }

@@ -104,4 +104,16 @@ public class FixedController {
 	public R updateKpiFixedList(@RequestBody List<KpiFixed> kpiFixedList) {
 		return kpiFixedService.updateByList(kpiFixedList);
 	}
+
+	/**
+	 * 导入数据
+	 * @param kpiFixedList
+	 * @return
+	 */
+	@PostMapping("/compute")
+	@ApiOperation(value = "从新计算一下")
+	@ApiOperationSupport(order = 5)
+	public R compute(@RequestBody List<KpiFixed> kpiFixedList) {
+		return kpiFixedService.computeByList(kpiFixedList);
+	}
 }

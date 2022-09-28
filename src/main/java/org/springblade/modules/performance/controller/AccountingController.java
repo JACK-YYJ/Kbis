@@ -69,7 +69,7 @@ public class AccountingController {
 		}
 		kpiPersonalService.deleteBysaveAccounting(param.getToMonth());
 		kpiAccountingService.savess(param);
-		kpiPersonalService.add(param.getToMonth());
+//		kpiPersonalService.add(param.getToMonth());
 		return R.success("保存成功");
 	}
 }

@@ -82,7 +82,7 @@ public class JobCertificateController {
 	@ApiOperation(value = "删除")
 	@ApiOperationSupport(order = 4)
 	public R delete(@RequestBody List<Integer> param) {
-		int count = jobCertificateService.count();
+		int count = userService.count();
 		if(count==0){
 			param.forEach(s->{
 				jobCertificateService.removeById(s);

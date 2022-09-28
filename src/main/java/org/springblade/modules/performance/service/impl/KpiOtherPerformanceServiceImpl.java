@@ -46,7 +46,7 @@ public class KpiOtherPerformanceServiceImpl extends ServiceImpl<KpiOtherPerforma
         Page<KpiOtherPerformance> allList = baseMapper.selectOpattendancePage(page, toMonth);
 		String format = DateUtil.format(DateUtil.date(), "yyyy-MM");
         if (allList.getRecords().size() == 0&&format.equals(toMonth)) {
-            List<User> userList = userService.lambdaQuery().orderByDesc(User::getCreateTime).list();
+            List<User> userList = userService.lambdaQuery().orderByAsc(User::getUId).list();
             ArrayList<KpiOtherPerformance> kpiopaddList = new ArrayList<>();
             for (User user : userList) {
                 KpiOtherPerformance addKpiOp = new KpiOtherPerformance();
@@ -105,6 +105,59 @@ public class KpiOtherPerformanceServiceImpl extends ServiceImpl<KpiOtherPerforma
 		);
 		kpiOp.setKpiOpAllPrice(j);
 		this.updateById(kpiOp);
+	}
+
+	/**
+	 * 计算一下
+	 * @param paramList
+	 */
+	@Override
+	public void updateByAllCompute(List<KpiOtherPerformance> paramList) {
+		paramList.forEach(param->{
+
+			KpiOtherPerformance kpiOp = this.getById(param.getKpiOpId());
+			kpiOp.setManagePrice(param.getManagePrice());
+			kpiOp.setManagePerformancePrice(param.getManagePerformancePrice());
+			kpiOp.setVariousRewardsPrice(param.getVariousRewardsPrice());
+			kpiOp.setVariousAssessmentsPrice(param.getVariousAssessmentsPrice());
+			kpiOp.setVariousSubsidiesPrice(param.getVariousSubsidiesPrice());
+
+			kpiOp.setOtherNightShiftsSum(param.getOtherNightShiftsSum());
+			kpiOp.setCtNightShiftsSum(param.getCtNightShiftsSum());
+			kpiOp.setOvertimeSum(param.getOvertimeSum());
+			kpiOp.setBedsideSum(param.getBedsideSum());
+
+			kpiOp.setRadiationPrice(param.getRadiationPrice());
+			BigDecimal i = param.getManagePrice()
+				.add(param.getManagePerformancePrice()
+					.add(param.getVariousRewardsPrice()
+						.add(param.getVariousAssessmentsPrice()
+							.add(param.getVariousSubsidiesPrice()
+								.add(param.getRadiationPrice()) ))
+					));
+			// 其他绩效 里面的单价数量
+			OtherPerformance oNSSum = otherPerformanceService.getOne(new QueryWrapper<OtherPerformance>().eq(OtherPerformance.COL_OP_BT_NAME, "OtherNightShiftsSum"));
+			OtherPerformance ctNSSum = otherPerformanceService.getOne(new QueryWrapper<OtherPerformance>().eq(OtherPerformance.COL_OP_BT_NAME, "CtNightShiftsSum"));
+			OtherPerformance oSum = otherPerformanceService.getOne(new QueryWrapper<OtherPerformance>().eq(OtherPerformance.COL_OP_BT_NAME, "OvertimeSum"));
+			OtherPerformance bSum = otherPerformanceService.getOne(new QueryWrapper<OtherPerformance>().eq(OtherPerformance.COL_OP_BT_NAME, "BedsideSum"));
+			//合计
+			BigDecimal j = i.add(param.getOtherNightShiftsSum().multiply(oNSSum.getOpSum())
+				.add(param.getCtNightShiftsSum().multiply(ctNSSum.getOpSum())
+					.add(param.getOvertimeSum().multiply(oSum.getOpSum())
+						.add(param.getBedsideSum().multiply(bSum.getOpSum()))
+					)
+				)
+			);
+			kpiOp.setComputeStatus(1);
+			kpiOp.setKpiOpAllPrice(j);
+			this.updateById(kpiOp);
+		});
+	}
+
+	@Override
+	public List<KpiOtherPerformance> selectToMonth(String format) {
+		List<KpiOtherPerformance> kpiOtherPerformances = baseMapper.selectToMonth(format);
+		return kpiOtherPerformances;
 	}
 }
 

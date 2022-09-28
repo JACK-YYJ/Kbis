@@ -1,6 +1,9 @@
 package org.springblade.modules.user.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.sun.jersey.core.impl.provider.xml.ThreadLocalSingletonContextProvider;
 import org.springblade.modules.user.dto.UpdateJobDto;
+import org.springblade.modules.user.entity.Job;
 import org.springblade.modules.user.entity.Work;
 import org.springblade.modules.user.service.WorkService;
 import org.springblade.modules.user.vo.JobWorkVo;
@@ -28,6 +31,9 @@ public class JobWorkServiceImpl extends ServiceImpl<JobWorkMapper, JobWork> impl
 
 	@Override
 	public void add(UpdateJobDto param) {
+		param.getJobWorkList().forEach(s-> {
+			s.setJId(param.getJId());
+		});
 		this.saveBatch(param.getJobWorkList());
 	}
 

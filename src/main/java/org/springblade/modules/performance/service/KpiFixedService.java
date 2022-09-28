@@ -19,4 +19,8 @@ public interface KpiFixedService extends IService<KpiFixed> {
 	void updateByOne(KpiFixed param);
 
 	R updateByList(List<KpiFixed> kpiFixedList);
+
+	List<KpiFixed> selectToMonth(String format);
+
+	R computeByList(List<KpiFixed> kpiFixedList);
 }

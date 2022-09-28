@@ -17,6 +17,9 @@ public interface KpiOtherPerformanceService extends IService<KpiOtherPerformance
 
 	void updateByAllPrice(KpiOtherPerformance param);
 
+	void updateByAllCompute(List<KpiOtherPerformance> paramList);
+
+	List<KpiOtherPerformance> selectToMonth(String format);
 }
 
 

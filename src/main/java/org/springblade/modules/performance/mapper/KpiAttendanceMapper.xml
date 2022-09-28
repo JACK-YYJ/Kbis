@@ -32,7 +32,7 @@
             from kpi_attendance
         <where>
             <if test="toMonth != null and toMonth != ''">
-                date_format(attendance_month, '%Y-%m') =  #{toMonth}
+                date_format(attendance_month, '%Y-%m') = #{toMonth}
             </if>
         </where>
         order by id desc
@@ -58,18 +58,24 @@
             from kpi_attendance
         <where>
             <if test="idOrName != null and idOrName != ''">
-               ( user_code regexp #{idOrName}
+                (user_code regexp #{idOrName}
                     or user_name regexp #{idOrName})
             </if>
             <if test="toMonth != null and toMonth != ''">
-                and  date_format(attendance_month, '%Y-%m') =  #{toMonth}
+                and  date_format(attendance_month, '%Y-%m') = #{toMonth}
             </if>
         </where>
     </select>
     <select id="selectByAdd" resultType="org.springblade.modules.performance.vo.KpiAttendanceVo">
-    select
+        select
         <include refid="Base_Column_List"/>
         from kpi_attendance
         where date_format(attendance_month, '%Y-%m') = date_format(CURDATE(), '%Y-%m')
+    </select>
+    <select id="selectToMonth" resultMap="BaseResultMap">
+     select
+        <include refid="Base_Column_List"/>
+        from kpi_attendance
+        where date_format(attendance_month, '%Y-%m') = #{format}
     </select>
 </mapper>

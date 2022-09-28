@@ -1,6 +1,7 @@
 package org.springblade.modules.user.service;
 
 import org.springblade.modules.user.dto.UpdateJobDto;
+import org.springblade.modules.user.entity.Job;
 import org.springblade.modules.user.entity.JobWork;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.springblade.modules.user.vo.JobWorkVo;
