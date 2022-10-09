@@ -33,9 +33,9 @@ public class PersonalController {
 	@ApiOperationSupport(order = 1)
 	@ApiOperation(value = "查询", notes = "传入toMonth ")
 	public R<IPage<KpiPersonal>> selectPersonalPage(Query page, String toMonth, String idOrName) {
-		if (toMonth==null){
-			return R.fail("请从新输入月份");
-		}
+//		if (toMonth==null){
+//			return R.fail("请从新输入月份");
+//		}
 		IPage<KpiPersonal> pages = kpiPersonalService.selectPersonalPage(Condition.getPage(page), toMonth,idOrName);
 		return R.data(pages);
 	}

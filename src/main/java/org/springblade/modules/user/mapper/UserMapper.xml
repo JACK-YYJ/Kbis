@@ -1,41 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.springblade.modules.user.mapper.UserMapper">
-  <resultMap id="BaseResultMap" type="org.springblade.modules.user.entity.User">
-    <!--@mbg.generated-->
-    <!--@Table dict_user-->
-    <id column="u_id" jdbcType="INTEGER" property="uId" />
-    <result column="user_code" jdbcType="INTEGER" property="userCode" />
-    <result column="user_name" jdbcType="VARCHAR" property="userName" />
-    <result column="card_id" jdbcType="VARCHAR" property="cardId" />
-    <result column="j_id" jdbcType="INTEGER" property="jId" />
-    <result column="job_name" jdbcType="VARCHAR" property="jobName" />
-    <result column="p_id" jdbcType="INTEGER" property="pId" />
-    <result column="position_name" jdbcType="VARCHAR" property="positionName" />
-    <result column="d_id" jdbcType="INTEGER" property="dId" />
-    <result column="degree_name" jdbcType="VARCHAR" property="degreeName" />
-    <result column="seniority" jdbcType="TIMESTAMP" property="seniority" />
-    <result column="jc_id" jdbcType="TINYINT" property="jcId" />
-    <result column="job_certificate_name" jdbcType="VARCHAR" property="jobCertificateName" />
-    <result column="is_deleted" jdbcType="TINYINT" property="isDeleted" />
-    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
-    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-  </resultMap>
-  <sql id="Base_Column_List">
-    <!--@mbg.generated-->
-    u_id, user_code, user_name, card_id, j_id, job_name, p_id, position_name, d_id, degree_name,
-    seniority, jc_id, job_certificate_name, is_deleted, create_by, create_time, update_by,
-    update_time
-  </sql>
+    <resultMap id="BaseResultMap" type="org.springblade.modules.user.entity.User">
+        <!--@mbg.generated-->
+        <!--@Table dict_user-->
+        <id column="u_id" jdbcType="INTEGER" property="uId"/>
+        <result column="user_code" jdbcType="INTEGER" property="userCode"/>
+        <result column="user_name" jdbcType="VARCHAR" property="userName"/>
+        <result column="card_id" jdbcType="VARCHAR" property="cardId"/>
+        <result column="j_id" jdbcType="INTEGER" property="jId"/>
+        <result column="job_name" jdbcType="VARCHAR" property="jobName"/>
+        <result column="p_id" jdbcType="INTEGER" property="pId"/>
+        <result column="position_name" jdbcType="VARCHAR" property="positionName"/>
+        <result column="d_id" jdbcType="INTEGER" property="dId"/>
+        <result column="degree_name" jdbcType="VARCHAR" property="degreeName"/>
+        <result column="seniority" jdbcType="TIMESTAMP" property="seniority"/>
+        <result column="jc_id" jdbcType="TINYINT" property="jcId"/>
+        <result column="job_certificate_name" jdbcType="VARCHAR" property="jobCertificateName"/>
+        <result column="is_deleted" jdbcType="TINYINT" property="isDeleted"/>
+        <result column="create_by" jdbcType="VARCHAR" property="createBy"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_by" jdbcType="VARCHAR" property="updateBy"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        u_id, user_code, user_name, card_id, j_id, job_name, p_id, position_name, d_id, degree_name,
+        seniority, jc_id, job_certificate_name, is_deleted, create_by, create_time, update_by,
+        update_time
+    </sql>
     <select id="selectUserPage" resultType="org.springblade.modules.user.vo.UserVo">
-            SELECT  <include refid="Base_Column_List" />
+        SELECT
+        <include refid="Base_Column_List"/>
         FROM dict_user
         <where>
-           is_deleted = 0
+            is_deleted = 0
             <if test="param.userCodeOrName != null">
-              and  (user_code REGEXP #{param.userCodeOrName} or user_name REGEXP #{param.userCodeOrName})
+                and  (user_code REGEXP #{param.userCodeOrName} or user_name REGEXP #{param.userCodeOrName})
             </if>
             <if test="param.jId != null">
                 and j_id = #{param.jId}
@@ -47,6 +48,17 @@
                 and d_id = #{param.dId}
             </if>
         </where>
-         order by create_time desc
+        order by user_code
+    </select>
+    <select id="selectCompute" resultType="org.springblade.modules.performance.entity.ComputeStatus">
+        select a.compute_status  AS acompute_status,
+               f.compute_status  AS fcompute_status,
+               op.compute_status AS opcompute_status,
+               w.compute_status  AS wcompute_status
+        FROM dict_user du
+                 LEFT JOIN kpi_attendance a ON a.user_code = du.user_code
+                 LEFT JOIN kpi_fixed f ON f.user_code = du.user_code
+                 LEFT JOIN kpi_other_performance op ON op.user_code = du.user_code
+                 LEFT JOIN kpi_workload w ON w.user_code = du.user_code
     </select>
 </mapper>

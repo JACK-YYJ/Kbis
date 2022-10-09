@@ -31,11 +31,12 @@
             ) AS percentage
             from kpi_attendance
         <where>
-            <if test="toMonth != null and toMonth != ''">
+            <if test=" toMonth != ''">
                 date_format(attendance_month, '%Y-%m') = #{toMonth}
             </if>
         </where>
-        order by id desc
+        order by id desc,
+        compute_status
     </select>
     <select id="selectAttendance" resultMap="BaseResultMap">
         select

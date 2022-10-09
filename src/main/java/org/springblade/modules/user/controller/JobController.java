@@ -26,7 +26,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("api/set/job")
-@Api(tags = "岗位字典表(待处理)")
+@Api(tags = "岗位字典表(字典表)")
 @CrossOrigin
 public class JobController {
 	@Autowired
@@ -167,8 +167,8 @@ public class JobController {
 
 		}else {
 			for (Integer ids : param) {
-				User serviceOne = userService.getOne(new QueryWrapper<User>().eq(User.COL_J_ID, ids));
-				if (ObjectUtil.isNotEmpty(serviceOne)) {
+				List<User> serviceOne = userService.lambdaQuery().eq(User::getJId, ids).list();
+				if (ObjectUtil.isAllNotEmpty(serviceOne)) {
 					return R.fail(500,"该岗位下存在用户，不可删除");
 				}
 				//删除

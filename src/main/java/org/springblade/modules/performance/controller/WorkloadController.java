@@ -1,5 +1,6 @@
 package org.springblade.modules.performance.controller;
 
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
@@ -34,9 +35,9 @@ public class WorkloadController {
 	@ApiOperationSupport(order = 1)
 	@ApiOperation(value = "条件分页查询", notes = "传入toMonth")
 	public R<IPage<KpiWorkload>> selectWorkloadPage(Query page, String toMonth, String idOrName) {
-		if (toMonth==null){
-			return R.fail("请从新输入月份");
-		}
+//		if (toMonth==null){
+//			return R.fail("请从新输入月份");
+//		}
 		IPage<KpiWorkload> pages = kpiWorkloadService.selectWorkloadPage(Condition.getPage(page), toMonth,idOrName);
 		return R.data(pages);
 	}
@@ -67,13 +68,13 @@ public class WorkloadController {
 	}
 	/**
 	 * 导入数据
-	 * @param kpiFixedList
 	 * @return
 	 */
 	@PostMapping("/compute")
-	@ApiOperation(value = "保存")
+	@ApiOperation(value = "计算一下")
 	@ApiOperationSupport(order = 4)
-	public R compute(@RequestBody List<KpiWorkload> kpiFixedList) {
+	public R compute() {
+		List<KpiWorkload> kpiFixedList = kpiWorkloadService.selectToMonth(DateUtil.format(DateUtil.date(), "yyyy-MM"));
 		return kpiWorkloadService.computeByList(kpiFixedList);
 	}
 }

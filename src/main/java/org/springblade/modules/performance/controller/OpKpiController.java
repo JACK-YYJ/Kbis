@@ -1,5 +1,6 @@
 package org.springblade.modules.performance.controller;
 
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -45,9 +46,9 @@ public class OpKpiController {
 	@ApiOperationSupport(order = 1)
 	@ApiOperation(value = "条件分页查询", notes = "传入toMonth")
 	public R selectOpattendancePage(Query page, String toMonth,String idOrName) {
-		if (toMonth==null){
-			return R.fail("请从新输入月份");
-		}
+//		if (toMonth==null){
+//			return R.fail("请从新输入月份");
+//		}
 		IPage<KpiOtherPerformance> pages = kpiOtherPerformanceService.selectOpattendancePage(Condition.getPage(page), toMonth,idOrName);
 		return R.data(pages);
 	}
@@ -85,13 +86,13 @@ public class OpKpiController {
 
 	/**
 	 * 从新计算一下
-	 * @param paramList
 	 * @return
 	 */
 	@PostMapping("/compute")
 	@ApiOperation(value = "从新计算一下")
-	@ApiOperationSupport(order = 2)
-	public R compute(@RequestBody List<KpiOtherPerformance> paramList) {
+	@ApiOperationSupport(order = 4)
+	public R compute() {
+		List<KpiOtherPerformance> paramList = kpiOtherPerformanceService.selectToMonth(DateUtil.format(DateUtil.date(), "yyyy-MM"));
 		kpiOtherPerformanceService.updateByAllCompute(paramList);
 		return R.success("操作成功");
 	}

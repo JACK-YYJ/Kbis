@@ -40,9 +40,9 @@ public class AccountingController {
 	@ApiOperationSupport(order = 1)
 	@ApiOperation(value = "查询", notes = "传入toMonth")
 	public R selectAccountingPage(String toMonth) {
-		if (toMonth==null){
-			return R.fail("请从新输入月份");
-		}
+//		if (toMonth==null){
+//			return R.fail("请从新输入月份");
+//		}
 		return kpiAccountingService.selectAccountingPage(toMonth);
 	}
 

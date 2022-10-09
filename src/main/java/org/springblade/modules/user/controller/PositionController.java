@@ -90,8 +90,8 @@ public class PositionController {
 
 		}else {
 			for (Integer ids : param) {
-				User serviceOne = userService.getOne(new QueryWrapper<User>().eq(User.COL_P_ID, ids));
-				if (ObjectUtil.isNotNull(serviceOne)) {
+				List<User> serviceOne = userService.lambdaQuery().eq(User::getPId, ids).list();
+				if (ObjectUtil.isAllNotEmpty(serviceOne)) {
 					return R.fail("该职称下存在用户，不可删除");
 				}
 			}

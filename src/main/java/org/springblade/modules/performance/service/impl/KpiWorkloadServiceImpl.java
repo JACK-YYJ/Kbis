@@ -120,23 +120,23 @@ public class KpiWorkloadServiceImpl extends ServiceImpl<KpiWorkloadMapper, KpiWo
 				)
 		);
 		baseMapper.updateById(param);
-		List<kpiWorkloadVo> kWVoList = baseMapper.selectWorkLoadVo(param.getAttendanceMonth());
-		List<kpiWorkloadVo> kpiWorkloadVoStream = kWVoList.stream()
-			.filter(s ->
-				(s.getWorkSum()
-					.compareTo(  (BigDecimal.valueOf(0))  ) !=0))
-			.collect(Collectors.toList());
-		//A医师
-		List<kpiWorkloadVo> phykWVoList = kpiWorkloadVoStream.stream()
-			.filter(s -> s.getJobType().equals(0))
-			.collect(Collectors.toList());
-		//B医技
-		List<kpiWorkloadVo> medkWVoList = kpiWorkloadVoStream.stream()
-			.filter(s -> s.getJobType().equals(1) )
-			.collect(Collectors.toList());
-		if (phykWVoList.size()!=0&&medkWVoList.size()!=0){
-			this.updateVerify(param);
-		}
+//		List<kpiWorkloadVo> kWVoList = baseMapper.selectWorkLoadVo(param.getAttendanceMonth());
+//		List<kpiWorkloadVo> kpiWorkloadVoStream = kWVoList.stream()
+//			.filter(s ->
+//				(s.getWorkSum()
+//					.compareTo(  (BigDecimal.valueOf(0))  ) !=0))
+//			.collect(Collectors.toList());
+//		//A医师
+//		List<kpiWorkloadVo> phykWVoList = kpiWorkloadVoStream.stream()
+//			.filter(s -> s.getJobType().equals(0))
+//			.collect(Collectors.toList());
+//		//B医技
+//		List<kpiWorkloadVo> medkWVoList = kpiWorkloadVoStream.stream()
+//			.filter(s -> s.getJobType().equals(1) )
+//			.collect(Collectors.toList());
+//		if (phykWVoList.size()!=0&&medkWVoList.size()!=0){
+//			this.updateVerify(param);
+//		}
 		return R.success("编辑成功");
 	}
 
@@ -253,11 +253,11 @@ public class KpiWorkloadServiceImpl extends ServiceImpl<KpiWorkloadMapper, KpiWo
 			}
 		});
 
-		kpiFixedList.forEach(s->{
-			KpiWorkload param = this.getById(s);
-			R r2 = this.updateVerify(param);
-			R2.add(r2);
-		});
+//		kpiFixedList.forEach(s->{
+//			KpiWorkload param = this.getById(s);
+//			R r2 = this.updateVerify(param);
+//			R2.add(r2);
+//		});
 		if (ObjectUtil.isAllNotEmpty(data)) {
 			return R.fail("工作量分值数据缺失");
 		}
@@ -278,10 +278,17 @@ public class KpiWorkloadServiceImpl extends ServiceImpl<KpiWorkloadMapper, KpiWo
 
 	@Override
 	public R computeByList(List<KpiWorkload> kpiFixedList) {
-		kpiFixedList.forEach(param->{
-
+		List<R> R2 = new ArrayList<>();
+		kpiFixedList.forEach(s->{
+			KpiWorkload param = this.getById(s);
+			param.setComputeStatus(1);//计算 固定绩效
+			R r2 = this.updateVerify(param);
+			R2.add(r2);
 		});
-		return null;
+		if (ObjectUtil.isAllNotEmpty(R2)) {
+			return R.success("初始计算请忽略");
+		}
+		return R.success("计算成功");
 	}
 }
 

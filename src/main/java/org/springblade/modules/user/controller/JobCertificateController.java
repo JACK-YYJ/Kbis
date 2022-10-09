@@ -1,5 +1,6 @@
 package org.springblade.modules.user.controller;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
@@ -51,6 +52,7 @@ public class JobCertificateController {
 	@ApiOperationSupport(order = 2)
 	public R add(@RequestBody JobCertificate param) {
 		JobCertificate em = jobCertificateService.getOne(new QueryWrapper<JobCertificate>().eq(JobCertificate.COL_JOB_CERTIFICATE_NAME,param.getJobCertificateName()));
+		byte[] bytes = param.getJobCertificateName().getBytes();
 		if (em != null) {
 			return R.fail("请勿重复添加");
 		}
@@ -81,7 +83,7 @@ public class JobCertificateController {
 	@PostMapping("/delete")
 	@ApiOperation(value = "删除")
 	@ApiOperationSupport(order = 4)
-	public R delete(@RequestBody List<Integer> param) {
+	public R delete(@RequestBody List<JobCertificate> param) {
 		int count = userService.count();
 		if(count==0){
 			param.forEach(s->{
@@ -89,11 +91,12 @@ public class JobCertificateController {
 			});
 
 		}else {
-			User user = userService.lambdaQuery()
-				.orderByDesc(User::getJcId).list().get(0);
-
-			if(user.getJcId()>=count){
-				return R.fail("该上岗证已有用户");
+			for (JobCertificate jobCertificate : param) {
+				List<User> user = userService.lambdaQuery()
+					.like(User::getJobCertificateName,jobCertificate.getJobCertificateName()).list();
+				if(ObjectUtil.isAllNotEmpty(user)){
+					return R.fail("该上岗证已有用户");
+				}
 			}
 			param.forEach(s->{
 				jobCertificateService.removeById(s);

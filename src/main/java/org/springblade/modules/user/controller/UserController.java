@@ -1,5 +1,6 @@
 package org.springblade.modules.user.controller;
 
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -10,6 +11,7 @@ import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.api.R;
 import org.springblade.modules.performance.service.KpiAttendanceService;
+import org.springblade.modules.performance.service.KpiPersonalService;
 import org.springblade.modules.system.dto.SysUserPwdDto;
 import org.springblade.modules.system.entity.SysUser;
 import org.springblade.modules.system.service.SysUserService;
@@ -37,7 +39,8 @@ public class UserController {
 	@Autowired
 	public SysUserService sysUserService;
 
-
+	@Autowired
+	private KpiPersonalService kpiPersonalService;
 	/**
 	 * 用户分页查询
 	 */
@@ -46,6 +49,16 @@ public class UserController {
 	@ApiOperation(value = "条件分页查询", notes = "传入UserDto")
 	public R<IPage<UserVo>> selectUserPage(Query page, UserDto param) {
 		IPage<UserVo> pages = userService.selectUserPage(Condition.getPage(page), param);
+		return R.data(pages);
+	}
+	/**
+	 * 用户分页查询
+	 */
+	@GetMapping("/selectUserOfCreateTime")
+	@ApiOperationSupport(order = 1)
+	@ApiOperation(value = "添加数据回显（按照创建时间倒序）", notes = "")
+	public R selectUserOfCreateTime() {
+		List<User> pages = userService.lambdaQuery().orderByDesc(User::getCreateTime).list();
 		return R.data(pages);
 	}
 
@@ -64,7 +77,9 @@ public class UserController {
 //		User.setCreateBy(param.getUserName());
 //		User.add(sysUser);
 		userService.save(param);
-//		userService.addCompute(param);
+		userService.addCompute(param);
+		String format = DateUtil.format(DateUtil.date(), "yyyy-MM");
+		kpiPersonalService.deleteBysaveAccounting(format);
 		return R.success("添加成功");
 	}
 

@@ -1,5 +1,6 @@
 package org.springblade.modules.performance.controller;
 
+import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
@@ -38,9 +39,9 @@ public class FixedController {
 	@ApiOperationSupport(order = 1)
 	@ApiOperation(value = "条件分页查询", notes = "传入toMonth")
 	public R selectfixedPage(Query page, String toMonth, String idOrName) {
-		if (toMonth==null){
-			return R.fail("请从新输入月份");
-		}
+//		if (toMonth==null){
+//			return R.fail("请从新输入月份");
+//		}
 		IPage<KpiFixed> pages = kpiFixedService.selectfixedPage(Condition.getPage(page), toMonth,idOrName);
 		return R.data(pages);
 	}
@@ -107,13 +108,13 @@ public class FixedController {
 
 	/**
 	 * 导入数据
-	 * @param kpiFixedList
 	 * @return
 	 */
 	@PostMapping("/compute")
 	@ApiOperation(value = "从新计算一下")
 	@ApiOperationSupport(order = 5)
-	public R compute(@RequestBody List<KpiFixed> kpiFixedList) {
+	public R compute() {
+		List<KpiFixed> kpiFixedList = kpiFixedService.selectToMonth(DateUtil.format(DateUtil.date(), "yyyy-MM"));
 		return kpiFixedService.computeByList(kpiFixedList);
 	}
 }

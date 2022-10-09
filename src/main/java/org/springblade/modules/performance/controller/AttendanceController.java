@@ -40,9 +40,9 @@ public class AttendanceController {
 	@ApiOperationSupport(order = 1)
 	@ApiOperation(value = "条件分页查询", notes = "传入toMonth")
 	public R<IPage<KpiAttendanceVo>> selectAttendancePage(Query page, String toMonth,String idOrName) {
-		if (toMonth==null){
-	 	 return R.fail("请从新输入月份");
-		}
+//		if (toMonth==null){
+//	 	 return R.fail("请从新输入月份");
+//		}
 		IPage<KpiAttendanceVo> pages = kpiAttendanceService.selectAttendancePage(Condition.getPage(page), toMonth,idOrName);
 		return R.data(pages);
 	}
@@ -69,14 +69,14 @@ public class AttendanceController {
 	/**
 	 *
 	 *
-	 * @param param
 	 * @return
 	 */
 	@PostMapping("/compute")
 	@ApiOperation(value = "从新计算")
 	@ApiOperationSupport(order = 2)
-	public R compute(@RequestBody List<KpiAttendance> param) {
-			param.forEach(s->{
+	public R compute() {
+		List<KpiAttendance> param = kpiAttendanceService.selectToMonth(DateUtil.format(DateUtil.date(), "yyyy-MM"));
+		param.forEach(s->{
 				s.setComputeStatus(1);
 				kpiAttendanceService.updateById(s);
 			});
