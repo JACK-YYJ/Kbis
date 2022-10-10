@@ -16,9 +16,10 @@
         select
         <include refid="Base_Column_List" />
         from dict_degree
+        where d_id != 0
         <where>
             <if test="degreeName != null and degreeName != ''">
-                degree_name regexp #{degreeName}
+              and  degree_name regexp #{degreeName}
             </if>
         </where>
         order by degree_score desc

@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.springblade.modules.user.mapper.PositionMapper">
-  <resultMap id="BaseResultMap" type="org.springblade.modules.user.entity.Position">
-    <!--@mbg.generated-->
-    <!--@Table dict_position-->
-    <id column="p_id" jdbcType="INTEGER" property="pId" />
-    <result column="position_name" jdbcType="VARCHAR" property="positionName" />
-    <result column="position_score" jdbcType="DECIMAL" property="positionScore" />
-  </resultMap>
-  <sql id="Base_Column_List">
-    <!--@mbg.generated-->
-    p_id, position_name, position_score
-  </sql>
+    <resultMap id="BaseResultMap" type="org.springblade.modules.user.entity.Position">
+        <!--@mbg.generated-->
+        <!--@Table dict_position-->
+        <id column="p_id" jdbcType="INTEGER" property="pId"/>
+        <result column="position_name" jdbcType="VARCHAR" property="positionName"/>
+        <result column="position_score" jdbcType="DECIMAL" property="positionScore"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        p_id, position_name, position_score
+    </sql>
     <select id="selectPositionPage" resultMap="BaseResultMap">
         select
-        <include refid="Base_Column_List" />
+        <include refid="Base_Column_List"/>
         from dict_position
+            where  p_id != 0
         <where>
             <if test="idOrName != null and idOrName != ''">
-                p_id regexp #{idOrName}
-                    or position_name regexp #{idOrName}
+             and      position_name regexp #{idOrName}
             </if>
         </where>
         order by position_score desc
