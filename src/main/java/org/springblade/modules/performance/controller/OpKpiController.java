@@ -91,8 +91,8 @@ public class OpKpiController {
 	@PostMapping("/compute")
 	@ApiOperation(value = "从新计算一下")
 	@ApiOperationSupport(order = 4)
-	public R compute() {
-		List<KpiOtherPerformance> paramList = kpiOtherPerformanceService.selectToMonth(DateUtil.format(DateUtil.date(), "yyyy-MM"));
+	public R compute(@RequestBody String toMonth) {
+		List<KpiOtherPerformance> paramList = kpiOtherPerformanceService.selectToMonth(toMonth);
 		kpiOtherPerformanceService.updateByAllCompute(paramList);
 		return R.success("操作成功");
 	}

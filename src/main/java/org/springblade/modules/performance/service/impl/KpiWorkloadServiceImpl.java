@@ -158,7 +158,9 @@ public class KpiWorkloadServiceImpl extends ServiceImpl<KpiWorkloadMapper, KpiWo
 		List<kpiWorkloadVo> phykWVoList = kpiWorkloadVoStream.stream()
 			.filter(s -> s.getJobType().equals(0))
 			.collect(Collectors.toList());
-
+		if(ObjectUtil.isAllEmpty(phykWVoList)){
+			return R.fail("/ by zero");
+		}
 		BigDecimal phyAverage = phykWVoList.stream().map(kpiWorkloadVo::getWorkSum)    //求平均值
 			.reduce(BigDecimal.ZERO, BigDecimal::add)
 			.divide(BigDecimal.valueOf(phykWVoList.size()), 4, BigDecimal.ROUND_HALF_UP);
@@ -231,7 +233,7 @@ public class KpiWorkloadServiceImpl extends ServiceImpl<KpiWorkloadMapper, KpiWo
 			}
 		}
 		baseMapper.updateById(param);
-		return null;
+		return R.success("ok");
 	}
 
 	@Override
@@ -265,7 +267,7 @@ public class KpiWorkloadServiceImpl extends ServiceImpl<KpiWorkloadMapper, KpiWo
 			return R.fail("校验到Excel不存在的工号");
 		}
 		if (ObjectUtil.isAllNotEmpty(R2)) {
-			return R.success("初始计算请忽略");
+			return R.fail("暂无工作量，计算失效");
 		}
 		return R.success("保存成功");
 	}
@@ -283,10 +285,15 @@ public class KpiWorkloadServiceImpl extends ServiceImpl<KpiWorkloadMapper, KpiWo
 			KpiWorkload param = this.getById(s);
 			param.setComputeStatus(1);//计算 固定绩效
 			R r2 = this.updateVerify(param);
-			R2.add(r2);
+			if (("暂无工作量，计算失效")==r2.getMsg()) {
+				R2.add(r2);
+			}
+//			if (){
+//
+//			}
 		});
 		if (ObjectUtil.isAllNotEmpty(R2)) {
-			return R.success("初始计算请忽略");
+			return R.fail("暂无工作量，计算失效");
 		}
 		return R.success("计算成功");
 	}

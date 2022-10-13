@@ -32,7 +32,6 @@
                 date_format(attendance_month, '%Y-%m') = #{toMonth}
             </if>
         </where>
-        GROUP BY user_code
         order by id desc
     </select>
     <delete id="deleteBysaveAccounting">
@@ -60,11 +59,12 @@
                  LEFT JOIN kpi_other_performance kop ON kop.user_code = du.user_code
                  LEFT JOIN kpi_fixed kf ON kf.user_code = du.user_code
                  LEFT JOIN kpi_workload kw ON kw.user_code = du.user_code
-        <where>
+
+        where
             <if test="format != null and format != ''">
-                date_format(ka.attendance_month, '%Y-%m') = #{format}
+               date_format(ka.attendance_month, '%Y-%m') = #{format}
             </if>
-        </where>
+
         GROUP BY du.user_code
         order by du.create_time
     </select>

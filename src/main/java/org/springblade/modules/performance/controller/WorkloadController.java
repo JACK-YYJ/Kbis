@@ -67,14 +67,14 @@ public class WorkloadController {
 		return kpiWorkloadService.updateByList(kpiFixedList);
 	}
 	/**
-	 * 导入数据
+	 * 计算一下
 	 * @return
 	 */
 	@PostMapping("/compute")
 	@ApiOperation(value = "计算一下")
 	@ApiOperationSupport(order = 4)
-	public R compute() {
-		List<KpiWorkload> kpiFixedList = kpiWorkloadService.selectToMonth(DateUtil.format(DateUtil.date(), "yyyy-MM"));
+	public R compute(@RequestBody String toMonth) {
+		List<KpiWorkload> kpiFixedList = kpiWorkloadService.selectToMonth(toMonth);
 		return kpiWorkloadService.computeByList(kpiFixedList);
 	}
 }

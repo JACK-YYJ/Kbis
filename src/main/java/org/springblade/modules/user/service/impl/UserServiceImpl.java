@@ -72,8 +72,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 			kpiAttendance.setUserName(user.getUserName());
 			kpiAttendance.setAttendanceMonth(DateUtils.getNowDate());
 			kpiAttendance.setAttendanceState(1);
-			kpiAttendance.setAttendanceDay(23);
-			kpiAttendance.setMonthDay(23);
+			kpiAttendance.setAttendanceDay(31);
+			kpiAttendance.setMonthDay(31);
 			kpiAttendances.add(kpiAttendance);
 		}
 		kpiAttendanceService.saveBatch(kpiAttendances);

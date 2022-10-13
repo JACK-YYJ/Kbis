@@ -74,8 +74,8 @@ public class AttendanceController {
 	@PostMapping("/compute")
 	@ApiOperation(value = "从新计算")
 	@ApiOperationSupport(order = 2)
-	public R compute() {
-		List<KpiAttendance> param = kpiAttendanceService.selectToMonth(DateUtil.format(DateUtil.date(), "yyyy-MM"));
+	public R compute(@RequestBody String toMonth) {
+		List<KpiAttendance> param = kpiAttendanceService.selectToMonth(toMonth);
 		param.forEach(s->{
 				s.setComputeStatus(1);
 				kpiAttendanceService.updateById(s);

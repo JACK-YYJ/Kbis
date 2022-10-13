@@ -32,7 +32,7 @@ public class ComputeStatusController {
 	 */
 	@GetMapping("/select")
 	@ApiOperationSupport(order = 1)
-	@ApiOperation(value = "", notes = "")
+	@ApiOperation(value = "判断kbi模块数据显示的接口", notes = "")
 	public R select() {
 		List<ComputeStatus> computeStatusList  = userMapper.selectCompute();
 		ComputeCode computeCode = new ComputeCode();

@@ -113,8 +113,8 @@ public class FixedController {
 	@PostMapping("/compute")
 	@ApiOperation(value = "从新计算一下")
 	@ApiOperationSupport(order = 5)
-	public R compute() {
-		List<KpiFixed> kpiFixedList = kpiFixedService.selectToMonth(DateUtil.format(DateUtil.date(), "yyyy-MM"));
+	public R compute(@RequestBody String toMonth) {
+		List<KpiFixed> kpiFixedList = kpiFixedService.selectToMonth(toMonth);
 		return kpiFixedService.computeByList(kpiFixedList);
 	}
 }
