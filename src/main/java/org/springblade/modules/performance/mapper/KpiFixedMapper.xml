@@ -34,7 +34,8 @@
                 </if>
             </if>
         </where>
-        order by kpi_fixed_id desc
+          order by compute_status ,
+        user_code
     </select>
     <select id="selectToMonth" resultType="org.springblade.modules.performance.vo.FixedToMonth">
         SELECT du.user_code,
@@ -66,8 +67,8 @@
         from kpi_fixed
         <where>
             <if test="idOrName != null and idOrName != ''">
-                user_code regexp #{idOrName}
-                    or user_name regexp #{idOrName}
+               ( user_code regexp #{idOrName}
+                    or user_name regexp #{idOrName})
             </if>
             <if test="toMonth != null and toMonth != ''">
                 and date_format(attendance_month, '%Y-%m') = #{toMonth}
@@ -102,6 +103,7 @@
         <include refid="Base_Column_List"/>
         from kpi_fixed
         where date_format(attendance_month, '%Y-%m') = #{format}
+        order by user_code
     </select>
     <select id="selectToMonthOne" resultType="org.springblade.modules.performance.vo.FixedToMonth">
     SELECT du.user_code,

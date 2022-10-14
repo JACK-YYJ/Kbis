@@ -57,12 +57,11 @@ public class AttendanceController {
 	@ApiOperation(value = "编辑")
 	@ApiOperationSupport(order = 2)
 	public R update(@RequestBody List<KpiAttendance> param) {
-//			param.forEach(s->{
-//				if(s.getAttendanceState().equals(2) || s.getAttendanceMonth().equals(3)){
-//					s.setAttendanceDay(0);
-//				}
-//			});
-		//前端处理了
+			param.forEach(s->{
+				if(s.getAttendanceState().equals(2)){
+					s.setAttendanceDay(0);
+				}
+			});
 			kpiAttendanceService.updateBatchById(param);
 		return R.success("操作成功");
 	}
@@ -71,10 +70,10 @@ public class AttendanceController {
 	 *
 	 * @return
 	 */
-	@PostMapping("/compute")
+	@GetMapping("/compute")
 	@ApiOperation(value = "从新计算")
 	@ApiOperationSupport(order = 2)
-	public R compute(@RequestBody String toMonth) {
+	public R compute(@RequestParam(value = "toMonth") String toMonth) {
 		List<KpiAttendance> param = kpiAttendanceService.selectToMonth(toMonth);
 		param.forEach(s->{
 				s.setComputeStatus(1);

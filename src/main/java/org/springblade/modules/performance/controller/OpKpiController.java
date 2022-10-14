@@ -53,6 +53,17 @@ public class OpKpiController {
 		return R.data(pages);
 	}
 
+	@GetMapping("/selectOrUserCode")
+	@ApiOperationSupport(order = 1)
+	@ApiOperation(value = "数据回显（UserCode从小到大排序）", notes = "传入toMonth")
+	public R selectOrUserCode( String toMonth) {
+		if (toMonth==null){
+			return R.fail("请从新输入月份");
+		}
+		List<KpiOtherPerformance> pages = kpiOtherPerformanceService.selectToMonth(toMonth);
+		return R.data(pages);
+	}
+
 	@PostMapping("/update")
 	@ApiOperation(value = "编辑")
 	@ApiOperationSupport(order = 2)
@@ -88,10 +99,10 @@ public class OpKpiController {
 	 * 从新计算一下
 	 * @return
 	 */
-	@PostMapping("/compute")
+	@GetMapping("/compute")
 	@ApiOperation(value = "从新计算一下")
 	@ApiOperationSupport(order = 4)
-	public R compute(@RequestBody String toMonth) {
+	public R compute(@RequestParam(value = "toMonth") String toMonth) {
 		List<KpiOtherPerformance> paramList = kpiOtherPerformanceService.selectToMonth(toMonth);
 		kpiOtherPerformanceService.updateByAllCompute(paramList);
 		return R.success("操作成功");

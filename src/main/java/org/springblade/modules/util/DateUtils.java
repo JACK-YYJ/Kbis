@@ -9,7 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import java.util.Date;
-
+import java.util.Locale;
 
 
 public class DateUtils {
@@ -34,6 +34,12 @@ public class DateUtils {
 
 		return dateStr;
 
+	}
+	//java获取当前月的天数
+	public static Integer getDayOfMonth(){
+		Calendar aCalendar = Calendar.getInstance(Locale.CHINA);
+		int day=aCalendar.getActualMaximum(Calendar.DATE);
+		return day;
 	}
 
 

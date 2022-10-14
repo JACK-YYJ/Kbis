@@ -18,7 +18,7 @@ public interface ShiroService {
 	 * @param userId
 	 * @return
 	 */
-	Map<String, Object> createToken(Integer userId);
+	String createToken(Integer userId);
 
 	/**
 	 * logout

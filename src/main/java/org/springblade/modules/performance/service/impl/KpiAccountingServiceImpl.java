@@ -44,7 +44,12 @@ public class KpiAccountingServiceImpl extends ServiceImpl<KpiAccountingMapper, K
 			this.install(byId);
 		}
 		if(ObjectUtil.isEmpty(kpiAccounting)&&(!format.equals(toMonth))){
-			return R.fail("当前月份数据为空");
+			KpiAccounting accounting = new KpiAccounting();
+			accounting.setAttendanceMonth(DateUtil.parse(toMonth,"yyyy-MM"));
+			this.save(accounting);
+			KpiAccounting byId = baseMapper.selectByToMonth(toMonth);
+			this.install(byId);
+			return R.success("当前月份数据为空,已自动生成");
 		}
 		return R.data(kpiAccounting);
 	}

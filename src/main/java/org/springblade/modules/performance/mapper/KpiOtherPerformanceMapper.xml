@@ -37,7 +37,8 @@
                 date_format(attendance_month, '%Y-%m') = #{toMonth}
             </if>
         </where>
-        order by kpi_op_id desc
+          order by compute_status ,
+        user_code
     </select>
     <select id="selectidOrName" resultMap="BaseResultMap">
         select
@@ -58,5 +59,6 @@
         <include refid="Base_Column_List"/>
         from kpi_other_performance
         where date_format(attendance_month, '%Y-%m') = #{format}
+        order by user_code
     </select>
 </mapper>

@@ -12,6 +12,6 @@ import lombok.Data;
 public class UpdateDto {
 	@ApiModelProperty(value = "全勤天数")
 	private Integer ToDaySum;
-	@ApiModelProperty(value = "当前时间 YYYY—mm-dd")
+	@ApiModelProperty(value = "输入的月份 YYYY—mm-dd（修改的）")
 	private String toMonth;
 }

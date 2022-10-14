@@ -29,8 +29,7 @@ public class ShiroServiceImpl extends ServiceImpl<SysTokenMapper, SysToken> impl
 	 * @return
 	 */
 	@Override
-	public Map<String, Object> createToken(Integer userId) {
-		Map<String, Object> result = new HashMap<>();
+	public String createToken(Integer userId) {
 		//生成一个token
 		String token = TokenGenerator.generateValue();
 		//当前时间
@@ -55,9 +54,9 @@ public class ShiroServiceImpl extends ServiceImpl<SysTokenMapper, SysToken> impl
 			tokenEntity.setExpireTime(expireTime);
 			this.baseMapper.updateById(tokenEntity);
 		}
-		result.put("token", token);
+		;
 //		result.put("expire", expireTime);
-		return result;
+		return token;
 	}
 
 

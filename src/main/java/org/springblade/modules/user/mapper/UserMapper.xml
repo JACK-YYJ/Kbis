@@ -60,5 +60,12 @@
                  LEFT JOIN kpi_fixed f ON f.user_code = du.user_code
                  LEFT JOIN kpi_other_performance op ON op.user_code = du.user_code
                  LEFT JOIN kpi_workload w ON w.user_code = du.user_code
+        where date_format(a.attendance_month, '%Y-%m')  = #{toMonth}
+                AND
+				date_format(f.attendance_month, '%Y-%m')  = #{toMonth}
+				AND
+				date_format(op.attendance_month, '%Y-%m')  = #{toMonth}
+				AND
+				date_format(w.attendance_month, '%Y-%m')  = #{toMonth}
     </select>
 </mapper>

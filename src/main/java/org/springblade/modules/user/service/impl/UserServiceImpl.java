@@ -64,6 +64,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
 	@Override
 	public void addIngMonthAttenddance() {
+
+
 		List<User> userList = this.lambdaQuery().orderByAsc(User::getUId).list();
 		ArrayList<KpiAttendance> kpiAttendances = new ArrayList<>();
 		for (User user : userList) {
@@ -72,8 +74,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 			kpiAttendance.setUserName(user.getUserName());
 			kpiAttendance.setAttendanceMonth(DateUtils.getNowDate());
 			kpiAttendance.setAttendanceState(1);
-			kpiAttendance.setAttendanceDay(31);
-			kpiAttendance.setMonthDay(31);
+			kpiAttendance.setAttendanceDay(DateUtils.getDayOfMonth());
+			kpiAttendance.setMonthDay(DateUtils.getDayOfMonth());
 			kpiAttendances.add(kpiAttendance);
 		}
 		kpiAttendanceService.saveBatch(kpiAttendances);

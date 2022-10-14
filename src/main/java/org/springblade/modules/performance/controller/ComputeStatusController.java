@@ -8,10 +8,7 @@ import org.springblade.modules.performance.entity.ComputeCode;
 import org.springblade.modules.performance.entity.ComputeStatus;
 import org.springblade.modules.user.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,8 +30,8 @@ public class ComputeStatusController {
 	@GetMapping("/select")
 	@ApiOperationSupport(order = 1)
 	@ApiOperation(value = "判断kbi模块数据显示的接口", notes = "")
-	public R select() {
-		List<ComputeStatus> computeStatusList  = userMapper.selectCompute();
+	public R select(@RequestParam(value = "toMonth")String toMonth) {
+		List<ComputeStatus> computeStatusList  = userMapper.selectCompute(toMonth);
 		ComputeCode computeCode = new ComputeCode();
 		List<ComputeCode> list = new ArrayList<>();
 		ComputeCode code = new ComputeCode();

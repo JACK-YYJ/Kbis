@@ -41,6 +41,16 @@ public class WorkloadController {
 		IPage<KpiWorkload> pages = kpiWorkloadService.selectWorkloadPage(Condition.getPage(page), toMonth,idOrName);
 		return R.data(pages);
 	}
+	@GetMapping("/selectOrUserCode")
+	@ApiOperationSupport(order = 1)
+	@ApiOperation(value = "数据回显（UserCode从小到大排序）", notes = "传入toMonth")
+	public R selectOrUserCode( String toMonth) {
+		if (toMonth==null){
+			return R.fail("请从新输入月份");
+		}
+		List<KpiWorkload> pages = kpiWorkloadService.selectToMonth(toMonth);
+		return R.data(pages);
+	}
 
 	/**
 	 * 编辑
@@ -51,8 +61,6 @@ public class WorkloadController {
 	@ApiOperation(value = "编辑")
 	@ApiOperationSupport(order = 3)
 	public R updateOneKpiFixed(@RequestBody KpiWorkload param) {
-
-
 		return kpiWorkloadService.updateByOne(param);
 	}
 	/**
@@ -70,10 +78,10 @@ public class WorkloadController {
 	 * 计算一下
 	 * @return
 	 */
-	@PostMapping("/compute")
+	@GetMapping("/compute")
 	@ApiOperation(value = "计算一下")
 	@ApiOperationSupport(order = 4)
-	public R compute(@RequestBody String toMonth) {
+	public R compute(@RequestParam(value = "toMonth") String toMonth) {
 		List<KpiWorkload> kpiFixedList = kpiWorkloadService.selectToMonth(toMonth);
 		return kpiWorkloadService.computeByList(kpiFixedList);
 	}

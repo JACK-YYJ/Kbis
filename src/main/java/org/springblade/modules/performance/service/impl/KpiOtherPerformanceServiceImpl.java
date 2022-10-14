@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.conditions.query.QueryChainWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springblade.modules.performance.entity.KpiAttendance;
 import org.springblade.modules.performance.entity.OpKpi;
+import org.springblade.modules.performance.service.KpiAttendanceService;
 import org.springblade.modules.performance.service.OpKpiService;
 import org.springblade.modules.performance.vo.KpiAttendanceDataVo;
 import org.springblade.modules.performance.vo.KpiAttendanceVo;
@@ -40,6 +41,8 @@ public class KpiOtherPerformanceServiceImpl extends ServiceImpl<KpiOtherPerforma
     private UserService userService;
 	@Autowired
 	private OtherPerformanceService otherPerformanceService;
+	@Autowired
+	private KpiAttendanceService kpiAttendanceService;
 
     @Override
     public IPage<KpiOtherPerformance> selectOpattendancePage(IPage<Object> page, String toMonth, String idOrName) {
@@ -140,6 +143,12 @@ public class KpiOtherPerformanceServiceImpl extends ServiceImpl<KpiOtherPerforma
 			OtherPerformance ctNSSum = otherPerformanceService.getOne(new QueryWrapper<OtherPerformance>().eq(OtherPerformance.COL_OP_BT_NAME, "CtNightShiftsSum"));
 			OtherPerformance oSum = otherPerformanceService.getOne(new QueryWrapper<OtherPerformance>().eq(OtherPerformance.COL_OP_BT_NAME, "OvertimeSum"));
 			OtherPerformance bSum = otherPerformanceService.getOne(new QueryWrapper<OtherPerformance>().eq(OtherPerformance.COL_OP_BT_NAME, "BedsideSum"));
+
+			KpiAttendance one = kpiAttendanceService.getOne(
+				new QueryWrapper<KpiAttendance>()
+				.eq(KpiAttendance.COL_USER_CODE, param.getUserCode())
+				.eq(KpiAttendance.COL_ATTENDANCE_MONTH,param.getAttendanceMonth()));
+
 			//合计
 			BigDecimal j = i.add(param.getOtherNightShiftsSum().multiply(oNSSum.getOpSum())
 				.add(param.getCtNightShiftsSum().multiply(ctNSSum.getOpSum())
@@ -149,7 +158,12 @@ public class KpiOtherPerformanceServiceImpl extends ServiceImpl<KpiOtherPerforma
 				)
 			);
 			kpiOp.setComputeStatus(1);
-			kpiOp.setKpiOpAllPrice(j);
+			//合计  借调
+			if(one.getAttendanceState()==2){
+				kpiOp.setKpiOpAllPrice(BigDecimal.valueOf(0));
+			}else {
+				kpiOp.setKpiOpAllPrice(j);
+			}
 			this.updateById(kpiOp);
 		});
 	}

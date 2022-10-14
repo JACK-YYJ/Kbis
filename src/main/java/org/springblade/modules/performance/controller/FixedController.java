@@ -11,6 +11,7 @@ import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.api.R;
 import org.springblade.modules.performance.dto.SetFactorDto;
 import org.springblade.modules.performance.entity.KpiFixed;
+import org.springblade.modules.performance.entity.KpiOtherPerformance;
 import org.springblade.modules.performance.service.KpiFixedService;
 import org.springblade.modules.user.entity.JobCertificate;
 import org.springblade.modules.user.service.JobCertificateService;
@@ -43,6 +44,16 @@ public class FixedController {
 //			return R.fail("请从新输入月份");
 //		}
 		IPage<KpiFixed> pages = kpiFixedService.selectfixedPage(Condition.getPage(page), toMonth,idOrName);
+		return R.data(pages);
+	}
+	@GetMapping("/selectOrUserCode")
+	@ApiOperationSupport(order = 1)
+	@ApiOperation(value = "数据回显（UserCode从小到大排序）", notes = "传入toMonth")
+	public R selectOrUserCode( String toMonth) {
+		if (toMonth==null){
+			return R.fail("请从新输入月份");
+		}
+		List<KpiFixed> pages = kpiFixedService.selectToMonth(toMonth);
 		return R.data(pages);
 	}
 
@@ -110,10 +121,10 @@ public class FixedController {
 	 * 导入数据
 	 * @return
 	 */
-	@PostMapping("/compute")
+	@GetMapping("/compute")
 	@ApiOperation(value = "从新计算一下")
 	@ApiOperationSupport(order = 5)
-	public R compute(@RequestBody String toMonth) {
+	public R compute(@RequestParam(value = "toMonth")String toMonth) {
 		List<KpiFixed> kpiFixedList = kpiFixedService.selectToMonth(toMonth);
 		return kpiFixedService.computeByList(kpiFixedList);
 	}

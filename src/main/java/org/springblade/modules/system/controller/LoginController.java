@@ -7,6 +7,7 @@ import org.springblade.modules.system.dto.SysUserDto;
 import org.springblade.modules.system.dto.SysUserE;
 import org.springblade.modules.system.entity.SysUser;
 import org.springblade.modules.system.service.SysUserService;
+import org.springblade.modules.system.vo.UserInfo;
 import org.springblade.modules.user.service.ShiroService;
 import org.springblade.modules.user.service.TechuserAccessHistoryService;
 import org.springblade.modules.user.tool.utils.ShiroUtils;
@@ -60,13 +61,17 @@ public class LoginController {
 		}
 
 		//生成token，并保存到数据库
-		Map<String, Object> token = shiroService.createToken(user.getUserCode());
+		String token = shiroService.createToken(user.getUserCode());
+		UserInfo info = new UserInfo();
+		info.setToken(token);
+		info.setUserCode(userInfo.getUserCode());
+		info.setCreateBy(userInfo.getCreateBy());
 
 		//登录的信息插入到时间记录表
 //		techuserAccessHistoryService.instLogin(user);
 		//修改用户信息
 //		sysUserService.updataLogin(user);
-		return R.data(token);
+		return R.data(info);
 	}
 
 	/**

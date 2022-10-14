@@ -285,7 +285,7 @@ public class KpiWorkloadServiceImpl extends ServiceImpl<KpiWorkloadMapper, KpiWo
 			KpiWorkload param = this.getById(s);
 			param.setComputeStatus(1);//计算 固定绩效
 			R r2 = this.updateVerify(param);
-			if (("暂无工作量，计算失效")==r2.getMsg()) {
+			if (("/ by zero")==r2.getMsg()) {
 				R2.add(r2);
 			}
 //			if (){
