@@ -1,5 +1,6 @@
 package org.springblade.modules.system.controller;
 
+import cn.hutool.extra.tokenizer.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springblade.core.tool.api.R;
@@ -13,7 +14,9 @@ import org.springblade.modules.user.service.TechuserAccessHistoryService;
 import org.springblade.modules.user.tool.utils.ShiroUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 /**
@@ -105,7 +108,12 @@ public class LoginController {
 		return sysUserService.enroll(user);
 
 	}
-
+//	@RequestMapping("/uploadFile")
+//	public Result uploadFile(HttpServletRequest request, MultipartFile file){
+//
+//		return fileUploadService.uploadFile(request, file);
+//
+//	}
 
 }
 

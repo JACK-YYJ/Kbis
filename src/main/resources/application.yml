@@ -108,3 +108,5 @@ blade:
       - blade_notice
 ymlConfig:
   theDefaultPassword: 123456
+file:
+  save-path: /home/yanyuanjie/kbi/logs
