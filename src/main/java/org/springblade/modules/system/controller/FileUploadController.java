@@ -3,6 +3,7 @@ package org.springblade.modules.system.controller;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import org.springblade.core.tool.api.R;
 import org.springblade.modules.system.service.FileUploadService;
@@ -27,6 +28,7 @@ public class FileUploadController {
 	private FileUploadService fileUploadService;
 
 	@PostMapping("/uploadImg")
+	@ApiOperation("单个图片")
 	public R uploadImg(@RequestParam("file") MultipartFile file, HttpServletRequest request) {
 		boolean isFlag = false;
 		for (String type : IMAGE_TYPE) {
@@ -55,6 +57,7 @@ public class FileUploadController {
 	}
 
 	@PostMapping("/uploadManyImg")
+	@ApiOperation("多个图片")
 	public R uploadManyImg(@RequestParam("files") MultipartFile[] files, HttpServletRequest request) {
 		boolean isFlag = false;
 		for (MultipartFile uploadFile : files) {

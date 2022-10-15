@@ -109,4 +109,5 @@ blade:
 ymlConfig:
   theDefaultPassword: 123456
 file:
-  save-path: /home/yanyuanjie/kbi/logs
+  save-path: /home/yanyuanjie/kbi/web/kbilogo
+#  /home/yanyuanjie/kbi/web/kbilogo
