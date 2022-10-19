@@ -16,6 +16,7 @@ import org.springblade.modules.performance.service.KpiWorkloadService;
 import org.springblade.modules.user.entity.JobCertificate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
 

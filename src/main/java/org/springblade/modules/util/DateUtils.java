@@ -1,5 +1,7 @@
 package org.springblade.modules.util;
 
+import cn.hutool.core.date.DateUtil;
+
 import java.text.DateFormat;
 
 import java.text.ParseException;
@@ -342,6 +344,10 @@ public class DateUtils {
 		Date d = new Date();
 
 		return d;
+	}
+	public static Date getNow_yyyyMM(){
+		Date format = DateUtil.parse(DateUtils.getTodayDate(), "yyyy-MM");
+		return format;
 	}
 
 	public static void main(String[] args) {

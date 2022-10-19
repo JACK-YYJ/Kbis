@@ -15,6 +15,7 @@ import org.springblade.modules.performance.vo.KpiAttendanceVo;
 import org.springblade.modules.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.Date;
 import java.util.List;
@@ -58,7 +59,8 @@ public class AttendanceController {
 	@ApiOperationSupport(order = 2)
 	public R update(@RequestBody List<KpiAttendance> param) {
 			param.forEach(s->{
-				if(s.getAttendanceState().equals(2)){
+				s.setAttendanceMonth(null);
+				if(s.getAttendanceState()==2){
 					s.setAttendanceDay(0);
 				}
 			});
@@ -95,8 +97,12 @@ public class AttendanceController {
 		//str 转 date
 		List<KpiAttendance> kpiAttendanceList = kpiAttendanceService.selectAttendance(param);
 		for (KpiAttendance kpiAttendance : kpiAttendanceList) {
-			kpiAttendance.setMonthDay(param.getToDaySum());
-			kpiAttendance.setAttendanceDay(param.getToDaySum());
+			if (kpiAttendance.getAttendanceState()==2){
+				kpiAttendance.setMonthDay(param.getToDaySum());
+			}else {
+				kpiAttendance.setMonthDay(param.getToDaySum());
+				kpiAttendance.setAttendanceDay(param.getToDaySum());
+			}
 		}
 		kpiAttendanceService.updateBatchById(kpiAttendanceList);
 		return R.success("操作成功");

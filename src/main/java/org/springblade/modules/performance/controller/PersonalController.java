@@ -12,6 +12,7 @@ import org.springblade.modules.performance.service.KpiPersonalService;
 import org.springblade.modules.performance.vo.StatisticsVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
 

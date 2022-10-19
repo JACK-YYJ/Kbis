@@ -1,6 +1,7 @@
 package org.springblade.modules.performance.service.impl;
 
 import cn.hutool.core.date.DateUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.conditions.query.QueryChainWrapper;
@@ -21,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -143,12 +145,19 @@ public class KpiOtherPerformanceServiceImpl extends ServiceImpl<KpiOtherPerforma
 			OtherPerformance ctNSSum = otherPerformanceService.getOne(new QueryWrapper<OtherPerformance>().eq(OtherPerformance.COL_OP_BT_NAME, "CtNightShiftsSum"));
 			OtherPerformance oSum = otherPerformanceService.getOne(new QueryWrapper<OtherPerformance>().eq(OtherPerformance.COL_OP_BT_NAME, "OvertimeSum"));
 			OtherPerformance bSum = otherPerformanceService.getOne(new QueryWrapper<OtherPerformance>().eq(OtherPerformance.COL_OP_BT_NAME, "BedsideSum"));
+			System.out.println(DateUtil.format(param.getAttendanceMonth(),"yyyy-MM"));
 
-			KpiAttendance one = kpiAttendanceService.getOne(
-				new QueryWrapper<KpiAttendance>()
+			LambdaQueryWrapper<KpiAttendance> wrapper = new LambdaQueryWrapper<>();
+			wrapper.eq(KpiAttendance::getAttendanceMonth,param.getAttendanceMonth());
+			wrapper.eq(KpiAttendance::getUserCode,param.getUserCode());
+
+
+			KpiAttendance one = kpiAttendanceService.getOne(new QueryWrapper<KpiAttendance>()
 				.eq(KpiAttendance.COL_USER_CODE, param.getUserCode())
-				.eq(KpiAttendance.COL_ATTENDANCE_MONTH,param.getAttendanceMonth()));
+				.like((KpiAttendance.COL_ATTENDANCE_MONTH),String.valueOf(DateUtil.format(param.getAttendanceMonth(),"yyyy-MM")))
+			);
 
+//			KpiAttendance one1 = kpiAttendanceService.lambdaQuery().eq(KpiAttendance::getUserCode,param.getUserCode()).eq(KpiAttendance::getAttendanceMonth,param.getAttendanceMonth()).list().get(0);
 			//合计
 			BigDecimal j = i.add(param.getOtherNightShiftsSum().multiply(oNSSum.getOpSum())
 				.add(param.getCtNightShiftsSum().multiply(ctNSSum.getOpSum())

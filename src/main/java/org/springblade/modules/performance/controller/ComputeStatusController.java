@@ -9,6 +9,7 @@ import org.springblade.modules.performance.entity.ComputeStatus;
 import org.springblade.modules.user.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.ArrayList;
 import java.util.List;

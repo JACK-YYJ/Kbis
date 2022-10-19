@@ -39,7 +39,6 @@ import java.util.stream.Collectors;
  *
  * @author Chill
  */
-@ApiIgnore
 @RestController
 @AllArgsConstructor
 @RequestMapping("/blade-log/api")

@@ -16,6 +16,7 @@ import org.springblade.modules.user.service.UserService;
 import org.springblade.modules.user.service.WorkService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
 

@@ -130,4 +130,28 @@
         and du.user_code =#{userCode}
         order by du.create_time desc
     </select>
+    <select id="selectToMonths" resultType="org.springblade.modules.performance.vo.FixedToMonth">
+     SELECT     du.user_code,
+               du.user_name,
+               ka.attendance_month,
+               dp.position_score,
+               dd.degree_score,
+               TIMESTAMPDIFF(YEAR, du.seniority, CURDATE()) as seniority,
+               du.jc_id                                     as jc_sum,
+                 CAST(
+                TRUNCATE(CAST(ka.attendance_day AS DECIMAL) /
+                            CAST(ka.month_day AS DECIMAL(13, 2)
+                                ), 11
+                       ) AS DECIMAL(11, 6)
+                   )                                        AS percentage,
+               dj.job_gs,
+               dj.job_ratio
+        FROM dict_user du
+                 LEFT JOIN kpi_attendance ka ON ka.user_code = du.user_code
+                 LEFT JOIN dict_position dp ON dp.p_id = du.p_id
+                 LEFT JOIN dict_degree dd ON dd.d_id = du.d_id
+                 LEFT JOIN dict_job dj ON dj.j_id = du.j_id
+        WHERE date_format(ka.attendance_month, '%Y-%m') = date_format(#{parse}, '%Y-%m')
+        order by du.create_time
+    </select>
 </mapper>

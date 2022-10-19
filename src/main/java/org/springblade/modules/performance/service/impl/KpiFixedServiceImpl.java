@@ -88,6 +88,7 @@ public class KpiFixedServiceImpl extends ServiceImpl<KpiFixedMapper, KpiFixed> i
 	 @Override
 	 public void updateByOne(KpiFixed param) {
 		 PercentageVo p = baseMapper.selectPercentageVo(param.getAttendanceMonth(),param.getUserCode());//出勤率 和 公式
+
 			//合计分值
 		 param.setFixedCountScore(p.getPercentage().multiply(
 			 (param.getPositionScore().add(

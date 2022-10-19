@@ -19,6 +19,7 @@ import org.springblade.modules.user.service.JobService;
 import org.springblade.modules.user.service.OtherPerformanceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
 

@@ -92,10 +92,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 			KpiAttendance kpiAttendance = new KpiAttendance();
 			kpiAttendance.setUserCode(param.getUserCode());
 			kpiAttendance.setUserName(param.getUserName());
-			kpiAttendance.setAttendanceMonth(DateUtils.getNowDate());
+			kpiAttendance.setAttendanceMonth(DateUtils.getNow_yyyyMM());
 			kpiAttendance.setAttendanceState(1);
-			kpiAttendance.setAttendanceDay(23);
-			kpiAttendance.setMonthDay(23);
+			kpiAttendance.setAttendanceDay(DateUtils.getDayOfMonth());
+			kpiAttendance.setMonthDay(DateUtils.getDayOfMonth());
 			kpiAttendanceService.save(kpiAttendance);
 		}
 		//其他绩效 添加
@@ -103,7 +103,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 			KpiOtherPerformance addKpiOp = new KpiOtherPerformance();
 			addKpiOp.setUserCode(param.getUserCode());
 			addKpiOp.setUserName(param.getUserName());
-			addKpiOp.setAttendanceMonth(DateUtils.getNowDate());
+			addKpiOp.setAttendanceMonth(DateUtils.getNow_yyyyMM());
 			kpiOtherPerformanceService.save(addKpiOp);
 		}
 		//固定绩效 用户添加
@@ -113,7 +113,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 			KpiFixed fixed = new KpiFixed();
 			fixed.setUserCode(fixedToMonth.getUserCode());
 			fixed.setUserName(fixedToMonth.getUserName());
-			fixed.setAttendanceMonth(fixedToMonth.getAttendanceMonth());
+			fixed.setAttendanceMonth(DateUtils.getNow_yyyyMM());
 			fixed.setPositionScore(fixedToMonth.getPositionScore());	//职称分值A
 			fixed.setDegreeScore(fixedToMonth.getDegreeScore());		//学历分值B
 			fixed.setSeniority(fixedToMonth.getSeniority());			//工龄
@@ -149,7 +149,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 			KpiWorkload kpiWorkload = new KpiWorkload();
 			kpiWorkload.setUserCode(param.getUserCode());
 			kpiWorkload.setUserName(param.getUserName());
-			kpiWorkload.setAttendanceMonth(DateUtils.getNowDate());
+			kpiWorkload.setAttendanceMonth(DateUtils.getNow_yyyyMM());
 			kpiWorkloadService.save(kpiWorkload);
 		}
 	}

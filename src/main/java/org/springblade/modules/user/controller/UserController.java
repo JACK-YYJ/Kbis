@@ -22,6 +22,7 @@ import org.springblade.modules.user.tool.utils.ShiroUtils;
 import org.springblade.modules.user.vo.UserVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
 
@@ -102,7 +103,7 @@ public class UserController {
 	@ApiOperationSupport(order = 4)
 	public R delete(@RequestBody List<Integer> param) {
 		sysUserService.removeByIds(param);
-		return R.data(userService.removeByIds(param));
+		return R.success("删除成功");
 	}
 
 	/**

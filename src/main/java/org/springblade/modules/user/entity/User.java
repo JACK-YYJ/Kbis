@@ -1,9 +1,6 @@
 package org.springblade.modules.user.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
@@ -122,6 +119,7 @@ public class User implements Serializable {
     /**
      * 1删除  默认0
      */
+	@TableLogic
     @TableField(value = "is_deleted")
     @ApiModelProperty(value = "1删除  默认0")
     private Byte isDeleted;

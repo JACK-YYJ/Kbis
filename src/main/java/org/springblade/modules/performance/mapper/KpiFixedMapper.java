@@ -1,5 +1,6 @@
 package org.springblade.modules.performance.mapper;
 
+import cn.hutool.core.date.DateTime;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.apache.ibatis.annotations.Mapper;
@@ -30,4 +31,6 @@ public interface KpiFixedMapper extends BaseMapper<KpiFixed> {
 	List<KpiFixed> selectListifNUll(String format);
 
 	FixedToMonth selectToMonthOne(Integer userCode);
+
+	List<FixedToMonth> selectToMonths(@Param("parse")Date parse);
 }
