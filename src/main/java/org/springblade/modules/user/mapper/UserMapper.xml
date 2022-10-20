@@ -31,7 +31,8 @@
     </sql>
     <select id="selectUserPage" resultType="org.springblade.modules.user.vo.UserVo">
         SELECT
-        <include refid="Base_Column_List"/>
+        <include refid="Base_Column_List"/>,
+        TIMESTAMPDIFF(YEAR, seniority, CURDATE()) as senioritySum
         FROM dict_user
         <where>
             is_deleted = 0

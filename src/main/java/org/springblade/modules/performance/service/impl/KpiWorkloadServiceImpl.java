@@ -169,7 +169,9 @@ public class KpiWorkloadServiceImpl extends ServiceImpl<KpiWorkloadMapper, KpiWo
 		List<kpiWorkloadVo> medkWVoList = kpiWorkloadVoStream.stream()
 			.filter(s -> s.getJobType().equals(1) )
 			.collect(Collectors.toList());
-
+		if(ObjectUtil.isAllEmpty(medkWVoList)){
+			return R.fail("/ by zero");
+		}
 		BigDecimal medAverage = medkWVoList.stream().map(kpiWorkloadVo::getWorkSum)    //求平均值
 			.reduce(BigDecimal.ZERO, BigDecimal::add)
 			.divide(BigDecimal.valueOf(medkWVoList.size()), 4, BigDecimal.ROUND_HALF_UP);

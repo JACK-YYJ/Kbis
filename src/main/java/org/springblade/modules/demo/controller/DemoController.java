@@ -23,6 +23,9 @@ import org.springblade.modules.user.service.JobCertificateService;
 import org.springblade.modules.user.service.UserService;
 import org.springblade.modules.util.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -58,23 +61,27 @@ public class DemoController {
 	 */
 	@GetMapping("/install")
 	@ApiOperationSupport(order = 1)
-	@ApiOperation(value = "测试接口", notes = "传入toMonth时间格式为2022-10-01")
-	public R selectAccountingPage(String toMonth) {
+	@ApiOperation(value = "测试接口", notes = "传入toMonth时间格式为2022/10/01 00:00:00")
+	@Transactional(isolation = Isolation.DEFAULT, propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+	public R selectAccountingPage( Date toMonth) {
 		/*出勤率*/
 		List<User> userList = userService.lambdaQuery().orderByAsc(User::getUserCode).list();
 
-			Date stf = DateUtil.parse(toMonth);
+//			Date stf = DateUtil.parse(toMonth);
+//		System.out.println(stf);
+//		String format = DateUtil.format(stf, "yyyy-MM");
 
 		for (User user : userList) {
+
 			KpiAttendance isFlag = kpiAttendanceService.getOne(new QueryWrapper<KpiAttendance>()
 				.eq(KpiAttendance.COL_USER_CODE,user.getUserCode())
-				.like(KpiAttendance.COL_ATTENDANCE_MONTH,DateUtil.parse(toMonth,"yyyy-MM")));
+				.like(KpiAttendance.COL_ATTENDANCE_MONTH,DateUtil.format(toMonth,"yyyy-MM")));
 
 			if (ObjectUtil.isEmpty(isFlag)){
 				KpiAttendance kpiAttendance = new KpiAttendance();
 				kpiAttendance.setUserCode(user.getUserCode());
 				kpiAttendance.setUserName(user.getUserName());
-				kpiAttendance.setAttendanceMonth(DateUtil.parse(toMonth,"yyyy-MM"));
+				kpiAttendance.setAttendanceMonth(toMonth);
 				kpiAttendance.setAttendanceState(1);
 				kpiAttendance.setAttendanceDay(DateUtils.getDayOfMonth());
 				kpiAttendance.setMonthDay(DateUtils.getDayOfMonth());
@@ -86,28 +93,28 @@ public class DemoController {
 		for (User user : userList) {
 			KpiOtherPerformance isFlag = kpiOtherPerformanceService.getOne(new QueryWrapper<KpiOtherPerformance>()
 				.eq(KpiOtherPerformance.COL_USER_CODE,user.getUserCode())
-				.like(KpiOtherPerformance.COL_ATTENDANCE_MONTH,DateUtil.parse(toMonth,"yyyy-MM")));
+				.like(KpiOtherPerformance.COL_ATTENDANCE_MONTH,DateUtil.format(toMonth,"yyyy-MM")));
 			if (ObjectUtil.isEmpty(isFlag)){
 				KpiOtherPerformance addKpiOp = new KpiOtherPerformance();
 				addKpiOp.setUserCode(user.getUserCode());
 				addKpiOp.setUserName(user.getUserName());
-				addKpiOp.setAttendanceMonth(DateUtil.parse(toMonth,"yyyy-MM"));
+				addKpiOp.setAttendanceMonth(toMonth);
 				kpiOtherPerformanceService.save(addKpiOp);
 			}
 		}
 		/*固定绩效*/
-		List<FixedToMonth>	 fixedToMonthList = kpiFixedMapper.selectToMonths(DateUtil.parse(toMonth));
+		List<FixedToMonth>	 fixedToMonthList = kpiFixedMapper.selectToMonths(toMonth);
 		// 工龄系数 和 上岗证 系数  （没数据 会出现数组下标越界）
 		JobCertificate xs = jobCertificateService.query().list().get(0);
 		fixedToMonthList.forEach(s->{
 			KpiFixed isFlag = kpiFixedService.getOne(new QueryWrapper<KpiFixed>()
 				.eq(KpiFixed.COL_USER_CODE,s.getUserCode())
-				.like(KpiFixed.COL_ATTENDANCE_MONTH,DateUtil.parse(toMonth,"yyyy-MM")));
+				.like(KpiFixed.COL_ATTENDANCE_MONTH,DateUtil.format(toMonth,"yyyy-MM")));
 			if(ObjectUtil.isEmpty(isFlag)){
 				KpiFixed fixed = new KpiFixed();
 				fixed.setUserCode(s.getUserCode());
 				fixed.setUserName(s.getUserName());
-				fixed.setAttendanceMonth(DateUtil.parse(toMonth,"yyyy-MM"));
+				fixed.setAttendanceMonth(toMonth);
 				fixed.setPositionScore(s.getPositionScore());	//职称分值A
 				fixed.setDegreeScore(s.getDegreeScore());		//学历分值B
 				fixed.setSeniority(s.getSeniority());			//工龄
@@ -141,14 +148,14 @@ public class DemoController {
 		});
 		/*工作量*/
 		for (User user : userList) {
-			KpiFixed isFlag = kpiFixedService.getOne(new QueryWrapper<KpiFixed>()
-				.eq(KpiFixed.COL_USER_CODE,user.getUserCode())
-				.like(KpiFixed.COL_ATTENDANCE_MONTH,DateUtil.parse(toMonth,"yyyy-MM")));
+			KpiWorkload isFlag = kpiWorkloadService.getOne(new QueryWrapper<KpiWorkload>()
+				.eq(KpiWorkload.COL_USER_CODE,user.getUserCode())
+				.like(KpiWorkload.COL_ATTENDANCE_MONTH,DateUtil.format(toMonth,"yyyy-MM")));
 			if(ObjectUtil.isEmpty(isFlag)){
 				KpiWorkload kpiWorkload = new KpiWorkload();
 				kpiWorkload.setUserCode(user.getUserCode());
 				kpiWorkload.setUserName(user.getUserName());
-				kpiWorkload.setAttendanceMonth(DateUtil.parse(toMonth,"yyyy-MM"));
+				kpiWorkload.setAttendanceMonth(toMonth);
 				kpiWorkloadService.save(kpiWorkload);
 			}
 		}

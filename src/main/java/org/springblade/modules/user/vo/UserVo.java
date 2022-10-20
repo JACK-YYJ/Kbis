@@ -61,15 +61,15 @@ public class UserVo {
     @ApiModelProperty(value="学历名称")
     private String degreeName;
 
-//    /**
-//     * 工作类型名称
-//     */
-//    @TableField(value = "work_name")
-//    @ApiModelProperty(value="工作类型名称")
-//    private String workName;
+    /**
+     * 工龄字符串格式
+     */
+
+    @ApiModelProperty(value="工龄sum")
+    private String senioritySum;
 
     /**
-     * 工龄
+     * 返回的时间
      */
     @ApiModelProperty(value = "工龄")
     private String seniority;
