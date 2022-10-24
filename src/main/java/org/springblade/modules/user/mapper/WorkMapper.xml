@@ -21,6 +21,6 @@
                    work_name regexp #{idOrName}
             </if>
         </where>
-        order by w_id desc
+        order by w_id
     </select>
 </mapper>

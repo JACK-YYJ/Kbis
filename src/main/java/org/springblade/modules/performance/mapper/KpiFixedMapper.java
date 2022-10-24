@@ -32,5 +32,7 @@ public interface KpiFixedMapper extends BaseMapper<KpiFixed> {
 
 	FixedToMonth selectToMonthOne(Integer userCode);
 
+	FixedToMonth selectToUser(@Param("attendanceMonth") Date attendanceMonth, @Param("userCode") Integer userCode);
+
 	List<FixedToMonth> selectToMonths(@Param("parse")Date parse);
 }

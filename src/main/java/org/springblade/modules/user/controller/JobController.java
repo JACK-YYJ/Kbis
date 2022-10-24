@@ -75,7 +75,7 @@ public class JobController {
 	@ApiOperationSupport(order = 1)
 	@ApiOperation(value = "工作量计分值第一次添加查询", notes = "第一次添加会默认 加到关系表里默认值为0")
 	public R selectJobWork() {
-		List<Work> jobWorkList = workService.lambdaQuery().orderByDesc(Work::getWId).list();
+		List<Work> jobWorkList = workService.lambdaQuery().orderByAsc(Work::getWId).list();
 		if (jobWorkList.size()==0){
 			return R.fail("请添加工作类型");
 		}

@@ -75,6 +75,7 @@ public class KpiPersonalServiceImpl extends ServiceImpl<KpiPersonalMapper, KpiPe
 				this.save(personal);
 			});
 		}
+		//如果不是当前月份 的话
 		if (kpiAttendancePage.getRecords().size() ==0 && (!format.equals(toMonth))){
 
 			KpiAccounting kpiAccounting = kpiAccountingMapper.selectByToMonth(toMonth);
@@ -99,6 +100,11 @@ public class KpiPersonalServiceImpl extends ServiceImpl<KpiPersonalMapper, KpiPe
 					personal.setWorkSum(BigDecimal.valueOf(0));
 				}
 				if (s.getJobType().equals(0)){
+					if(){
+
+					}else {
+
+					}
 					personal.setFixedSum(s.getFixedSum().multiply(kpiAccounting.getPhyFixedUnit()));//	重新计算
 					personal.setWorkSum(s.getWorkSum().multiply(kpiAccounting.getPhyWorkUnit()));//	重新计算
 				}

@@ -18,7 +18,7 @@ public interface KpiWorkloadService extends IService<KpiWorkload> {
 
     IPage<KpiWorkload> selectWorkloadPage(IPage<Object> page, String toMonth, String idOrName);
 
-	R updateByOne(KpiWorkload param);
+	R updateByWorkSum(KpiWorkload param);
 
 	R updateByList(List<KpiWorkload> kpiFixedList);
 

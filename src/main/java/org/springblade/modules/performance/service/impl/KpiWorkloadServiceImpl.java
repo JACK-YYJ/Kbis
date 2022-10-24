@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.sun.jersey.core.impl.provider.xml.ThreadLocalSingletonContextProvider;
+import org.springblade.common.enumm.WorkDictEnum;
 import org.springblade.core.tool.api.R;
 import org.springblade.modules.performance.entity.KpiAttendance;
 import org.springblade.modules.performance.mapper.KpiFixedMapper;
@@ -70,7 +71,7 @@ public class KpiWorkloadServiceImpl extends ServiceImpl<KpiWorkloadMapper, KpiWo
 	}
 
 	@Override
-	public R updateByOne(KpiWorkload param) {
+	public R updateByWorkSum(KpiWorkload param) {
 		WorkSumByUserCode PlainFilmSum = baseMapper.setectWorkSumByUserCode(param.getUserCode(), 1);
 		WorkSumByUserCode BowelSum = baseMapper.setectWorkSumByUserCode(param.getUserCode(), 2);
 		WorkSumByUserCode BreastSum = baseMapper.setectWorkSumByUserCode(param.getUserCode(), 3);
@@ -179,7 +180,7 @@ public class KpiWorkloadServiceImpl extends ServiceImpl<KpiWorkloadMapper, KpiWo
 
 
 		if (ObjectUtil.isEmpty(p)) {
-			return R.fail("用户没出勤记录");
+			return R.fail("nop");
 		}
 		if (p.getWorkGs() == 0) {
 			//医师 矫正分值
@@ -250,7 +251,7 @@ public class KpiWorkloadServiceImpl extends ServiceImpl<KpiWorkloadMapper, KpiWo
 				rList.add(R.data(one));
 			}
 			//循环校验
-			R r = this.updateByOne(param);
+			R r = this.updateByWorkSum(param);
 
 			if (!r.isSuccess()) {
 				data.add(param);
@@ -283,19 +284,23 @@ public class KpiWorkloadServiceImpl extends ServiceImpl<KpiWorkloadMapper, KpiWo
 	@Override
 	public R computeByList(List<KpiWorkload> kpiFixedList) {
 		List<R> R2 = new ArrayList<>();
+		List<R> Rp = new ArrayList<>();
 		kpiFixedList.forEach(s->{
-			KpiWorkload param = this.getById(s);
-			param.setComputeStatus(1);//计算 固定绩效
-			R r2 = this.updateVerify(param);
+			s.setComputeStatus(1);//计算 固定绩效
+			R r =this.updateByWorkSum(s);//计算合计
+			R r2 = this.updateVerify(s);
 			if (("/ by zero")==r2.getMsg()) {
 				R2.add(r2);
 			}
-//			if (){
-//
-//			}
+			if (("nop")== r2.getMsg()){
+				Rp.add(r2);
+			}
 		});
 		if (ObjectUtil.isAllNotEmpty(R2)) {
 			return R.fail("暂无工作量，计算失效");
+		}
+		if (ObjectUtil.isAllNotEmpty(Rp)) {
+			return R.fail("当前数据考勤有误，请联系管理员");
 		}
 		return R.success("计算成功");
 	}

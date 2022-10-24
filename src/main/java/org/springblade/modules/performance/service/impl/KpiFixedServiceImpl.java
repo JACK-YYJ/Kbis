@@ -85,35 +85,48 @@ public class KpiFixedServiceImpl extends ServiceImpl<KpiFixedMapper, KpiFixed> i
 	 	return selectPage;
 	 }
 
+	 public void updateByUser(KpiFixed param) {
+		 FixedToMonth	 UserFixed = baseMapper.selectToUser(param.getAttendanceMonth(),param.getUserCode());
+		 JobCertificate xs = jobCertificateService.query().list().get(0);
+		 param.setPositionScore(UserFixed.getPositionScore());	//职称分值A
+		 param.setDegreeScore(UserFixed.getDegreeScore());		//学历分值B
+		 param.setSeniority(UserFixed.getSeniority());			//工龄
+		 param.setSeniorityScore(UserFixed.getSeniority().multiply(xs.getAgeFactor()));//工龄分值 C
+		 param.setJcSum(UserFixed.getJcSum().multiply(xs.getJobCertificateFactor())); // 上岗证分值
+		 this.updateById(param);
+	 }
 	 @Override
 	 public void updateByOne(KpiFixed param) {
 		 PercentageVo p = baseMapper.selectPercentageVo(param.getAttendanceMonth(),param.getUserCode());//出勤率 和 公式
 
-			//合计分值
-		 param.setFixedCountScore(p.getPercentage().multiply(
-			 (param.getPositionScore().add(
-				 param.getDegreeScore().add(
-					 param.getSeniorityScore().add(
-						 param.getJcSum()
+
+		 this.updateByUser(param);
+		 KpiFixed kpiFixed = this.getById(param);
+		 //合计分值
+		 kpiFixed.setFixedCountScore(p.getPercentage().multiply(
+			 (kpiFixed.getPositionScore().add(
+				 kpiFixed.getDegreeScore().add(
+					 kpiFixed.getSeniorityScore().add(
+						 kpiFixed.getJcSum()
 							 //三基考试
-							 .add(param.getThreeExam())
+							 .add(kpiFixed.getThreeExam())
 					 )
 				 )
 			 ))
 		 ));
 		 if(p.getJobGs()==0){// 科室主任 、科室副主任  合计分值
-			 param.setFixedCorrectionScore(param.getFixedCountScore());
+			 kpiFixed.setFixedCorrectionScore(kpiFixed.getFixedCountScore());
 		 }
 		 if(p.getJobGs()==1){//合计分值*岗位系数
-			 param.setFixedCorrectionScore(param.getFixedCountScore().multiply(p.getJobRatio()));
+			 kpiFixed.setFixedCorrectionScore(kpiFixed.getFixedCountScore().multiply(p.getJobRatio()));
 		 }
 		 if(p.getJobGs()==2){//合计分值*岗位系数*出勤率
-			 param.setFixedCorrectionScore(param.getFixedCountScore().multiply(p.getJobRatio().multiply(p.getPercentage())));
+			 kpiFixed.setFixedCorrectionScore(kpiFixed.getFixedCountScore().multiply(p.getJobRatio().multiply(p.getPercentage())));
 		 }
 		 if(p.getJobGs()==3){//无
-			 param.setFixedCorrectionScore(BigDecimal.valueOf(0));
+			 kpiFixed.setFixedCorrectionScore(BigDecimal.valueOf(0));
 		 }
-		 this.updateById(param);
+		 this.updateById(kpiFixed);
 	 }
 
 	 @Override
