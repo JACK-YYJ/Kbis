@@ -100,11 +100,11 @@ public class KpiPersonalServiceImpl extends ServiceImpl<KpiPersonalMapper, KpiPe
 					personal.setWorkSum(BigDecimal.valueOf(0));
 				}
 				if (s.getJobType().equals(0)){
-					if(){
-
-					}else {
-
-					}
+//					if(){
+//
+//					}else {
+//
+//					}
 					personal.setFixedSum(s.getFixedSum().multiply(kpiAccounting.getPhyFixedUnit()));//	重新计算
 					personal.setWorkSum(s.getWorkSum().multiply(kpiAccounting.getPhyWorkUnit()));//	重新计算
 				}
