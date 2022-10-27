@@ -5,6 +5,7 @@
         <!--@mbg.generated-->
         <!--@Table kpi_personal-->
         <id column="id" jdbcType="INTEGER" property="id"/>
+        <id column="u_id" jdbcType="INTEGER" property="uId"/>
         <result column="user_code" jdbcType="INTEGER" property="userCode"/>
         <result column="user_name" jdbcType="VARCHAR" property="userName"/>
         <result column="attendance_month" jdbcType="DATE" property="attendanceMonth"/>
@@ -20,7 +21,7 @@
     </resultMap>
     <sql id="Base_Column_List">
         <!--@mbg.generated-->
-        id, user_code, user_name, attendance_month, percentage, job_type, job_name, job_ratio,
+        id, u_id,user_code, user_name, attendance_month, percentage, job_type, job_name, job_ratio,
         card_id, op_sum, fixed_sum, work_sum, personal_sum
     </sql>
     <select id="selectPersonalPage" resultMap="BaseResultMap">
@@ -42,7 +43,9 @@
     <select id="selectByAdd" resultType="org.springblade.modules.performance.vo.KpiPersonalVo">
         SELECT du.user_code,
                du.user_name,
+                du.u_id,
                ka.attendance_month,
+               ka.attendance_state,
                CONCAT(CAST(CONVERT(
                    100 * CAST(ka.attendance_day AS DECIMAL) / CAST(ka.month_day AS DECIMAL), DECIMAL) AS CHAR),
                       '%')               AS percentage,
@@ -128,5 +131,36 @@
             </if>
         </where>
         GROUP BY job_type
+    </select>
+
+    <select id="selectByMonth" resultType="org.springblade.modules.performance.vo.KpiPersonalVo">
+        SELECT du.user_code,
+        du.user_name,
+        ka.attendance_month,
+        ka.attendance_state,
+        CONCAT(CAST(CONVERT(
+        100 * CAST(ka.attendance_day AS DECIMAL) / CAST(ka.month_day AS DECIMAL), DECIMAL) AS CHAR),
+        '%')               AS percentage,
+        dj.job_type,
+        dj.job_name,
+        dj.job_ratio,
+        du.card_id,
+        dj.job_gs,
+        kop.kpi_op_all_price      AS op_sum,
+        kf.fixed_correction_score AS fixed_sum,
+        kw.work_correct           AS work_sum
+        FROM dict_user du
+        LEFT JOIN kpi_attendance ka ON ka.user_code = du.user_code
+        LEFT JOIN dict_job dj ON dj.j_id = du.j_id
+
+        LEFT JOIN kpi_other_performance kop ON kop.user_code = du.user_code
+        LEFT JOIN kpi_fixed kf ON kf.user_code = du.user_code
+        LEFT JOIN kpi_workload kw ON kw.user_code = du.user_code
+
+        where date_format(ka.attendance_month, '%Y-%m') = #{toMonth}
+        AND date_format(kop.attendance_month, '%Y-%m') = #{toMonth}
+        AND date_format(kf.attendance_month, '%Y-%m') = #{toMonth}
+        AND date_format(kw.attendance_month, '%Y-%m')= #{toMonth}
+        order by du.user_code
     </select>
 </mapper>

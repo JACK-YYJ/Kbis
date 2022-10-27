@@ -126,7 +126,7 @@ public class JobController {
 	}
 
 	/**
-	 * 学历字典表 update
+	 * 岗位字典表 update
 	 * @param param
 	 * @return
 	 */
@@ -136,6 +136,15 @@ public class JobController {
 	public R update(@RequestBody UpdateJobDto param) {
 
 		jobService.updateById(param);
+		//岗位名称 联动
+		List<User> userList = userService.lambdaQuery().eq(User::getJId, param.getJId()).list();
+		if(ObjectUtil.isAllNotEmpty(userList)){
+			for (User user : userList) {
+				user.setJobName(param.getJobName());
+				userService.updateById(user);
+			}
+		}
+
 		if(param.getJobWorkList().size()==0){
 			return R.fail("请到工作类型管理添加数据");
 		}
@@ -147,6 +156,9 @@ public class JobController {
 				jobWorkService.updateById(s);
 			}
 		});
+
+		//同步用户表
+
 		return R.success("操作成功");
 	}
 

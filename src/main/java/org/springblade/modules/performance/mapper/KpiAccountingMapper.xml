@@ -30,10 +30,10 @@
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    id, attendance_month, performance_sum, onther_performance_sum, allot_sum, phy_centum, 
-    med_centum, phy_fixed_coefficient, phy_work_coefficient, med_fixed_coefficient, med_work_coefficient, 
-    phy_fixed_sum, phy_work_sum, med_fixed_sum, med_work_sum, phy_fixed_correction_score_sum, 
-    phy_work_correct_sum, med_fixed_correction_score_sum, med_work_correct_sum, phy_fixed_unit, 
+    id, attendance_month, performance_sum, onther_performance_sum, allot_sum, phy_centum,
+    med_centum, phy_fixed_coefficient, phy_work_coefficient, med_fixed_coefficient, med_work_coefficient,
+    phy_fixed_sum, phy_work_sum, med_fixed_sum, med_work_sum, phy_fixed_correction_score_sum,
+    phy_work_correct_sum, med_fixed_correction_score_sum, med_work_correct_sum, phy_fixed_unit,
     phy_work_unit, med_fixed_unit, med_work_unit
   </sql>
     <select id="selectSumPhyMed" resultType="org.springblade.modules.performance.vo.SumVo">
@@ -44,21 +44,17 @@
                kw.work_sum,
                kw.work_correct,
                kop.kpi_op_all_price
-
         FROM dict_user du
                  LEFT JOIN kpi_attendance ka ON ka.user_code = du.user_code
                  LEFT JOIN kpi_other_performance kop ON kop.user_code = du.user_code
                  LEFT JOIN dict_job dj ON dj.j_id = du.j_id
                  LEFT JOIN kpi_fixed kf ON kf.user_code = du.user_code
                  LEFT JOIN kpi_workload kw ON kw.user_code = du.user_code
-
-        <where>
-            <if test="toMonth != null and toMonth != ''">
-                <if test="toMonth != null and toMonth != ''">
-                    date_format(ka.attendance_month, '%Y-%m') = #{toMonth}
-                </if>
-            </if>
-        </where>
+            where
+                date_format(ka.attendance_month, '%Y-%m') = #{toMonth} AND
+                date_format(kop.attendance_month, '%Y-%m') = #{toMonth}AND
+                date_format(kf.attendance_month, '%Y-%m') = #{toMonth}AND
+                date_format(kw.attendance_month, '%Y-%m') = #{toMonth}
     </select>
     <select id="selectByToMonth" resultMap="BaseResultMap">
         select

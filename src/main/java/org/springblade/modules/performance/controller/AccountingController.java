@@ -55,8 +55,11 @@ public class AccountingController {
 			return R.fail("请从新输入");
 		}
 
-		kpiPersonalService.deleteBysaveAccounting(param.getToMonth());
-		return kpiAccountingService.saves(param);
+//		kpiPersonalService.deleteBysaveAccounting(param.getToMonth());
+		kpiAccountingService.saves(param);
+		kpiPersonalService.updateByPersonal(param.getToMonth());
+		return R.success("保存成功");
+
 	}
 
 
@@ -68,9 +71,9 @@ public class AccountingController {
 		if (param==null){
 			return R.fail("请从新输入");
 		}
-		kpiPersonalService.deleteBysaveAccounting(param.getToMonth());
+//		kpiPersonalService.deleteBysaveAccounting(param.getToMonth());
 		kpiAccountingService.savess(param);
-//		kpiPersonalService.add(param.getToMonth());
+		kpiPersonalService.updateByPersonal(param.getToMonth());
 		return R.success("保存成功");
 	}
 }

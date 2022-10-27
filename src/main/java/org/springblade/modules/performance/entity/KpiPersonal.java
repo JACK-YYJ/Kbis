@@ -36,6 +36,12 @@ public class KpiPersonal implements Serializable {
     @ApiModelProperty(value = "个人绩效id")
     private Integer id;
 
+	/**
+	 * 用户id
+	 */
+	@TableField(value = "u_id")
+	@ApiModelProperty(value="用户id")
+	private Integer uId;
     /**
      * 工号
      */
@@ -125,6 +131,7 @@ public class KpiPersonal implements Serializable {
     private static final long serialVersionUID = 1L;
 
     public static final String COL_ID = "id";
+	public static final String COL_U_ID = "u_id";
 
     public static final String COL_USER_CODE = "user_code";
 

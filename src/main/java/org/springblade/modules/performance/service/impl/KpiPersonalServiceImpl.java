@@ -1,10 +1,12 @@
 package org.springblade.modules.performance.service.impl;
 
 import cn.hutool.core.date.DateUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springblade.core.tool.api.R;
 import org.springblade.modules.performance.entity.KpiAccounting;
+import org.springblade.modules.performance.entity.KpiAttendance;
 import org.springblade.modules.performance.mapper.KpiAccountingMapper;
 import org.springblade.modules.performance.vo.KpiAttendanceVo;
 import org.springblade.modules.performance.vo.KpiPersonalVo;
@@ -41,6 +43,7 @@ public class KpiPersonalServiceImpl extends ServiceImpl<KpiPersonalMapper, KpiPe
 			List<KpiPersonalVo> MonthIngList = baseMapper.selectByAdd(toMonth);
 			MonthIngList.forEach(s->{
 				KpiPersonal personal = new KpiPersonal();
+				personal.setUId(s.getUId());
 				personal.setUserCode(s.getUserCode());
 				personal.setUserName(s.getUserName());
 				personal.setAttendanceMonth(s.getAttendanceMonth());
@@ -149,44 +152,46 @@ public class KpiPersonalServiceImpl extends ServiceImpl<KpiPersonalMapper, KpiPe
 	}
 
 	@Override
-	public void add(String toMonth) {
+	public void updateByPersonal(String toMonth) {
 		KpiAccounting kpiAccounting = kpiAccountingMapper.selectByToMonth(toMonth);
 
-		List<KpiPersonalVo> MonthIngList = baseMapper.selectByAdd(toMonth);
+		List<KpiPersonalVo> MonthIngList = baseMapper.selectByMonth(toMonth);
 		MonthIngList.forEach(s->{
-			KpiPersonal personal = new KpiPersonal();
-			personal.setUserCode(s.getUserCode());
-			personal.setUserName(s.getUserName());
-			personal.setAttendanceMonth(s.getAttendanceMonth());
-			personal.setPercentage(s.getPercentage());
 
-			personal.setJobType(s.getJobType());
-			personal.setJobName(s.getJobName());
-			personal.setJobRatio(s.getJobRatio());
+			KpiPersonal one = this.getOne(new QueryWrapper<KpiPersonal>()
+				.eq(KpiPersonal.COL_U_ID, s.getUId())
+				.like(KpiPersonal.COL_ATTENDANCE_MONTH, DateUtil.format(s.getAttendanceMonth(),"yyyy-MM")));
 
-			personal.setCardId(s.getCardId());
-			personal.setOpSum(s.getOpSum());//	其他绩效
+			one.setUserCode(s.getUserCode());
+			one.setUserName(s.getUserName());
+			one.setPercentage(s.getPercentage());
+
+			one.setJobType(s.getJobType());
+			one.setJobName(s.getJobName());
+			one.setJobRatio(s.getJobRatio());
+
+			one.setCardId(s.getCardId());
+			one.setOpSum(s.getOpSum());//	其他绩效
 			//实习生 公式
 			if (s.getJobGs()==3){
-				personal.setFixedSum(BigDecimal.valueOf(0));
-				personal.setWorkSum(BigDecimal.valueOf(0));
+				one.setFixedSum(BigDecimal.valueOf(0));
+				one.setWorkSum(BigDecimal.valueOf(0));
 			}
 			if (s.getJobType()==0){
-				personal.setFixedSum(s.getFixedSum().multiply(kpiAccounting.getPhyFixedUnit()));//	重新计算
-				personal.setWorkSum(s.getWorkSum().multiply(kpiAccounting.getPhyWorkUnit()));//	重新计算
+				one.setFixedSum(s.getFixedSum().multiply(kpiAccounting.getPhyFixedUnit()));//	重新计算
+				one.setWorkSum(s.getWorkSum().multiply(kpiAccounting.getPhyWorkUnit()));//	重新计算
 			}
 			if (s.getJobType()==1){
-				personal.setFixedSum(s.getFixedSum().multiply(kpiAccounting.getMedFixedUnit()));//	重新计算
-				personal.setWorkSum(s.getWorkSum().multiply(kpiAccounting.getMedWorkUnit()));//	重新计算
+				one.setFixedSum(s.getFixedSum().multiply(kpiAccounting.getMedFixedUnit()));//	重新计算
+				one.setWorkSum(s.getWorkSum().multiply(kpiAccounting.getMedWorkUnit()));//	重新计算
 			}
-
-			personal.setPersonalSum(
-				personal.getOpSum()
-					.add(personal.getFixedSum()
-						.add(personal.getWorkSum())
+			one.setPersonalSum(
+				one.getOpSum()
+					.add(one.getFixedSum()
+						.add(one.getWorkSum())
 					)
 			);
-			this.updateById(personal);
+			this.updateById(one);
 		});
 	}
 

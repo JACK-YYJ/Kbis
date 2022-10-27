@@ -157,7 +157,7 @@ public class KpiFixedServiceImpl extends ServiceImpl<KpiFixedMapper, KpiFixed> i
 		 List<R> rList =new ArrayList<>();
 		 kpiFixedList.forEach(param->{
 			 //校验工号
-			 User one = userService.getOne(new QueryWrapper<User>().eq(User.COL_USER_CODE, param.getUserCode()));
+			 User one = userService.getOne(new QueryWrapper<User>().eq(User.COL_USER_CODE, param.getUserCode()).eq(User.COL_IS_DELETED,0));
 			 if(one==null){
 				 rList.add(R.data(one));
 			 }
@@ -165,7 +165,7 @@ public class KpiFixedServiceImpl extends ServiceImpl<KpiFixedMapper, KpiFixed> i
 			 this.updateByOne(param);
 		 });
 		 if (ObjectUtil.isAllNotEmpty(rList)){
-			 return R.fail("校验到Excel不存在的工号");
+			 return R.fail("当前月份数据和设置中心的用户不匹配，请联系管理员");
 		 }
 		 return R.success("编辑成功");
 	 }

@@ -102,7 +102,7 @@ public class UserController {
 	@ApiOperation(value = "删除")
 	@ApiOperationSupport(order = 4)
 	public R delete(@RequestBody List<Integer> param) {
-		sysUserService.removeByIds(param);
+		userService.removeByIds(param);
 		return R.success("删除成功");
 	}
 

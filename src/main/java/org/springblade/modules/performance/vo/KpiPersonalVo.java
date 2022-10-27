@@ -14,6 +14,12 @@ import java.util.Date;
 @Data
 public class KpiPersonalVo {
 	/**
+	 * 用户id
+	 */
+	@TableField(value = "u_id")
+	@ApiModelProperty(value="用户id")
+	private Integer uId;
+	/**
 	 * 工号
 	 */
 	@TableField(value = "user_code")
@@ -33,7 +39,12 @@ public class KpiPersonalVo {
 	@TableField(value = "attendance_month")
 	@ApiModelProperty(value = "出勤月")
 	private Date attendanceMonth;
-
+	/**
+	 * 出勤状态 1：正常出勤 2 ：借调 3：进修
+	 */
+	@TableField(value = "attendance_state")
+	@ApiModelProperty(value = "出勤状态 1：正常出勤 2 ：借调 3：进修")
+	private Integer attendanceState;
 	/**
 	 * 出勤率
 	 */

@@ -1,5 +1,6 @@
 package org.springblade.modules.user.controller;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
@@ -75,6 +76,13 @@ public class DegreeController extends BladeController {
 	@ApiOperationSupport(order = 3)
 	public R update(@RequestBody Degree param) {
 		degreeService.updateById(param);
+		List<User> userList = userService.lambdaQuery().eq(User::getDId, param.getDId()).list();
+		if(ObjectUtil.isAllNotEmpty(userList)){
+			for (User user : userList) {
+				user.setDegreeName(param.getDegreeName());
+				userService.updateById(user);
+			}
+		}
 		return R.success("操作成功");
 	}
 

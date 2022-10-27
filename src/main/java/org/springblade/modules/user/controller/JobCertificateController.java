@@ -72,6 +72,13 @@ public class JobCertificateController {
 	@ApiOperationSupport(order = 3)
 	public R update(@RequestBody JobCertificate param) {
 		jobCertificateService.updateById(param);
+//		List<User> userList = userService.lambdaQuery().eq(User::getJcId, param.getJcId()).list();
+//		if(ObjectUtil.isAllNotEmpty(userList)){
+//			for (User user : userList) {
+//				user.setJobCertificateName(param.getJobCertificateName());
+//				userService.updateById(user);
+//			}
+//		}
 		return R.success("操作成功");
 	}
 

@@ -34,7 +34,7 @@ public class PositionController {
 	@Autowired
 	public UserService userService;
 	/**
-	 * 工作类型管理分页查询
+	 * 职称管理分页查询
 	 */
 	@GetMapping("/selectPositionPage")
 	@ApiOperationSupport(order = 1)
@@ -45,7 +45,7 @@ public class PositionController {
 	}
 
 	/**
-	 * 工作类型管理 add
+	 * 职称管理 add
 	 * @param param
 	 * @return
 	 */
@@ -62,7 +62,7 @@ public class PositionController {
 	}
 
 	/**
-	 * 工作类型管理 update
+	 * 职称管理 update
 	 * @param param
 	 * @return
 	 */
@@ -70,6 +70,13 @@ public class PositionController {
 	@ApiOperation(value = "编辑")
 	@ApiOperationSupport(order = 3)
 	public R update(@RequestBody Position param) {
+		List<User> userList = userService.lambdaQuery().eq(User::getPId, param.getPId()).list();
+		if(ObjectUtil.isAllNotEmpty(userList)){
+			for (User user : userList) {
+				user.setPositionName(param.getPositionName());
+				userService.updateById(user);
+			}
+		}
 		positionService.updateById(param);
 		return R.success("操作成功");
 	}

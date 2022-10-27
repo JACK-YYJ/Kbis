@@ -23,7 +23,8 @@ public interface KpiPersonalService extends IService<KpiPersonal> {
 
 	void deleteBysaveAccounting(String toMonth);
 
-	void add(String toMonth);
+	void updateByPersonal(String toMonth);
+
 }
 
 

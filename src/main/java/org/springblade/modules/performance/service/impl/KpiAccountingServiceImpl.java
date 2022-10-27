@@ -116,7 +116,9 @@ public class KpiAccountingServiceImpl extends ServiceImpl<KpiAccountingMapper, K
 
 		BigDecimal MedFixedCountScore = medcollect.stream().map(SumVo::getFixedCountScore).reduce(BigDecimal.ZERO, BigDecimal::add);
 		BigDecimal medWorkSum = medcollect.stream().map(SumVo::getWorkSum).reduce(BigDecimal.ZERO, BigDecimal::add);
-
+		if(PhyFixedCorrectionScore == BigDecimal.valueOf(0)){
+			return 	R.fail("相关数据初始为零");
+		}
 		byId.setPhyFixedUnit((byId.getPhyFixedSum().divide(PhyFixedCorrectionScore,4, BigDecimal.ROUND_HALF_UP)));//医师固定绩每分绩效
 
 		byId.setPhyWorkUnit((byId.getPhyWorkSum().divide(PhyWorkCorrect,4, BigDecimal.ROUND_HALF_UP)));//医师工作量绩效每分绩效
