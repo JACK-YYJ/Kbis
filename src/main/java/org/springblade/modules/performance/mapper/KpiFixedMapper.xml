@@ -38,7 +38,9 @@
         user_code
     </select>
     <select id="selectToMonth" resultType="org.springblade.modules.performance.vo.FixedToMonth">
-        SELECT du.user_code,
+        SELECT
+            du.u_id,
+               du.user_code,
                du.user_name,
                ka.attendance_month,
                dp.position_score,
@@ -106,7 +108,9 @@
         order by user_code
     </select>
     <select id="selectToMonthOne" resultType="org.springblade.modules.performance.vo.FixedToMonth">
-    SELECT du.user_code,
+    SELECT
+        du.u_id,
+        du.user_code,
                du.user_name,
                ka.attendance_month,
                dp.position_score,

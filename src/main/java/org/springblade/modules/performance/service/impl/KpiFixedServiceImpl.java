@@ -44,6 +44,7 @@ public class KpiFixedServiceImpl extends ServiceImpl<KpiFixedMapper, KpiFixed> i
 			JobCertificate xs = jobCertificateService.query().list().get(0);
 			fixedToMonthList.forEach(s->{
 			 KpiFixed fixed = new KpiFixed();
+			 fixed.setUId(s.getUId());
 			 fixed.setUserCode(s.getUserCode());
 			 fixed.setUserName(s.getUserName());
 			 fixed.setAttendanceMonth(s.getAttendanceMonth());

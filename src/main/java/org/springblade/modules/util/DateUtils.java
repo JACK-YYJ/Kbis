@@ -316,6 +316,21 @@ public class DateUtils {
 
 	}
 
+
+	/**
+	 * 获取上一个月
+	 *
+	 * @return
+	 */
+	public static String getLastMonth() {
+		Calendar cal = Calendar.getInstance();
+		cal.add(cal.MONTH, -1);
+		SimpleDateFormat dft = new SimpleDateFormat("yyyy-MM");
+		String lastMonth = dft.format(cal.getTime());
+		System.out.println(lastMonth);
+		return lastMonth;
+
+	}
 	//获取当天时间
 	public static String getTodayDate() {
 		Date d = new Date();
@@ -349,10 +364,17 @@ public class DateUtils {
 		Date format = DateUtil.parse(DateUtils.getTodayDate(), "yyyy-MM");
 		return format;
 	}
+	public static Date getLast_yyyyMM(){
+		Date format = DateUtil.parse(DateUtils.getLastMonth(), "yyyy-MM");
+		return format;
+	}
 
 	public static void main(String[] args) {
 
 // getDateByDate();
+		getLastMonth();
+
+		System.out.println(getLast_yyyyMM());
 
 // formString("2021-15-27 15:42:44");
 

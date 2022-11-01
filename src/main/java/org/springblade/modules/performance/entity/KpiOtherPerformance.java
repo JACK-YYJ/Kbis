@@ -51,6 +51,12 @@ public class KpiOtherPerformance implements Serializable {
     @ApiModelProperty(value = "出勤管理id")
     private Integer kpiOpId;
 
+	/**
+	 * 用户id
+	 */
+	@TableField(value = "u_id")
+	@ApiModelProperty(value="用户id")
+	private Integer uId;
     /**
      * 工号
      */

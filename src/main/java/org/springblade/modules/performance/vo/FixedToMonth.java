@@ -1,5 +1,6 @@
 package org.springblade.modules.performance.vo;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -14,6 +15,12 @@ import java.util.Date;
  */
 @Data
 public class FixedToMonth {
+	/**
+	 * 用户id
+	 */
+	@TableField(value = "u_id")
+	@ApiModelProperty(value="用户id")
+	private Integer uId;
 	private Integer userCode;
 	private String userName;
 	@DateTimeFormat(pattern = "yyyy-MM")

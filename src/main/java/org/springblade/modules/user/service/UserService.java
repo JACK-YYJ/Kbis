@@ -8,6 +8,8 @@ import org.springblade.modules.user.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.springblade.modules.user.vo.UserVo;
 
+import java.util.List;
+
 /**
  * @Author 元杰
  * @Date 2022/8/25 11:02
@@ -22,6 +24,10 @@ public interface UserService extends IService<User> {
 	void addIngMonthAttenddance();
 
 	void addCompute(User param);
+
+	void checkUser(User param);
+
+	void checkDeleteUser(List<Integer> param);
 }
 
 

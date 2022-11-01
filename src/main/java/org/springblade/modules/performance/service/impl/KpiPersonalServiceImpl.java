@@ -10,6 +10,7 @@ import org.springblade.modules.performance.entity.KpiAttendance;
 import org.springblade.modules.performance.mapper.KpiAccountingMapper;
 import org.springblade.modules.performance.vo.KpiAttendanceVo;
 import org.springblade.modules.performance.vo.KpiPersonalVo;
+import org.springblade.modules.performance.vo.PercentageSelectVo;
 import org.springblade.modules.performance.vo.StatisticsVo;
 import org.springblade.modules.util.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,9 +34,9 @@ public class KpiPersonalServiceImpl extends ServiceImpl<KpiPersonalMapper, KpiPe
 	@Autowired
 	private KpiAccountingMapper kpiAccountingMapper;
     @Override
-    public IPage<KpiPersonal> selectPersonalPage(IPage<Object> page, String toMonth, String idOrName) {
+    public IPage<PercentageSelectVo> selectPersonalPage(IPage<Object> page, String toMonth, String idOrName) {
 		String format = DateUtil.format(DateUtil.date(), "yyyy-MM");
-		Page<KpiPersonal> kpiAttendancePage = baseMapper.selectPersonalPage(page, toMonth);
+		Page<PercentageSelectVo> kpiAttendancePage = baseMapper.selectPersonalPage(page, toMonth);
 		if (kpiAttendancePage.getRecords().size() ==0 && format.equals(toMonth)){
 
 			KpiAccounting kpiAccounting = kpiAccountingMapper.selectByToMonth(format);
@@ -54,19 +55,41 @@ public class KpiPersonalServiceImpl extends ServiceImpl<KpiPersonalMapper, KpiPe
 				personal.setJobRatio(s.getJobRatio());
 
 				personal.setCardId(s.getCardId());
-				personal.setOpSum(s.getOpSum());//	其他绩效
+				//岗位联调
+				if (s.getButtonOther().equals(0)){
+					personal.setOpSum(BigDecimal.valueOf(0));
+				}else {
+					personal.setOpSum(s.getOpSum());//	其他绩效
+				}
 				//实习生 公式
 				if (s.getJobGs()==3){
 					personal.setFixedSum(BigDecimal.valueOf(0));
 					personal.setWorkSum(BigDecimal.valueOf(0));
 				}
 				if (s.getJobType().equals(0)){
-					personal.setFixedSum(s.getFixedSum().multiply(kpiAccounting.getPhyFixedUnit()));//	重新计算
-					personal.setWorkSum(s.getWorkSum().multiply(kpiAccounting.getPhyWorkUnit()));//	重新计算
+					if(s.getButtonFixed().equals(0)){
+						personal.setFixedSum(BigDecimal.valueOf(0));
+					}else {
+						personal.setFixedSum(s.getFixedSum().multiply(kpiAccounting.getPhyFixedUnit()));//	重新计算
+					}
+					if(s.getButtonWorkload().equals(0)){
+						personal.setWorkSum(BigDecimal.valueOf(0));
+					}else{
+						personal.setWorkSum(s.getWorkSum().multiply(kpiAccounting.getPhyWorkUnit()));//	重新计算
+					}
+
 				}
 				if (s.getJobType().equals(1)){
-					personal.setFixedSum(s.getFixedSum().multiply(kpiAccounting.getMedFixedUnit()));//	重新计算
-					personal.setWorkSum(s.getWorkSum().multiply(kpiAccounting.getMedWorkUnit()));//	重新计算
+					if(s.getButtonFixed().equals(0)){
+						personal.setFixedSum(BigDecimal.valueOf(0));
+					}else {
+						personal.setFixedSum(s.getFixedSum().multiply(kpiAccounting.getPhyFixedUnit()));//	重新计算
+					}
+					if(s.getButtonWorkload().equals(0)){
+						personal.setWorkSum(BigDecimal.valueOf(0));
+					}else{
+						personal.setWorkSum(s.getWorkSum().multiply(kpiAccounting.getPhyWorkUnit()));//	重新计算
+					}
 				}
 
 				personal.setPersonalSum(
@@ -86,6 +109,7 @@ public class KpiPersonalServiceImpl extends ServiceImpl<KpiPersonalMapper, KpiPe
 			List<KpiPersonalVo> MonthIngList = baseMapper.selectByAdd(toMonth);
 			MonthIngList.forEach(s->{
 				KpiPersonal personal = new KpiPersonal();
+				personal.setUId(s.getUId());
 				personal.setUserCode(s.getUserCode());
 				personal.setUserName(s.getUserName());
 				personal.setAttendanceMonth(s.getAttendanceMonth());
@@ -96,24 +120,41 @@ public class KpiPersonalServiceImpl extends ServiceImpl<KpiPersonalMapper, KpiPe
 				personal.setJobRatio(s.getJobRatio());
 
 				personal.setCardId(s.getCardId());
-				personal.setOpSum(s.getOpSum());//	其他绩效
+				//岗位联调
+				if (s.getButtonOther().equals(0)){
+					personal.setOpSum(BigDecimal.valueOf(0));
+				}else {
+					personal.setOpSum(s.getOpSum());//	其他绩效
+				}
 				//实习生 公式
 				if (s.getJobGs()==3){
 					personal.setFixedSum(BigDecimal.valueOf(0));
 					personal.setWorkSum(BigDecimal.valueOf(0));
 				}
 				if (s.getJobType().equals(0)){
-//					if(){
-//
-//					}else {
-//
-//					}
-					personal.setFixedSum(s.getFixedSum().multiply(kpiAccounting.getPhyFixedUnit()));//	重新计算
-					personal.setWorkSum(s.getWorkSum().multiply(kpiAccounting.getPhyWorkUnit()));//	重新计算
+					if(s.getButtonFixed().equals(0)){
+						personal.setFixedSum(BigDecimal.valueOf(0));
+					}else {
+						personal.setFixedSum(s.getFixedSum().multiply(kpiAccounting.getPhyFixedUnit()));//	重新计算
+					}
+					if(s.getButtonWorkload().equals(0)){
+						personal.setWorkSum(BigDecimal.valueOf(0));
+					}else{
+						personal.setWorkSum(s.getWorkSum().multiply(kpiAccounting.getPhyWorkUnit()));//	重新计算
+					}
+
 				}
 				if (s.getJobType().equals(1)){
-					personal.setFixedSum(s.getFixedSum().multiply(kpiAccounting.getMedFixedUnit()));//	重新计算
-					personal.setWorkSum(s.getWorkSum().multiply(kpiAccounting.getMedWorkUnit()));//	重新计算
+					if(s.getButtonFixed().equals(0)){
+						personal.setFixedSum(BigDecimal.valueOf(0));
+					}else {
+						personal.setFixedSum(s.getFixedSum().multiply(kpiAccounting.getPhyFixedUnit()));//	重新计算
+					}
+					if(s.getButtonWorkload().equals(0)){
+						personal.setWorkSum(BigDecimal.valueOf(0));
+					}else{
+						personal.setWorkSum(s.getWorkSum().multiply(kpiAccounting.getPhyWorkUnit()));//	重新计算
+					}
 				}
 
 				personal.setPersonalSum(
@@ -126,7 +167,7 @@ public class KpiPersonalServiceImpl extends ServiceImpl<KpiPersonalMapper, KpiPe
 			});
 		}
 		if (idOrName != null) {
-			IPage<KpiPersonal> kpiPersonalIPageByIdOrName = baseMapper.selectidOrName(page, idOrName, toMonth);
+			IPage<PercentageSelectVo> kpiPersonalIPageByIdOrName = baseMapper.selectidOrName(page, idOrName, toMonth);
 			return kpiPersonalIPageByIdOrName;
 		}
 		return kpiAttendancePage;
@@ -171,19 +212,40 @@ public class KpiPersonalServiceImpl extends ServiceImpl<KpiPersonalMapper, KpiPe
 			one.setJobRatio(s.getJobRatio());
 
 			one.setCardId(s.getCardId());
-			one.setOpSum(s.getOpSum());//	其他绩效
+			if (s.getButtonOther().equals(0)){
+				one.setOpSum(BigDecimal.valueOf(0));
+			}else {
+				one.setOpSum(s.getOpSum());//	其他绩效
+			}
+
 			//实习生 公式
 			if (s.getJobGs()==3){
 				one.setFixedSum(BigDecimal.valueOf(0));
 				one.setWorkSum(BigDecimal.valueOf(0));
 			}
 			if (s.getJobType()==0){
-				one.setFixedSum(s.getFixedSum().multiply(kpiAccounting.getPhyFixedUnit()));//	重新计算
-				one.setWorkSum(s.getWorkSum().multiply(kpiAccounting.getPhyWorkUnit()));//	重新计算
+				if(s.getButtonFixed().equals(0)){
+					one.setFixedSum(BigDecimal.valueOf(0));
+				}else {
+					one.setFixedSum(s.getFixedSum().multiply(kpiAccounting.getPhyFixedUnit()));//	重新计算
+				}
+				if(s.getButtonWorkload().equals(0)){
+					one.setWorkSum(BigDecimal.valueOf(0));
+				}else{
+					one.setWorkSum(s.getWorkSum().multiply(kpiAccounting.getPhyWorkUnit()));//	重新计算
+				}
 			}
 			if (s.getJobType()==1){
-				one.setFixedSum(s.getFixedSum().multiply(kpiAccounting.getMedFixedUnit()));//	重新计算
-				one.setWorkSum(s.getWorkSum().multiply(kpiAccounting.getMedWorkUnit()));//	重新计算
+				if(s.getButtonFixed().equals(0)){
+					one.setFixedSum(BigDecimal.valueOf(0));
+				}else {
+					one.setFixedSum(s.getFixedSum().multiply(kpiAccounting.getPhyFixedUnit()));//	重新计算
+				}
+				if(s.getButtonWorkload().equals(0)){
+					one.setWorkSum(BigDecimal.valueOf(0));
+				}else{
+					one.setWorkSum(s.getWorkSum().multiply(kpiAccounting.getPhyWorkUnit()));//	重新计算
+				}
 			}
 			one.setPersonalSum(
 				one.getOpSum()

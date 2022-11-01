@@ -37,6 +37,12 @@ public class KpiWorkload implements Serializable {
     @ApiModelProperty(value = "工作量核算分值id")
     private Integer kpiWorkId;
 
+	/**
+	 * 用户id
+	 */
+	@TableField(value = "u_id")
+	@ApiModelProperty(value="用户id")
+	private Integer uId;
     /**
      * 工号
      */

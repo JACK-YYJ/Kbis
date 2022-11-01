@@ -65,6 +65,26 @@ public class KpiPersonalVo {
 	@ApiModelProperty(value = "岗位类别")
 	private Integer jobGs;
 	/**
+	 * 固定绩效 按钮1：开  0：关
+	 */
+	@TableField(value = "button_fixed")
+	@ApiModelProperty(value = "固定绩效 按钮1：开  0：关")
+	private Boolean buttonFixed;
+
+	/**
+	 * 工作量绩效 按钮1：开 0：关
+	 */
+	@TableField(value = "button_workload")
+	@ApiModelProperty(value = "工作量绩效 按钮1：开 0：关")
+	private Boolean buttonWorkload;
+
+	/**
+	 * 其他绩效 按钮 1：开 0：关
+	 */
+	@TableField(value = "button_other")
+	@ApiModelProperty(value = "其他绩效 按钮 1：开 0：关")
+	private Boolean buttonOther;
+	/**
 	 * 岗位名称
 	 */
 	@TableField(value = "job_name")

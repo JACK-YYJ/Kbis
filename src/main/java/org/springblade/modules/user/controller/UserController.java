@@ -89,6 +89,7 @@ public class UserController {
 	@ApiOperationSupport(order = 3)
 	public R update(@RequestBody User param) {
 		userService.updateById(param);
+		userService.checkUser(param);
 		return R.success("操作成功");
 	}
 
@@ -103,6 +104,7 @@ public class UserController {
 	@ApiOperationSupport(order = 4)
 	public R delete(@RequestBody List<Integer> param) {
 		userService.removeByIds(param);
+		userService.checkDeleteUser(param);
 		return R.success("删除成功");
 	}
 

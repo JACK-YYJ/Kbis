@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springblade.modules.performance.entity.KpiPersonal;
 import org.springblade.modules.performance.vo.KpiPersonalVo;
+import org.springblade.modules.performance.vo.PercentageSelectVo;
 import org.springblade.modules.performance.vo.StatisticsVo;
 
 import java.util.Date;
@@ -19,12 +20,12 @@ import java.util.List;
 
 @Mapper
 public interface KpiPersonalMapper extends BaseMapper<KpiPersonal> {
-	Page<KpiPersonal> selectPersonalPage(@Param("page") IPage<Object> page, @Param("toMonth") String toMonth);
+	Page<PercentageSelectVo> selectPersonalPage(@Param("page") IPage<Object> page, @Param("toMonth") String toMonth);
 
 
 	List<KpiPersonalVo> selectByAdd(@Param("format") String format);
 
-	IPage<KpiPersonal> selectidOrName(@Param("page") IPage<Object> page, @Param("idOrName") String idOrName, @Param("toMonth") String toMonth);
+	IPage<PercentageSelectVo> selectidOrName(@Param("page") IPage<Object> page, @Param("idOrName") String idOrName, @Param("toMonth") String toMonth);
 
 	List<StatisticsVo> selectByjobName(@Param("toMonth") String toMonth);
 

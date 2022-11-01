@@ -1,6 +1,7 @@
 package org.springblade.modules.performance.controller;
 
 
+import cn.hutool.core.util.ObjectUtil;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -51,14 +52,19 @@ public class AccountingController {
 	@ApiOperationSupport(order = 2)
 	@ApiOperation(value = "保存", notes = "")
 	public R Save(@RequestBody AccountingDto param) {
-		if (param==null){
-			return R.fail("请从新输入");
+		if (
+			ObjectUtil.isEmpty(param.getPerformanceSum())&
+			ObjectUtil.isEmpty(param.getPhyCentum())&
+			ObjectUtil.isEmpty(param.getMedFixedCoefficient())&
+			ObjectUtil.isEmpty(param.getPhyFixedCoefficient())
+		){
+			return R.fail("请重新输入");
 		}
 
 //		kpiPersonalService.deleteBysaveAccounting(param.getToMonth());
-		kpiAccountingService.saves(param);
+		R saves = kpiAccountingService.saves(param);
 		kpiPersonalService.updateByPersonal(param.getToMonth());
-		return R.success("保存成功");
+		return R.success(saves.getMsg());
 
 	}
 
@@ -68,7 +74,10 @@ public class AccountingController {
 	@ApiOperationSupport(order = 3)
 	@ApiOperation(value = "统计保存", notes = "")
 	public R savetj(@RequestBody AccountingDto param) {
-		if (param==null){
+		if (ObjectUtil.isEmpty(param.getPerformanceSum())&
+			ObjectUtil.isEmpty(param.getPhyCentum())&
+			ObjectUtil.isEmpty(param.getMedFixedCoefficient())&
+			ObjectUtil.isEmpty(param.getPhyFixedCoefficient())){
 			return R.fail("请从新输入");
 		}
 //		kpiPersonalService.deleteBysaveAccounting(param.getToMonth());

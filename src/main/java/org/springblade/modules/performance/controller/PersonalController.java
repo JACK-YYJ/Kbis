@@ -9,6 +9,7 @@ import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.api.R;
 import org.springblade.modules.performance.entity.KpiPersonal;
 import org.springblade.modules.performance.service.KpiPersonalService;
+import org.springblade.modules.performance.vo.PercentageSelectVo;
 import org.springblade.modules.performance.vo.StatisticsVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -33,11 +34,11 @@ public class PersonalController {
 	@GetMapping("/selectPersonalPage")
 	@ApiOperationSupport(order = 1)
 	@ApiOperation(value = "查询", notes = "传入toMonth ")
-	public R<IPage<KpiPersonal>> selectPersonalPage(Query page, String toMonth, String idOrName) {
+	public R<IPage<PercentageSelectVo>> selectPersonalPage(Query page, String toMonth, String idOrName) {
 //		if (toMonth==null){
 //			return R.fail("请从新输入月份");
 //		}
-		IPage<KpiPersonal> pages = kpiPersonalService.selectPersonalPage(Condition.getPage(page), toMonth,idOrName);
+		IPage<PercentageSelectVo> pages = kpiPersonalService.selectPersonalPage(Condition.getPage(page), toMonth,idOrName);
 		return R.data(pages);
 	}
 

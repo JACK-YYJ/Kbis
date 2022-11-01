@@ -35,6 +35,13 @@ public class KpiAttendance implements Serializable {
     @ApiModelProperty(value = "出勤管理id")
     private Integer id;
 
+	/**
+	 * 用户id
+	 */
+	@TableField(value = "u_id")
+	@ApiModelProperty(value="用户id")
+	private Integer uId;
+
     /**
      * 工号
      */

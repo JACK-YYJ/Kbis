@@ -55,6 +55,7 @@ public class KpiOtherPerformanceServiceImpl extends ServiceImpl<KpiOtherPerforma
             ArrayList<KpiOtherPerformance> kpiopaddList = new ArrayList<>();
             for (User user : userList) {
                 KpiOtherPerformance addKpiOp = new KpiOtherPerformance();
+                addKpiOp.setUId(user.getUId());
                 addKpiOp.setUserCode(user.getUserCode());
                 addKpiOp.setUserName(user.getUserName());
                 addKpiOp.setAttendanceMonth(DateUtils.getNowDate());

@@ -5,6 +5,7 @@ import org.springblade.core.tool.api.R;
 import org.springblade.modules.performance.entity.KpiPersonal;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.springblade.modules.performance.vo.KpiAttendanceVo;
+import org.springblade.modules.performance.vo.PercentageSelectVo;
 import org.springblade.modules.performance.vo.StatisticsVo;
 
 import java.util.List;
@@ -16,7 +17,7 @@ import java.util.List;
 
 public interface KpiPersonalService extends IService<KpiPersonal> {
 
-    IPage<KpiPersonal> selectPersonalPage(IPage<Object> page, String toMonth, String idOrName);
+    IPage<PercentageSelectVo> selectPersonalPage(IPage<Object> page, String toMonth, String idOrName);
 
 
 	List<StatisticsVo> selectStatisticsList( String toMonth);

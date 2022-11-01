@@ -54,6 +54,7 @@ public class KpiWorkloadServiceImpl extends ServiceImpl<KpiWorkloadMapper, KpiWo
 			ArrayList<KpiWorkload> kpiAttendances = new ArrayList<>();
 			for (User user : userList) {
 				KpiWorkload kpiWorkload = new KpiWorkload();
+				kpiWorkload.setUId(user.getUId());
 				kpiWorkload.setUserCode(user.getUserCode());
 				kpiWorkload.setUserName(user.getUserName());
 				kpiWorkload.setAttendanceMonth(DateUtils.getNowDate());

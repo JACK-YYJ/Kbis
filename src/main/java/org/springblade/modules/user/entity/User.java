@@ -153,7 +153,7 @@ public class User implements Serializable {
 	/**
 	 * 1删除  默认0
 	 */
-	@TableLogic
+//	@TableLogic
 	@TableField(value = "is_deleted")
 	@ApiModelProperty(value="1删除  默认0")
 	private Byte isDeleted;

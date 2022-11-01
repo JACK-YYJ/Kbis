@@ -36,6 +36,12 @@ public class KpiFixed implements Serializable {
     @ApiModelProperty(value="固定绩效id")
     private Integer kpiFixedId;
 
+	/**
+	 * 用户id
+	 */
+	@TableField(value = "u_id")
+	@ApiModelProperty(value="用户id")
+	private Integer uId;
     /**
      * 工号
      */

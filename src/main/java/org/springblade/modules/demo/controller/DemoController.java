@@ -79,6 +79,7 @@ public class DemoController {
 
 			if (ObjectUtil.isEmpty(isFlag)){
 				KpiAttendance kpiAttendance = new KpiAttendance();
+				kpiAttendance.setUId(user.getUId());
 				kpiAttendance.setUserCode(user.getUserCode());
 				kpiAttendance.setUserName(user.getUserName());
 				kpiAttendance.setAttendanceMonth(toMonth);
@@ -96,6 +97,7 @@ public class DemoController {
 				.like(KpiOtherPerformance.COL_ATTENDANCE_MONTH,DateUtil.format(toMonth,"yyyy-MM")));
 			if (ObjectUtil.isEmpty(isFlag)){
 				KpiOtherPerformance addKpiOp = new KpiOtherPerformance();
+				addKpiOp.setUId(user.getUId());
 				addKpiOp.setUserCode(user.getUserCode());
 				addKpiOp.setUserName(user.getUserName());
 				addKpiOp.setAttendanceMonth(toMonth);
@@ -112,6 +114,7 @@ public class DemoController {
 				.like(KpiFixed.COL_ATTENDANCE_MONTH,DateUtil.format(toMonth,"yyyy-MM")));
 			if(ObjectUtil.isEmpty(isFlag)){
 				KpiFixed fixed = new KpiFixed();
+				fixed.setUId(s.getUId());
 				fixed.setUserCode(s.getUserCode());
 				fixed.setUserName(s.getUserName());
 				fixed.setAttendanceMonth(toMonth);
@@ -153,6 +156,7 @@ public class DemoController {
 				.like(KpiWorkload.COL_ATTENDANCE_MONTH,DateUtil.format(toMonth,"yyyy-MM")));
 			if(ObjectUtil.isEmpty(isFlag)){
 				KpiWorkload kpiWorkload = new KpiWorkload();
+				kpiWorkload.setUId(user.getUId());
 				kpiWorkload.setUserCode(user.getUserCode());
 				kpiWorkload.setUserName(user.getUserName());
 				kpiWorkload.setAttendanceMonth(toMonth);
