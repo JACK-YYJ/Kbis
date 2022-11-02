@@ -121,7 +121,7 @@ public class KpiPersonalServiceImpl extends ServiceImpl<KpiPersonalMapper, KpiPe
 
 				personal.setCardId(s.getCardId());
 				//岗位联调
-				if (s.getButtonOther().equals(0)){
+				if (!s.getButtonOther()){
 					personal.setOpSum(BigDecimal.valueOf(0));
 				}else {
 					personal.setOpSum(s.getOpSum());//	其他绩效
@@ -132,12 +132,12 @@ public class KpiPersonalServiceImpl extends ServiceImpl<KpiPersonalMapper, KpiPe
 					personal.setWorkSum(BigDecimal.valueOf(0));
 				}
 				if (s.getJobType().equals(0)){
-					if(s.getButtonFixed().equals(0)){
+					if(!s.getButtonFixed()){
 						personal.setFixedSum(BigDecimal.valueOf(0));
 					}else {
 						personal.setFixedSum(s.getFixedSum().multiply(kpiAccounting.getPhyFixedUnit()));//	重新计算
 					}
-					if(s.getButtonWorkload().equals(0)){
+					if(!s.getButtonWorkload()){
 						personal.setWorkSum(BigDecimal.valueOf(0));
 					}else{
 						personal.setWorkSum(s.getWorkSum().multiply(kpiAccounting.getPhyWorkUnit()));//	重新计算
@@ -145,12 +145,12 @@ public class KpiPersonalServiceImpl extends ServiceImpl<KpiPersonalMapper, KpiPe
 
 				}
 				if (s.getJobType().equals(1)){
-					if(s.getButtonFixed().equals(0)){
+					if(!s.getButtonFixed()){
 						personal.setFixedSum(BigDecimal.valueOf(0));
 					}else {
 						personal.setFixedSum(s.getFixedSum().multiply(kpiAccounting.getPhyFixedUnit()));//	重新计算
 					}
-					if(s.getButtonWorkload().equals(0)){
+					if(!s.getButtonWorkload()){
 						personal.setWorkSum(BigDecimal.valueOf(0));
 					}else{
 						personal.setWorkSum(s.getWorkSum().multiply(kpiAccounting.getPhyWorkUnit()));//	重新计算
@@ -212,7 +212,7 @@ public class KpiPersonalServiceImpl extends ServiceImpl<KpiPersonalMapper, KpiPe
 			one.setJobRatio(s.getJobRatio());
 
 			one.setCardId(s.getCardId());
-			if (s.getButtonOther().equals(0)){
+			if (!s.getButtonOther()){
 				one.setOpSum(BigDecimal.valueOf(0));
 			}else {
 				one.setOpSum(s.getOpSum());//	其他绩效
@@ -224,24 +224,24 @@ public class KpiPersonalServiceImpl extends ServiceImpl<KpiPersonalMapper, KpiPe
 				one.setWorkSum(BigDecimal.valueOf(0));
 			}
 			if (s.getJobType()==0){
-				if(s.getButtonFixed().equals(0)){
+				if(!s.getButtonFixed()){
 					one.setFixedSum(BigDecimal.valueOf(0));
 				}else {
 					one.setFixedSum(s.getFixedSum().multiply(kpiAccounting.getPhyFixedUnit()));//	重新计算
 				}
-				if(s.getButtonWorkload().equals(0)){
+				if(!s.getButtonWorkload()){
 					one.setWorkSum(BigDecimal.valueOf(0));
 				}else{
 					one.setWorkSum(s.getWorkSum().multiply(kpiAccounting.getPhyWorkUnit()));//	重新计算
 				}
 			}
 			if (s.getJobType()==1){
-				if(s.getButtonFixed().equals(0)){
+				if(!s.getButtonFixed()){
 					one.setFixedSum(BigDecimal.valueOf(0));
 				}else {
 					one.setFixedSum(s.getFixedSum().multiply(kpiAccounting.getPhyFixedUnit()));//	重新计算
 				}
-				if(s.getButtonWorkload().equals(0)){
+				if(!s.getButtonWorkload()){
 					one.setWorkSum(BigDecimal.valueOf(0));
 				}else{
 					one.setWorkSum(s.getWorkSum().multiply(kpiAccounting.getPhyWorkUnit()));//	重新计算

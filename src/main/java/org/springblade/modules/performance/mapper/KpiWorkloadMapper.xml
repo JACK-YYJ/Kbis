@@ -78,6 +78,7 @@
                  LEFT JOIN dict_job dj ON dj.j_id = du.j_id
                  LEFT JOIN kpi_workload kw ON kw.user_code = du.user_code
         where date_format(ka.attendance_month, '%Y-%m') = date_format(#{attendanceMonth}, '%Y-%m')
+        AND date_format( kw.attendance_month, '%Y-%m' ) = date_format( #{attendanceMonth}, '%Y-%m' )
     </select>
     <select id="selectToMonth" resultMap="BaseResultMap">
      select

@@ -40,8 +40,8 @@ public class KpiAccountingServiceImpl extends ServiceImpl<KpiAccountingMapper, K
 			KpiAccounting accounting = new KpiAccounting();
 			accounting.setAttendanceMonth(DateUtils.getNowDate());
 			this.save(accounting);
-			KpiAccounting byId = baseMapper.selectByToMonth(toMonth);
-			this.install(byId);
+//			KpiAccounting byId = baseMapper.selectByToMonth(toMonth);
+//			this.install(byId);
 		}
 		if(ObjectUtil.isEmpty(kpiAccounting)&&(!format.equals(toMonth))){
 			KpiAccounting accounting = new KpiAccounting();

@@ -18,7 +18,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -97,14 +101,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 			kpiAttendance.setMonthDay(DateUtils.getDayOfMonth());
 			kpiAttendanceService.save(kpiAttendance);
 
-//			kpiAttendance1.setUId(one.getUId());
-//			kpiAttendance1.setUserCode(one.getUserCode());
-//			kpiAttendance1.setUserName(one.getUserName());
-//			kpiAttendance1.setAttendanceMonth(DateUtils.getLast_yyyyMM());
-//			kpiAttendance1.setAttendanceState(1);
-//			kpiAttendance1.setAttendanceDay(DateUtils.getDayOfMonth());
-//			kpiAttendance1.setMonthDay(DateUtils.getDayOfMonth());
-//			kpiAttendanceService.save(kpiAttendance1);
+			kpiAttendance1.setUId(one.getUId());
+			kpiAttendance1.setUserCode(one.getUserCode());
+			kpiAttendance1.setUserName(one.getUserName());
+			kpiAttendance1.setAttendanceMonth(DateUtils.getLast_yyyyMM());
+			kpiAttendance1.setAttendanceState(1);
+			kpiAttendance1.setAttendanceDay(DateUtils.getDayOfMonth());
+			kpiAttendance1.setMonthDay(DateUtils.getDayOfMonth());
+			kpiAttendanceService.save(kpiAttendance1);
 		}
 		//其他绩效 添加
 		if (!(kpiOtherPerformanceList.size()==0)){
@@ -116,12 +120,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 			kpiOtherPerformanceService.save(addKpiOp);
 
 
-//			KpiOtherPerformance addKpiOp1 = new KpiOtherPerformance();
-//			addKpiOp1.setUId(one.getUId());
-//			addKpiOp1.setUserCode(one.getUserCode());
-//			addKpiOp1.setUserName(one.getUserName());
-//			addKpiOp1.setAttendanceMonth(DateUtils.getLast_yyyyMM());
-//			kpiOtherPerformanceService.save(addKpiOp1);
+			KpiOtherPerformance addKpiOp1 = new KpiOtherPerformance();
+			addKpiOp1.setUId(one.getUId());
+			addKpiOp1.setUserCode(one.getUserCode());
+			addKpiOp1.setUserName(one.getUserName());
+			addKpiOp1.setAttendanceMonth(DateUtils.getLast_yyyyMM());
+			kpiOtherPerformanceService.save(addKpiOp1);
 		}
 		//固定绩效 用户添加
 		FixedToMonth fixedToMonth = kpiFixedMapper.selectToMonthOne(one.getUserCode());
@@ -163,40 +167,40 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 			kpiFixedService.save(fixed);
 
 
-//			KpiFixed fixed1 = new KpiFixed();
-//			fixed1.setUId(fixedToMonth.getUId());
-//			fixed1.setUserCode(fixedToMonth.getUserCode());
-//			fixed1.setUserName(fixedToMonth.getUserName());
-//			fixed1.setAttendanceMonth(DateUtils.getLast_yyyyMM());
-//			fixed1.setPositionScore(fixedToMonth.getPositionScore());	//职称分值A
-//			fixed1.setDegreeScore(fixedToMonth.getDegreeScore());		//学历分值B
-//			fixed1.setSeniority(fixedToMonth.getSeniority());			//工龄
-//			fixed1.setSeniorityScore(fixedToMonth.getSeniority().multiply(xs.getAgeFactor()));//工龄分值 C
-//			fixed1.setJcSum(fixedToMonth.getJcSum().multiply(xs.getJobCertificateFactor())); // 上岗证分值
-//			//合计分值
-//			fixed1.setFixedCountScore(fixedToMonth.getPercentage().multiply(
-//				(fixedToMonth.getPositionScore().add(
-//					fixedToMonth.getDegreeScore().add(
-//						fixed1.getSeniorityScore().add(
-//							fixed1.getJcSum()
-//							//三基考试
-//						)
-//					)
-//				))
-//			));
-//			if(fixedToMonth.getJobGs()==0){
-//				fixed1.setFixedCorrectionScore(fixed1.getFixedCountScore());
-//			}
-//			if(fixedToMonth.getJobGs()==1){
-//				fixed1.setFixedCorrectionScore(fixed1.getFixedCountScore().multiply(fixedToMonth.getJobRatio()));
-//			}
-//			if(fixedToMonth.getJobGs()==2){
-//				fixed1.setFixedCorrectionScore(fixed1.getFixedCountScore().multiply(fixedToMonth.getJobRatio().multiply(fixedToMonth.getPercentage())));
-//			}
-//			if(fixedToMonth.getJobGs()==3){
-//				fixed1.setFixedCorrectionScore(BigDecimal.valueOf(0));
-//			}
-//			kpiFixedService.save(fixed1);
+			KpiFixed fixed1 = new KpiFixed();
+			fixed1.setUId(fixedToMonth.getUId());
+			fixed1.setUserCode(fixedToMonth.getUserCode());
+			fixed1.setUserName(fixedToMonth.getUserName());
+			fixed1.setAttendanceMonth(DateUtils.getLast_yyyyMM());
+			fixed1.setPositionScore(fixedToMonth.getPositionScore());	//职称分值A
+			fixed1.setDegreeScore(fixedToMonth.getDegreeScore());		//学历分值B
+			fixed1.setSeniority(fixedToMonth.getSeniority());			//工龄
+			fixed1.setSeniorityScore(fixedToMonth.getSeniority().multiply(xs.getAgeFactor()));//工龄分值 C
+			fixed1.setJcSum(fixedToMonth.getJcSum().multiply(xs.getJobCertificateFactor())); // 上岗证分值
+			//合计分值
+			fixed1.setFixedCountScore(fixedToMonth.getPercentage().multiply(
+				(fixedToMonth.getPositionScore().add(
+					fixedToMonth.getDegreeScore().add(
+						fixed1.getSeniorityScore().add(
+							fixed1.getJcSum()
+							//三基考试
+						)
+					)
+				))
+			));
+			if(fixedToMonth.getJobGs()==0){
+				fixed1.setFixedCorrectionScore(fixed1.getFixedCountScore());
+			}
+			if(fixedToMonth.getJobGs()==1){
+				fixed1.setFixedCorrectionScore(fixed1.getFixedCountScore().multiply(fixedToMonth.getJobRatio()));
+			}
+			if(fixedToMonth.getJobGs()==2){
+				fixed1.setFixedCorrectionScore(fixed1.getFixedCountScore().multiply(fixedToMonth.getJobRatio().multiply(fixedToMonth.getPercentage())));
+			}
+			if(fixedToMonth.getJobGs()==3){
+				fixed1.setFixedCorrectionScore(BigDecimal.valueOf(0));
+			}
+			kpiFixedService.save(fixed1);
 		}
 		//工作量绩效 添加
 		if (!(kpiWorkloads.size()==0)){
@@ -207,12 +211,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 			kpiWorkload.setAttendanceMonth(DateUtils.getNow_yyyyMM());
 			kpiWorkloadService.save(kpiWorkload);
 
-//			KpiWorkload kpiWorkload1= new KpiWorkload();
-//			kpiWorkload1.setUId(one.getUId());
-//			kpiWorkload1.setUserCode(one.getUserCode());
-//			kpiWorkload1.setUserName(one.getUserName());
-//			kpiWorkload1.setAttendanceMonth(DateUtils.getLast_yyyyMM());
-//			kpiWorkloadService.save(kpiWorkload1);
+			KpiWorkload kpiWorkload1= new KpiWorkload();
+			kpiWorkload1.setUId(one.getUId());
+			kpiWorkload1.setUserCode(one.getUserCode());
+			kpiWorkload1.setUserName(one.getUserName());
+			kpiWorkload1.setAttendanceMonth(DateUtils.getLast_yyyyMM());
+			kpiWorkloadService.save(kpiWorkload1);
 		}
 	}
 
@@ -227,35 +231,56 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 			for (KpiAttendance kpiAttendance : kpiAttendanceList) {
 				kpiAttendance.setUserCode(param.getUserCode());
 				kpiAttendance.setUserName(param.getUserName());
-				kpiAttendanceService.updateById(kpiAttendance);
+
+				long result = kpiAttendance.getAttendanceMonth().getTime()-DateUtils.getLast_yyyyMM().getTime();
+				if(result>=0){  //两个月之前的数据
+					kpiAttendanceService.updateById(kpiAttendance);
+				}
 			}
 		}
 		if (ObjectUtil.isAllNotEmpty(kpiOtherPerformanceList)){
 			for (KpiOtherPerformance kpiOtherPerformance : kpiOtherPerformanceList) {
 				kpiOtherPerformance.setUserCode(param.getUserCode());
 				kpiOtherPerformance.setUserName(param.getUserName());
-				kpiOtherPerformanceService.updateById(kpiOtherPerformance);
+
+				long result = kpiOtherPerformance.getAttendanceMonth().getTime()-DateUtils.getLast_yyyyMM().getTime();
+				if(result>=0){
+					kpiOtherPerformanceService.updateById(kpiOtherPerformance);
+				}
 			}
 		}
 		if (ObjectUtil.isAllNotEmpty(kpiFixedList)){
 			for (KpiFixed kpiFixed : kpiFixedList) {
 				kpiFixed.setUserCode(param.getUserCode());
 				kpiFixed.setUserName(param.getUserName());
-				kpiFixedService.updateById(kpiFixed);
+
+				long result = kpiFixed.getAttendanceMonth().getTime()-DateUtils.getLast_yyyyMM().getTime();
+				if(result>=0){
+					kpiFixedService.updateById(kpiFixed);
+				}
+
 			}
 		}
 		if (ObjectUtil.isAllNotEmpty(kpiWorkloadList)){
 			for (KpiWorkload kpiWorkload : kpiWorkloadList) {
 				kpiWorkload.setUserCode(param.getUserCode());
 				kpiWorkload.setUserName(param.getUserName());
-				kpiWorkloadService.updateById(kpiWorkload);
+
+				long result = kpiWorkload.getAttendanceMonth().getTime()-DateUtils.getLast_yyyyMM().getTime();
+				if(result>0){
+					kpiWorkloadService.updateById(kpiWorkload);
+				}
 			}
 		}
 		if (ObjectUtil.isAllNotEmpty(kpiPersonalList)){
 			for (KpiPersonal kpiPersonal : kpiPersonalList) {
 				kpiPersonal.setUserCode(param.getUserCode());
 				kpiPersonal.setUserName(param.getUserName());
-				kpiPersonalService.updateById(kpiPersonal);
+				long result = kpiPersonal.getAttendanceMonth().getTime()-DateUtils.getLast_yyyyMM().getTime();
+				if(result>0){
+					kpiPersonalService.updateById(kpiPersonal);
+				}
+
 			}
 		}
 	}
@@ -271,31 +296,53 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
 			if (ObjectUtil.isAllNotEmpty(kpiAttendanceList)){
 				for (KpiAttendance kpiAttendance : kpiAttendanceList) {
-					kpiAttendanceService.removeById(kpiAttendance);
+					long result = kpiAttendance.getAttendanceMonth().getTime()-DateUtils.getLast_yyyyMM().getTime();
+					if(result>=0){  //两个月之前的数据
+						kpiAttendanceService.removeById(kpiAttendance);
+					}
 				}
 			}
 			if (ObjectUtil.isAllNotEmpty(kpiOtherPerformanceList)){
 				for (KpiOtherPerformance kpiOtherPerformance : kpiOtherPerformanceList) {
-					kpiOtherPerformanceService.removeById(kpiOtherPerformance);
+					long result = kpiOtherPerformance.getAttendanceMonth().getTime()-DateUtils.getLast_yyyyMM().getTime();
+					if(result>=0){
+						kpiOtherPerformanceService.removeById(kpiOtherPerformance);
+					}
+
 				}
 			}
 			if (ObjectUtil.isAllNotEmpty(kpiFixedList)){
 				for (KpiFixed kpiFixed : kpiFixedList) {
-					kpiFixedService.removeById(kpiFixed);
+					long result = kpiFixed.getAttendanceMonth().getTime()-DateUtils.getLast_yyyyMM().getTime();
+					if(result>=0){
+						kpiFixedService.removeById(kpiFixed);
+					}
+
 				}
 			}
 			if (ObjectUtil.isAllNotEmpty(kpiWorkloadList)){
 				for (KpiWorkload kpiWorkload : kpiWorkloadList) {
-					kpiWorkloadService.removeById(kpiWorkload);
+					long result = kpiWorkload.getAttendanceMonth().getTime()-DateUtils.getLast_yyyyMM().getTime();
+					if(result>0){
+						kpiWorkloadService.removeById(kpiWorkload);
+					}
+
 				}
 			}
 			if (ObjectUtil.isAllNotEmpty(kpiPersonalList)){
 				for (KpiPersonal kpiPersonal : kpiPersonalList) {
-					kpiPersonalService.removeById(kpiPersonal);
+					long result = kpiPersonal.getAttendanceMonth().getTime()-DateUtils.getLast_yyyyMM().getTime();
+					if(result>0){
+						kpiPersonalService.removeById(kpiPersonal);
+					}
 				}
 			}
 		}
 	}
+
+
+
+
 
 }
 

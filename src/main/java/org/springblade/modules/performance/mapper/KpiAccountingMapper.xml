@@ -52,8 +52,8 @@
                  LEFT JOIN kpi_workload kw ON kw.user_code = du.user_code
             where
                 date_format(ka.attendance_month, '%Y-%m') = #{toMonth} AND
-                date_format(kop.attendance_month, '%Y-%m') = #{toMonth}AND
-                date_format(kf.attendance_month, '%Y-%m') = #{toMonth}AND
+                date_format(kop.attendance_month, '%Y-%m') = #{toMonth} AND
+                date_format(kf.attendance_month, '%Y-%m') = #{toMonth} AND
                 date_format(kw.attendance_month, '%Y-%m') = #{toMonth}
     </select>
     <select id="selectByToMonth" resultMap="BaseResultMap">

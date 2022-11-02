@@ -20,6 +20,7 @@ import org.springblade.modules.user.entity.User;
 import org.springblade.modules.user.service.UserService;
 import org.springblade.modules.user.tool.utils.ShiroUtils;
 import org.springblade.modules.user.vo.UserVo;
+import org.springblade.modules.util.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
@@ -80,7 +81,10 @@ public class UserController {
 		userService.save(param);
 		userService.addCompute(param);
 		String format = DateUtil.format(DateUtil.date(), "yyyy-MM");
+		String format1 = DateUtil.format(DateUtils.getLast_yyyyMM(), "yyyy-MM");
+
 		kpiPersonalService.deleteBysaveAccounting(format);
+		kpiPersonalService.deleteBysaveAccounting(format1);
 		return R.success("添加成功");
 	}
 
