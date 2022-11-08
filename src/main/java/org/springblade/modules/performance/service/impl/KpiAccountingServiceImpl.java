@@ -40,8 +40,8 @@ public class KpiAccountingServiceImpl extends ServiceImpl<KpiAccountingMapper, K
 			KpiAccounting accounting = new KpiAccounting();
 			accounting.setAttendanceMonth(DateUtils.getNowDate());
 			this.save(accounting);
-//			KpiAccounting byId = baseMapper.selectByToMonth(toMonth);
-//			this.install(byId);
+			KpiAccounting byId = baseMapper.selectByToMonth(toMonth);
+			this.install(byId);
 		}
 		if(ObjectUtil.isEmpty(kpiAccounting)&&(!format.equals(toMonth))){
 			KpiAccounting accounting = new KpiAccounting();
@@ -69,11 +69,16 @@ public class KpiAccountingServiceImpl extends ServiceImpl<KpiAccountingMapper, K
 		List<SumVo> kpiFixeds = baseMapper.selectSumPhyMed(format);
 		BigDecimal num1 = new BigDecimal(1.00);
 		BigDecimal opsum = kpiFixeds.stream().map(SumVo::getKpiOpAllPrice).reduce(BigDecimal.ZERO, BigDecimal::add);
+
+
 		byId.setOntherPerformanceSum(opsum);//其他绩效总额
 
 		BigDecimal PerformanceSum = param.getPerformanceSum().subtract(opsum);
 		byId.setAllotSum(PerformanceSum);//可分配绩效总额
-
+		if(opsum.compareTo(param.getPerformanceSum())==1){
+			this.updateById(byId);
+			return R.fail("请输入大于“其他绩效总额”的数值");
+		}
 		byId.setPhyCentum(param.getPhyCentum());//医师分配占比
 		BigDecimal MedCentum = num1.subtract(param.getPhyCentum());
 		byId.setMedCentum(MedCentum);//医技分配占比
@@ -92,10 +97,6 @@ public class KpiAccountingServiceImpl extends ServiceImpl<KpiAccountingMapper, K
 		byId.setMedFixedSum(PerformanceSum.multiply(MedCentum.multiply(param.getMedFixedCoefficient())));//医技固定绩效总额
 		byId.setMedWorkSum(PerformanceSum.multiply(MedCentum.multiply(WorkCoefficient)));//医技工作量绩效总额
 
-//		BigDecimal PhyFixedCorrectionScore = new BigDecimal(0.00000);
-//		BigDecimal PhyWorkCorrect = new BigDecimal(0.00000);
-//		BigDecimal MedFixedCorrectionScore = new BigDecimal(0.00000);
-//		BigDecimal MedWorkCorrect = new BigDecimal(0.00000);
 		List<SumVo> phycollect = kpiFixeds.stream().filter(s -> s.getJobType()==0).collect(Collectors.toList());
 		List<SumVo> medcollect = kpiFixeds.stream().filter(s -> s.getJobType()==1).collect(Collectors.toList());
 
@@ -119,17 +120,24 @@ public class KpiAccountingServiceImpl extends ServiceImpl<KpiAccountingMapper, K
 		if(PhyFixedCorrectionScore == BigDecimal.valueOf(0)){
 			return 	R.fail("相关数据初始为零");
 		}
-		byId.setPhyFixedUnit((byId.getPhyFixedSum().divide(PhyFixedCorrectionScore,4, BigDecimal.ROUND_HALF_UP)));//医师固定绩每分绩效
-
-		byId.setPhyWorkUnit((byId.getPhyWorkSum().divide(PhyWorkCorrect,4, BigDecimal.ROUND_HALF_UP)));//医师工作量绩效每分绩效
-		byId.setMedFixedUnit((byId.getMedFixedSum().divide(MedFixedCorrectionScore,4, BigDecimal.ROUND_HALF_UP)));//医技固定量绩效每分绩效
-		byId.setMedWorkUnit((byId.getMedWorkSum().divide(MedWorkCorrect,4, BigDecimal.ROUND_HALF_UP)));//医技工作量绩效每分绩效
+		if(!(PhyFixedCorrectionScore.compareTo(BigDecimal.ZERO) ==0)) {
+			byId.setPhyFixedUnit((byId.getPhyFixedSum().divide(PhyFixedCorrectionScore, 4, BigDecimal.ROUND_HALF_UP)));//医师固定绩每分绩效
+		}
+		if(!(PhyWorkCorrect.compareTo(BigDecimal.ZERO) ==0)){
+			byId.setPhyWorkUnit((byId.getPhyWorkSum().divide(PhyWorkCorrect,4, BigDecimal.ROUND_HALF_UP)));//医师工作量绩效每分绩效
+		}
+		if(!(MedFixedCorrectionScore.compareTo(BigDecimal.ZERO) ==0)) {
+			byId.setMedFixedUnit((byId.getMedFixedSum().divide(MedFixedCorrectionScore, 4, BigDecimal.ROUND_HALF_UP)));//医技固定量绩效每分绩效
+		}
+		if(!(MedWorkCorrect.compareTo(BigDecimal.ZERO) ==0)) {
+			byId.setMedWorkUnit((byId.getMedWorkSum().divide(MedWorkCorrect, 4, BigDecimal.ROUND_HALF_UP)));//医技工作量绩效每分绩效
+		}
 		this.updateById(byId);
 		return R.success("保存成功");
 	}
 
 	@Override
-	public void savess(AccountingDto param) {
+	public R savess(AccountingDto param) {
 
 		KpiAccounting byId = baseMapper.selectByToMonth(param.getToMonth());
 
@@ -139,11 +147,15 @@ public class KpiAccountingServiceImpl extends ServiceImpl<KpiAccountingMapper, K
 		List<SumVo> kpiFixeds = baseMapper.selectSumPhyMed(format);
 		BigDecimal num1 = new BigDecimal(1.00);
 		BigDecimal opsum = kpiFixeds.stream().map(SumVo::getKpiOpAllPrice).reduce(BigDecimal.ZERO, BigDecimal::add);
+
 		byId.setOntherPerformanceSum(opsum);//其他绩效总额
 
 		BigDecimal PerformanceSum = byId.getPerformanceSum().subtract(opsum);
 		byId.setAllotSum(PerformanceSum);//可分配绩效总额
 
+		if(opsum.compareTo(byId.getPerformanceSum())==1){
+			return R.fail("cz");
+		}
 		byId.setPhyCentum(param.getPhyCentum());//医师分配占比
 		BigDecimal MedCentum = num1.subtract(param.getPhyCentum());
 		byId.setMedCentum(MedCentum);//医技分配占比
@@ -173,12 +185,20 @@ public class KpiAccountingServiceImpl extends ServiceImpl<KpiAccountingMapper, K
 
 
 
-		byId.setPhyFixedUnit((byId.getPhyFixedSum().divide(PhyFixedCorrectionScore,4, BigDecimal.ROUND_HALF_UP)));//医师固定绩每分绩效
-		byId.setPhyWorkUnit((byId.getPhyWorkSum().divide(PhyWorkCorrect,4, BigDecimal.ROUND_HALF_UP)));//医师工作量绩效每分绩效
-		byId.setMedFixedUnit((byId.getMedFixedSum().divide(MedFixedCorrectionScore,4, BigDecimal.ROUND_HALF_UP)));//医技固定量绩效每分绩效
-		byId.setMedWorkUnit((byId.getMedWorkSum().divide(MedWorkCorrect,4, BigDecimal.ROUND_HALF_UP)));//医技工作量绩效每分绩效
+		if(!(PhyFixedCorrectionScore.compareTo(BigDecimal.ZERO) ==0)) {
+			byId.setPhyFixedUnit((byId.getPhyFixedSum().divide(PhyFixedCorrectionScore, 4, BigDecimal.ROUND_HALF_UP)));//医师固定绩每分绩效
+		}
+		if(!(PhyWorkCorrect.compareTo(BigDecimal.ZERO) ==0)){
+			byId.setPhyWorkUnit((byId.getPhyWorkSum().divide(PhyWorkCorrect,4, BigDecimal.ROUND_HALF_UP)));//医师工作量绩效每分绩效
+		}
+		if(!(MedFixedCorrectionScore.compareTo(BigDecimal.ZERO) ==0)) {
+			byId.setMedFixedUnit((byId.getMedFixedSum().divide(MedFixedCorrectionScore, 4, BigDecimal.ROUND_HALF_UP)));//医技固定量绩效每分绩效
+		}
+		if(!(MedWorkCorrect.compareTo(BigDecimal.ZERO) ==0)) {
+			byId.setMedWorkUnit((byId.getMedWorkSum().divide(MedWorkCorrect, 4, BigDecimal.ROUND_HALF_UP)));//医技工作量绩效每分绩效
+		}
 		this.updateById(byId);
-
+		return R.success("编辑成功");
 	}
 
 
@@ -237,10 +257,18 @@ public class KpiAccountingServiceImpl extends ServiceImpl<KpiAccountingMapper, K
 		byId.setMedFixedCorrectionScoreSum(MedFixedCorrectionScore);//医技固定绩效矫正之和B1
 		byId.setMedWorkCorrectSum(MedWorkCorrect);//医技工作量绩效矫正之和B1
 
-		byId.setPhyFixedUnit((byId.getPhyFixedSum().divide(PhyFixedCorrectionScore,4, BigDecimal.ROUND_HALF_UP)));//医师固定绩每分绩效
-		byId.setPhyWorkUnit((byId.getPhyWorkSum().divide(PhyWorkCorrect,4, BigDecimal.ROUND_HALF_UP)));//医师工作量绩效每分绩效
-		byId.setMedFixedUnit((byId.getMedFixedSum().divide(MedFixedCorrectionScore,4, BigDecimal.ROUND_HALF_UP)));//医技固定量绩效每分绩效
-		byId.setMedWorkUnit((byId.getMedWorkSum().divide(MedWorkCorrect,4, BigDecimal.ROUND_HALF_UP)));//医技工作量绩效每分绩效
+		if(!(PhyFixedCorrectionScore.compareTo(BigDecimal.ZERO) ==0)) {
+			byId.setPhyFixedUnit((byId.getPhyFixedSum().divide(PhyFixedCorrectionScore, 4, BigDecimal.ROUND_HALF_UP)));//医师固定绩每分绩效
+		}
+		if(!(PhyWorkCorrect.compareTo(BigDecimal.ZERO) ==0)){
+			byId.setPhyWorkUnit((byId.getPhyWorkSum().divide(PhyWorkCorrect,4, BigDecimal.ROUND_HALF_UP)));//医师工作量绩效每分绩效
+		}
+		if(!(MedFixedCorrectionScore.compareTo(BigDecimal.ZERO) ==0)) {
+			byId.setMedFixedUnit((byId.getMedFixedSum().divide(MedFixedCorrectionScore, 4, BigDecimal.ROUND_HALF_UP)));//医技固定量绩效每分绩效
+		}
+		if(!(MedWorkCorrect.compareTo(BigDecimal.ZERO) ==0)) {
+			byId.setMedWorkUnit((byId.getMedWorkSum().divide(MedWorkCorrect, 4, BigDecimal.ROUND_HALF_UP)));//医技工作量绩效每分绩效
+		}
 		this.updateById(byId);
 	}
 }

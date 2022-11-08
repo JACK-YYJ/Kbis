@@ -5,13 +5,13 @@ import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.sun.jersey.core.impl.provider.xml.ThreadLocalSingletonContextProvider;
-import org.springblade.common.enumm.WorkDictEnum;
 import org.springblade.core.tool.api.R;
-import org.springblade.modules.performance.entity.KpiAttendance;
+import org.springblade.modules.performance.dto.AccountingDto;
+import org.springblade.modules.performance.entity.KpiAccounting;
+import org.springblade.modules.performance.mapper.KpiAccountingMapper;
 import org.springblade.modules.performance.mapper.KpiFixedMapper;
-import org.springblade.modules.performance.service.KpiFixedService;
-import org.springblade.modules.performance.vo.KpiAttendanceVo;
+import org.springblade.modules.performance.service.KpiAccountingService;
+import org.springblade.modules.performance.service.KpiPersonalService;
 import org.springblade.modules.performance.vo.PercentageVo;
 import org.springblade.modules.performance.vo.WorkSumByUserCode;
 import org.springblade.modules.performance.vo.kpiWorkloadVo;
@@ -21,12 +21,12 @@ import org.springblade.modules.util.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
+import java.awt.peer.LightweightPeer;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
+
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springblade.modules.performance.mapper.KpiWorkloadMapper;
@@ -44,6 +44,12 @@ public class KpiWorkloadServiceImpl extends ServiceImpl<KpiWorkloadMapper, KpiWo
 	public UserService userService;
 	@Autowired
 	public KpiFixedMapper kpiFixedMapper;
+	@Autowired
+	public KpiAccountingMapper KpiAccountingMapper;
+	@Autowired
+	public KpiAccountingService kpiAccountingService;
+	@Autowired
+	public KpiPersonalService kpiPersonalService;
 
 	@Override
 	public IPage<KpiWorkload> selectWorkloadPage(IPage<Object> page, String toMonth, String idOrName) {
@@ -149,7 +155,7 @@ public class KpiWorkloadServiceImpl extends ServiceImpl<KpiWorkloadMapper, KpiWo
 	 */
 	private R updateVerify(KpiWorkload param) {
 		//根据 公式生成 矫正工作量绩效分值
-		PercentageVo p = kpiFixedMapper.selectPercentageVo(param.getAttendanceMonth(), param.getUserCode());
+
 		List<kpiWorkloadVo> kWVoList = baseMapper.selectWorkLoadVo(param.getAttendanceMonth());
 		List<kpiWorkloadVo> kpiWorkloadVoStream = kWVoList.stream()
 			.filter(s ->
@@ -158,31 +164,47 @@ public class KpiWorkloadServiceImpl extends ServiceImpl<KpiWorkloadMapper, KpiWo
 			.collect(Collectors.toList());
 		//A医师
 		List<kpiWorkloadVo> phykWVoList = kpiWorkloadVoStream.stream()
-			.filter(s -> s.getJobType().equals(0))
+			.filter(s -> s.getJobType()==0)
 			.collect(Collectors.toList());
-		if(ObjectUtil.isAllEmpty(phykWVoList)){
-			return R.fail("/ by zero");
-		}
-		BigDecimal phyAverage = phykWVoList.stream().map(kpiWorkloadVo::getWorkSum)    //求平均值
-			.reduce(BigDecimal.ZERO, BigDecimal::add)
-			.divide(BigDecimal.valueOf(phykWVoList.size()), 4, BigDecimal.ROUND_HALF_UP);
-
 		//B医技
 		List<kpiWorkloadVo> medkWVoList = kpiWorkloadVoStream.stream()
-			.filter(s -> s.getJobType().equals(1) )
+			.filter(s -> s.getJobType()==1 )
 			.collect(Collectors.toList());
-		if(ObjectUtil.isAllEmpty(medkWVoList)){
-			return R.fail("/ by zero");
-		}
-		BigDecimal medAverage = medkWVoList.stream().map(kpiWorkloadVo::getWorkSum)    //求平均值
-			.reduce(BigDecimal.ZERO, BigDecimal::add)
-			.divide(BigDecimal.valueOf(medkWVoList.size()), 4, BigDecimal.ROUND_HALF_UP);
-//		List<KpiWorkload> workSumList = this.lambdaQuery().list();
 
+		if(ObjectUtil.isAllEmpty(phykWVoList)&&ObjectUtil.isAllEmpty(medkWVoList)){//if 医师、医技avg==0
+			BigDecimal phyAverage = BigDecimal.valueOf(0);
+			BigDecimal medAverage = BigDecimal.valueOf(0);
+			this.computeAvg(phyAverage,medAverage,param);
 
-		if (ObjectUtil.isEmpty(p)) {
-			return R.fail("nop");
+		}else {
+			if (ObjectUtil.isAllEmpty(phykWVoList)){//if 医师avg==0
+				BigDecimal phyAverage = BigDecimal.valueOf(0);
+				BigDecimal medAverage = medkWVoList.stream().map(kpiWorkloadVo::getWorkSum)    //求平均值
+					.reduce(BigDecimal.ZERO, BigDecimal::add)
+					.divide(BigDecimal.valueOf(medkWVoList.size()), 4, BigDecimal.ROUND_HALF_UP);
+				this.computeAvg(phyAverage,medAverage,param);
+			}else {//if 医技avg==0
+				if(ObjectUtil.isAllEmpty(medkWVoList)){
+					BigDecimal medAverage = BigDecimal.valueOf(0);
+					BigDecimal phyAverage = phykWVoList.stream().map(kpiWorkloadVo::getWorkSum)    //求平均值
+						.reduce(BigDecimal.ZERO, BigDecimal::add)
+						.divide(BigDecimal.valueOf(phykWVoList.size()), 4, BigDecimal.ROUND_HALF_UP);
+					this.computeAvg(phyAverage,medAverage,param);
+				}else {
+					BigDecimal medAverage = medkWVoList.stream().map(kpiWorkloadVo::getWorkSum)    //求平均值
+						.reduce(BigDecimal.ZERO, BigDecimal::add)
+						.divide(BigDecimal.valueOf(medkWVoList.size()), 4, BigDecimal.ROUND_HALF_UP);
+					BigDecimal phyAverage = phykWVoList.stream().map(kpiWorkloadVo::getWorkSum)    //求平均值
+						.reduce(BigDecimal.ZERO, BigDecimal::add)
+						.divide(BigDecimal.valueOf(phykWVoList.size()), 4, BigDecimal.ROUND_HALF_UP);
+					this.computeAvg(phyAverage,medAverage,param);
+				}
+			}
 		}
+		return R.success("ok");
+	}
+	public void computeAvg (BigDecimal phyAverage,BigDecimal medAverage,KpiWorkload param){
+		PercentageVo p = kpiFixedMapper.selectPercentageVo(param.getAttendanceMonth(), param.getUserCode());
 		if (p.getWorkGs() == 0) {
 			//医师 矫正分值
 			if (p.getJobType() == 0) {
@@ -237,7 +259,6 @@ public class KpiWorkloadServiceImpl extends ServiceImpl<KpiWorkloadMapper, KpiWo
 			}
 		}
 		baseMapper.updateById(param);
-		return R.success("ok");
 	}
 
 	@Override
@@ -283,26 +304,39 @@ public class KpiWorkloadServiceImpl extends ServiceImpl<KpiWorkloadMapper, KpiWo
 	}
 
 	@Override
-	public R computeByList(List<KpiWorkload> kpiFixedList) {
+	public R computeByList(List<KpiWorkload> kpiFixedList,String toMonth) {
+		List<R> R1 = new ArrayList<>();
 		List<R> R2 = new ArrayList<>();
+		List<R> Rysyj=new ArrayList<>();
 		List<R> Rp = new ArrayList<>();
 		kpiFixedList.forEach(s->{
 			s.setComputeStatus(1);//计算 固定绩效
 			R r =this.updateByWorkSum(s);//计算合计
 			R r2 = this.updateVerify(s);
-			if (("/ by zero")==r2.getMsg()) {
-				R2.add(r2);
-			}
+
 			if (("nop")== r2.getMsg()){
 				Rp.add(r2);
 			}
+			if(("ysyj/ by zero")==r2.getMsg()){
+				Rysyj.add(r2);
+			}
 		});
-		if (ObjectUtil.isAllNotEmpty(R2)) {
-			return R.fail("暂无工作量，计算失效");
-		}
 		if (ObjectUtil.isAllNotEmpty(Rp)) {
 			return R.fail("当前数据考勤有误，请联系管理员");
 		}
+//		KpiAccounting kpiAccounting = KpiAccountingMapper.selectByToMonth(toMonth);
+//		if(ObjectUtil.isNotEmpty(kpiAccounting)){
+//			AccountingDto accountingDto = new AccountingDto();
+//
+//			accountingDto.setToMonth(toMonth);
+//			accountingDto.setMedFixedCoefficient(kpiAccounting.getMedFixedCoefficient());
+//			accountingDto.setPerformanceSum(kpiAccounting.getPerformanceSum());
+//			accountingDto.setPhyFixedCoefficient(kpiAccounting.getPhyFixedCoefficient());
+//			accountingDto.setPhyCentum(kpiAccounting.getPhyCentum());
+//
+//			kpiAccountingService.saves(accountingDto);
+//			kpiPersonalService.updateByPersonal(toMonth);
+//		}
 		return R.success("计算成功");
 	}
 }

@@ -11,6 +11,7 @@ import org.springblade.modules.performance.entity.KpiAccounting;
 import org.springblade.modules.performance.mapper.KpiAccountingMapper;
 import org.springblade.modules.performance.service.KpiAccountingService;
 import org.springblade.modules.performance.service.KpiPersonalService;
+import org.springblade.modules.performance.vo.StatisticsVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
@@ -63,6 +64,9 @@ public class AccountingController {
 
 //		kpiPersonalService.deleteBysaveAccounting(param.getToMonth());
 		R saves = kpiAccountingService.saves(param);
+		if(saves.getMsg()=="请输入大于“其他绩效总额”的数值"){
+			return R.fail(saves.getMsg());
+		}
 		kpiPersonalService.updateByPersonal(param.getToMonth());
 		return R.success(saves.getMsg());
 
@@ -80,9 +84,17 @@ public class AccountingController {
 			ObjectUtil.isEmpty(param.getPhyFixedCoefficient())){
 			return R.fail("请从新输入");
 		}
+
 //		kpiPersonalService.deleteBysaveAccounting(param.getToMonth());
-		kpiAccountingService.savess(param);
-		kpiPersonalService.updateByPersonal(param.getToMonth());
+		R r = kpiAccountingService.savess(param);
+		if (r.getMsg()=="cz"){
+			R.fail("请输入大于“其他绩效总额”的数值");
+		}
+		List<StatisticsVo> statisticsVos = kpiPersonalService.selectStatisticsList(param.getToMonth());
+		if(ObjectUtil.isAllNotEmpty(statisticsVos)){
+			kpiPersonalService.updateByPersonal(param.getToMonth());
+		}
+
 		return R.success("保存成功");
 	}
 }

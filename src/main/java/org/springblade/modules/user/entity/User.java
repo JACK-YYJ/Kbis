@@ -9,8 +9,9 @@ import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
- /**
+/**
  * @Author 元杰
  * @Date 2022/9/8 17:38
  */
@@ -20,6 +21,7 @@ import lombok.NoArgsConstructor;
  */
 @ApiModel(value = "org-springblade-modules-user-entity-User")
 @Data
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @TableName(value = "dict_user")
@@ -106,7 +108,7 @@ public class User implements Serializable {
 	 */
 	@TableField(value = "jc_id")
 	@ApiModelProperty(value="岗位证id")
-	private Byte jcId;
+	private Integer jcId;
 
 	/**
 	 * 岗位证名称

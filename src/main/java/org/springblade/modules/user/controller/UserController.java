@@ -80,11 +80,11 @@ public class UserController {
 //		User.add(sysUser);
 		userService.save(param);
 		userService.addCompute(param);
-		String format = DateUtil.format(DateUtil.date(), "yyyy-MM");
-		String format1 = DateUtil.format(DateUtils.getLast_yyyyMM(), "yyyy-MM");
+//		String format = DateUtil.format(DateUtil.date(), "yyyy-MM");
+//		String format1 = DateUtil.format(DateUtils.getLast_yyyyMM(), "yyyy-MM");
 
-		kpiPersonalService.deleteBysaveAccounting(format);
-		kpiPersonalService.deleteBysaveAccounting(format1);
+//		kpiPersonalService.deleteBysaveAccounting();
+//		kpiPersonalService.deleteBysaveAccounting(format1);
 		return R.success("添加成功");
 	}
 
@@ -92,6 +92,15 @@ public class UserController {
 	@ApiOperation(value = "编辑")
 	@ApiOperationSupport(order = 3)
 	public R update(@RequestBody User param) {
+		if(ObjectUtil.isEmpty(param.getDId())&&param.getDegreeName()==""){
+			param.setDId(0);
+		}
+		if(ObjectUtil.isEmpty(param.getJcId())&&param.getJobCertificateName()==""){
+			param.setJcId(0);
+		}
+		if(ObjectUtil.isEmpty(param.getPId())&&param.getPositionName()==""){
+			param.setPId(0);
+		}
 		userService.updateById(param);
 		userService.checkUser(param);
 		return R.success("操作成功");

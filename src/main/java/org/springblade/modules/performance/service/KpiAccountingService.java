@@ -19,7 +19,7 @@ public interface KpiAccountingService extends IService<KpiAccounting> {
 
     R saves(AccountingDto param);
 
-	void savess(AccountingDto param);
+	R savess(AccountingDto param);
 }
 
 

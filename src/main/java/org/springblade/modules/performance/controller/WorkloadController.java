@@ -84,6 +84,6 @@ public class WorkloadController {
 	@ApiOperationSupport(order = 4)
 	public R compute(@RequestParam(value = "toMonth") String toMonth) {
 		List<KpiWorkload> kpiFixedList = kpiWorkloadService.selectToMonth(toMonth);
-		return kpiWorkloadService.computeByList(kpiFixedList);
+		return kpiWorkloadService.computeByList(kpiFixedList,toMonth);
 	}
 }

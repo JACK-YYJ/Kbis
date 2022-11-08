@@ -20,15 +20,15 @@
     <select id="selectAttendancePage" resultType="org.springblade.modules.performance.vo.KpiAttendanceVo">
         select
         <include refid="Base_Column_List"/>
-        ,CONCAT(
-            CAST(CONVERT(100 * CAST(attendance_day AS DECIMAL) /
-                         CAST(month_day AS DECIMAL
-                             ),
-                DECIMAL
-                ) AS CHAR
-                ),
-            '%'
-            ) AS percentage
+        ,
+            CAST(
+                TRUNCATE( CAST(attendance_day AS DECIMAL) /
+                            CAST(month_day AS DECIMAL(13, 2)
+                                ), 11
+                       ) AS DECIMAL(11, 5)
+                   )
+                       AS percentage
+
             from kpi_attendance
         <where>
             <if test=" toMonth != ''">
@@ -47,15 +47,14 @@
     <select id="selectidOrName" resultType="org.springblade.modules.performance.vo.KpiAttendanceVo">
         select
         <include refid="Base_Column_List"/>
-        ,CONCAT(
-            CAST(CONVERT(100 * CAST(attendance_day AS DECIMAL) /
-                         CAST(month_day AS DECIMAL
-                             ),
-                DECIMAL
-                ) AS CHAR
-                ),
-            '%'
-            ) AS percentage
+        ,
+            CAST(
+                TRUNCATE(CAST(attendance_day AS DECIMAL) /
+                            CAST(month_day AS DECIMAL(13, 2)
+                                ), 11
+                       ) AS DECIMAL(11, 5)
+                   )
+                     AS percentage
             from kpi_attendance
         <where>
             <if test="idOrName != null and idOrName != ''">

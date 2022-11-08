@@ -25,6 +25,6 @@ public interface KpiWorkloadService extends IService<KpiWorkload> {
 
 	List<KpiWorkload> selectToMonth(String format);
 
-	R computeByList(List<KpiWorkload> kpiFixedList);
+	R computeByList(List<KpiWorkload> kpiFixedList,String toMonth);
 }
 

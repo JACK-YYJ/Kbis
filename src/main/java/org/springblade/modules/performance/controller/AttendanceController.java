@@ -101,7 +101,7 @@ public class AttendanceController {
 				kpiAttendance.setMonthDay(param.getToDaySum());
 			}else {
 				kpiAttendance.setMonthDay(param.getToDaySum());
-				kpiAttendance.setAttendanceDay(param.getToDaySum());
+//				kpiAttendance.setAttendanceDay(param.getToDaySum());
 			}
 		}
 		kpiAttendanceService.updateBatchById(kpiAttendanceList);

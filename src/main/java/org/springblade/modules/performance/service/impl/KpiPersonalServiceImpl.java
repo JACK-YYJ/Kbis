@@ -39,7 +39,7 @@ public class KpiPersonalServiceImpl extends ServiceImpl<KpiPersonalMapper, KpiPe
 		Page<PercentageSelectVo> kpiAttendancePage = baseMapper.selectPersonalPage(page, toMonth);
 		if (kpiAttendancePage.getRecords().size() ==0 && format.equals(toMonth)){
 
-			KpiAccounting kpiAccounting = kpiAccountingMapper.selectByToMonth(format);
+			KpiAccounting kpiAccounting = kpiAccountingMapper.selectByToMonth(toMonth);
 
 			List<KpiPersonalVo> MonthIngList = baseMapper.selectByAdd(toMonth);
 			MonthIngList.forEach(s->{
@@ -56,7 +56,7 @@ public class KpiPersonalServiceImpl extends ServiceImpl<KpiPersonalMapper, KpiPe
 
 				personal.setCardId(s.getCardId());
 				//岗位联调
-				if (s.getButtonOther().equals(0)){
+				if (!s.getButtonOther()){
 					personal.setOpSum(BigDecimal.valueOf(0));
 				}else {
 					personal.setOpSum(s.getOpSum());//	其他绩效
@@ -67,12 +67,12 @@ public class KpiPersonalServiceImpl extends ServiceImpl<KpiPersonalMapper, KpiPe
 					personal.setWorkSum(BigDecimal.valueOf(0));
 				}
 				if (s.getJobType().equals(0)){
-					if(s.getButtonFixed().equals(0)){
+					if(!s.getButtonFixed()){
 						personal.setFixedSum(BigDecimal.valueOf(0));
 					}else {
 						personal.setFixedSum(s.getFixedSum().multiply(kpiAccounting.getPhyFixedUnit()));//	重新计算
 					}
-					if(s.getButtonWorkload().equals(0)){
+					if(!s.getButtonWorkload()){
 						personal.setWorkSum(BigDecimal.valueOf(0));
 					}else{
 						personal.setWorkSum(s.getWorkSum().multiply(kpiAccounting.getPhyWorkUnit()));//	重新计算
@@ -80,15 +80,15 @@ public class KpiPersonalServiceImpl extends ServiceImpl<KpiPersonalMapper, KpiPe
 
 				}
 				if (s.getJobType().equals(1)){
-					if(s.getButtonFixed().equals(0)){
+					if(!s.getButtonFixed()){
 						personal.setFixedSum(BigDecimal.valueOf(0));
 					}else {
-						personal.setFixedSum(s.getFixedSum().multiply(kpiAccounting.getPhyFixedUnit()));//	重新计算
+						personal.setFixedSum(s.getFixedSum().multiply(kpiAccounting.getMedFixedUnit()));//	重新计算
 					}
-					if(s.getButtonWorkload().equals(0)){
+					if(!s.getButtonWorkload()){
 						personal.setWorkSum(BigDecimal.valueOf(0));
 					}else{
-						personal.setWorkSum(s.getWorkSum().multiply(kpiAccounting.getPhyWorkUnit()));//	重新计算
+						personal.setWorkSum(s.getWorkSum().multiply(kpiAccounting.getMedWorkUnit()));//	重新计算
 					}
 				}
 
@@ -148,12 +148,12 @@ public class KpiPersonalServiceImpl extends ServiceImpl<KpiPersonalMapper, KpiPe
 					if(!s.getButtonFixed()){
 						personal.setFixedSum(BigDecimal.valueOf(0));
 					}else {
-						personal.setFixedSum(s.getFixedSum().multiply(kpiAccounting.getPhyFixedUnit()));//	重新计算
+						personal.setFixedSum(s.getFixedSum().multiply(kpiAccounting.getMedFixedUnit()));//	重新计算
 					}
 					if(!s.getButtonWorkload()){
 						personal.setWorkSum(BigDecimal.valueOf(0));
 					}else{
-						personal.setWorkSum(s.getWorkSum().multiply(kpiAccounting.getPhyWorkUnit()));//	重新计算
+						personal.setWorkSum(s.getWorkSum().multiply(kpiAccounting.getMedWorkUnit()));//	重新计算
 					}
 				}
 
@@ -186,9 +186,9 @@ public class KpiPersonalServiceImpl extends ServiceImpl<KpiPersonalMapper, KpiPe
 	}
 
 	@Override
-	public void deleteBysaveAccounting(String toMonth) {
+	public void deleteBysaveAccounting() {
 //		String format = DateUtil.format(DateUtil.date(), "yyyy-MM");
-		baseMapper.deleteBysaveAccounting(toMonth);
+		baseMapper.deleteBysaveAccounting();
 
 	}
 
@@ -239,12 +239,12 @@ public class KpiPersonalServiceImpl extends ServiceImpl<KpiPersonalMapper, KpiPe
 				if(!s.getButtonFixed()){
 					one.setFixedSum(BigDecimal.valueOf(0));
 				}else {
-					one.setFixedSum(s.getFixedSum().multiply(kpiAccounting.getPhyFixedUnit()));//	重新计算
+					one.setFixedSum(s.getFixedSum().multiply(kpiAccounting.getMedFixedUnit()));//	重新计算
 				}
 				if(!s.getButtonWorkload()){
 					one.setWorkSum(BigDecimal.valueOf(0));
 				}else{
-					one.setWorkSum(s.getWorkSum().multiply(kpiAccounting.getPhyWorkUnit()));//	重新计算
+					one.setWorkSum(s.getWorkSum().multiply(kpiAccounting.getMedWorkUnit()));//	重新计算
 				}
 			}
 			one.setPersonalSum(

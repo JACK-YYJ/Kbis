@@ -50,7 +50,7 @@
     <delete id="deleteBysaveAccounting">
         delete
         from kpi_personal
-        where date_format(attendance_month, '%Y-%m') = #{toMonth}
+<!--        where date_format(attendance_month, '%Y-%m') = #{toMonth}-->
     </delete>
     <select id="selectByAdd" resultType="org.springblade.modules.performance.vo.KpiPersonalVo">
         SELECT
@@ -109,7 +109,7 @@
                SUM(personal_sum) as personal_sum
             ,
                CONCAT(CAST(CONVERT(100 * CAST(sum(personal_sum) AS DECIMAL) /
-                                   CAST((SELECT SUM(personal_sum) FROM kpi_personal) AS DECIMAL
+                                   CAST((SELECT SUM(personal_sum) FROM kpi_personal WHERE  date_format(attendance_month, '%Y-%m') = #{toMonth}) AS DECIMAL
                                        ),
                    DECIMAL
                    ) AS CHAR
@@ -131,7 +131,7 @@
                SUM(personal_sum)              as personal_sum
             ,
                CONCAT(CAST(CONVERT(100 * CAST(sum(personal_sum) AS DECIMAL) /
-                                   CAST((SELECT SUM(personal_sum) FROM kpi_personal) AS DECIMAL
+                                   CAST((SELECT SUM(personal_sum) FROM kpi_personal WHERE  date_format(attendance_month, '%Y-%m') = #{toMonth}) AS DECIMAL
                                        ),
                    DECIMAL
                    ) AS CHAR

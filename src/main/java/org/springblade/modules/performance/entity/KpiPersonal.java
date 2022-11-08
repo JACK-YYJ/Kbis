@@ -13,6 +13,7 @@ import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 /**
@@ -25,6 +26,7 @@ import org.springframework.format.annotation.DateTimeFormat;
  */
 @ApiModel(value = "org-springblade-modules-performance-entity-KpiPersonal")
 @Data
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @TableName(value = "kpi_personal")

@@ -47,6 +47,14 @@ public class DateUtils {
 		return day;
 	}
 
+	public static Integer getDayOfToMonth(Integer i){
+		Calendar aCalendar = Calendar.getInstance(Locale.CHINA);
+		aCalendar.add(Calendar.MONTH,-i);
+		int day=aCalendar.getActualMaximum(Calendar.DATE);
+		System.out.println("当前"+i+"个月:"+day);
+		return day;
+	}
+
 
 
 	/**
@@ -334,10 +342,21 @@ public class DateUtils {
 		return lastMonth;
 
 	}
+
+
+	public static String getLastByMonth(Integer i) {
+		Calendar cal = Calendar.getInstance();
+		cal.add(cal.MONTH, -i);
+		SimpleDateFormat dft = new SimpleDateFormat("yyyy-MM");
+		String lastMonth = dft.format(cal.getTime());
+		System.out.println(lastMonth);
+		return lastMonth;
+
+	}
 	//获取当天时间
 	public static String getTodayDate() {
 		Date d = new Date();
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
 		String dateNowStr = sdf.format(d);
 		return dateNowStr;
 	}
@@ -371,16 +390,21 @@ public class DateUtils {
 		Date format = DateUtil.parse(DateUtils.getLastMonth(), "yyyy-MM");
 		return format;
 	}
+	public static Date getLastByi_yyyyMM(Integer i){
+		Date format = DateUtil.parse(DateUtils.getLastByMonth(i), "yyyy-MM");
+		return format;
+	}
 
 	public static void main(String[] args) {
 
 // getDateByDate();
-		getLastMonth();
+//		getLastMonth();
 
-		System.out.println(getLast_yyyyMM());
-
+//		System.out.println(getLast_yyyyMM());
+//		System.out.println(getLastByMonth(0));
 // formString("2021-15-27 15:42:44");
-
+		System.out.println("sj:"+getLastByi_yyyyMM(2));
+		getDayOfToMonth(0);
 // getYearMonthDay();
 
 
